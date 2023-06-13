@@ -8,7 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.efficenz"
+        applicationId 'com.example.efficenz'
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -53,4 +53,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.6.0'
     implementation 'com.google.firebase:firebase-database:20.2.1'
     implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+
+    implementation 'com.google.code.gson:gson:2.8.7'
+
 }
