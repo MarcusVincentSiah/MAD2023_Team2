@@ -16,6 +16,7 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+        <!--Can swap .TaskManagement with .MainActivity if u want it to launch in the home page-->
         <activity
             android:name=".TaskManagement"
             android:exported="true"
