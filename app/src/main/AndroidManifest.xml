@@ -13,10 +13,11 @@
         android:theme="@style/Theme.EfficenZ"
         tools:targetApi="31">
         <activity
+            android:name=".TimeManagement"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
-            android:exported="false" />
-
-        <!--Can swap .TaskManagement with .MainActivity if u want it to launch in the home page-->
+            android:exported="false" /> <!-- Can swap .TaskManagement with .MainActivity if u want it to launch in the home page -->
         <activity
             android:name=".TaskManagement"
             android:exported="true"
