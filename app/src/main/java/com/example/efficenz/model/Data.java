@@ -5,14 +5,18 @@ public class Data {
     private String title;
     private String note;
     private String date;
+    private long timestamp;
+    private String dueDate;
     private String id;
 
     public Data(){}
 
-    public Data(String title, String note, String date, String id) {
+    public Data(String title, String note, String date, long timestamp, String dueDate,String id) {
         this.title = title;
         this.note = note;
         this.date = date;
+        this.timestamp = timestamp;
+        this.dueDate = dueDate;
         this.id = id;
     }
 
@@ -38,6 +42,21 @@ public class Data {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
     }
 
     public String getId() {
