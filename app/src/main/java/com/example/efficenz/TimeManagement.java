@@ -1,20 +1,16 @@
 package com.example.efficenz;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.efficenz.R;
 
 import java.util.Locale;
 
@@ -23,14 +19,14 @@ public class TimeManagement extends AppCompatActivity {
 
     private EditText time_input;
     private TextView time;
-    private Button set;
+    private Button set_time;
     private Button start_pause;
     private Button reset;
 
     private CountDownTimer countDownTimer;
 
-    private boolean TimeRunning;
-    private long START_TIME;
+    private boolean timeRunning;
+    private long startTime;
 
     private long timeLeft;
     private long endTime;
@@ -42,12 +38,12 @@ public class TimeManagement extends AppCompatActivity {
         setContentView(R.layout.activity_time_management);
 
         time_input = findViewById(R.id.time_input);
-        set = findViewById(R.id.btn_set);
+        set_time = findViewById(R.id.btn_set);
         time = findViewById(R.id.timer);
         start_pause = findViewById(R.id.btn_start_pause);
         reset = findViewById(R.id.btn_reset);
 
-        set.setOnClickListener(new View.OnClickListener() {
+        set_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String input = time_input.getText().toString();
@@ -70,7 +66,7 @@ public class TimeManagement extends AppCompatActivity {
         start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TimeRunning) {
+                if (timeRunning) {
                     pauseTimer();
                 } else {
                     startTimer();
@@ -87,7 +83,7 @@ public class TimeManagement extends AppCompatActivity {
     }
 
     private void setTime(long time) {
-        START_TIME = time;
+        startTime = time;
         resetTimer();
         closeKeyboard();
     }
@@ -103,23 +99,23 @@ public class TimeManagement extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                TimeRunning = false;
+                timeRunning = false;
                 updateInterface();
             }
         }.start();
 
-        TimeRunning = true;
+        timeRunning = true;
         updateInterface();
     }
 
     private  void pauseTimer() {
         countDownTimer.cancel();
-        TimeRunning = false;
+        timeRunning = false;
         updateInterface();
     }
 
     private void  resetTimer() {
-        timeLeft = START_TIME;
+        timeLeft = startTime;
         updateCountDownText();
         updateInterface();
     }
@@ -141,16 +137,16 @@ public class TimeManagement extends AppCompatActivity {
     }
 
     private void updateInterface() {
-        if(TimeRunning) {
+        if(timeRunning) {
             time_input.setVisibility(View.INVISIBLE);
-            set.setVisibility(View.INVISIBLE);
+            set_time.setVisibility(View.INVISIBLE);
             reset.setVisibility(View.INVISIBLE);
             start_pause.setText("Pause");
         }
 
         else {
             time_input.setVisibility(View.VISIBLE);
-            set.setVisibility(View.VISIBLE);
+            set_time.setVisibility(View.VISIBLE);
             start_pause.setText("Start");
 
             if(timeLeft < 1000) {
@@ -159,7 +155,7 @@ public class TimeManagement extends AppCompatActivity {
                 start_pause.setVisibility(View.VISIBLE);
             }
 
-            if (timeLeft < START_TIME) {
+            if (timeLeft < startTime) {
                 reset.setVisibility(View.VISIBLE);
             }
             else reset.setVisibility(View.INVISIBLE);
@@ -180,9 +176,9 @@ public class TimeManagement extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor =prefs.edit();
 
-        editor.putLong("startTime", START_TIME);
+        editor.putLong("startTime", startTime);
         editor.putLong("timeLeft", timeLeft);
-        editor.putBoolean("timerRunning", TimeRunning);
+        editor.putBoolean("timerRunning", timeRunning);
         editor.putLong("endTime", endTime);
 
         editor.apply();
@@ -197,20 +193,20 @@ public class TimeManagement extends AppCompatActivity {
         super.onStart();
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
-        START_TIME = prefs.getLong("startTime", 60000);
-        timeLeft = prefs.getLong("timeLeft", START_TIME);
-        TimeRunning = prefs.getBoolean("timerRunning", false);
+        startTime = prefs.getLong("startTime", 60000);
+        timeLeft = prefs.getLong("timeLeft", startTime);
+        timeRunning = prefs.getBoolean("timerRunning", false);
 
         updateCountDownText();
         updateInterface();
 
-        if(TimeRunning) {
+        if(timeRunning) {
             endTime = prefs.getLong("endTime", 0);
             timeLeft = endTime - System.currentTimeMillis();
 
             if(timeLeft < 0) {
                 timeLeft = 0;
-                TimeRunning = false;
+                timeRunning = false;
                 updateCountDownText();
                 updateInterface();
             }
