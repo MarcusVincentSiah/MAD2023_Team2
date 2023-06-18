@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -38,6 +40,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.DuplicateFormatFlagsException;
 
@@ -60,11 +64,21 @@ public class TaskManagement extends AppCompatActivity {
     private Button btnUpdateUp;
     private Button dateTimeButton;
 
+    private Button pickTimeBtn;
+
     //Variable
     private String title;
     private String note;
     private String dueDate;
+
+    private String dueTime;
     private String post_key;
+
+    private SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
+    // 17/6/2023 01:25pm
+    // 17/6/2023 01:25am
+    private SimpleDateFormat dtimeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mma");
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +99,9 @@ public class TaskManagement extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
-        recyclerView.setHasFixedSize(true);
+        layoutManager.setReverseLayout(false);
+        layoutManager.setStackFromEnd(false);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
 
         penBtn=findViewById(R.id.Pen_btn);
@@ -108,6 +122,7 @@ public class TaskManagement extends AppCompatActivity {
                 EditText title = myview.findViewById(R.id.edit_title);
                 EditText note = myview.findViewById(R.id.edit_note);
                 dateTimeButton = myview.findViewById(R.id.date_time_button);
+                pickTimeBtn = myview.findViewById(R.id.time_button);
 
                 Button btnSave = myview.findViewById(R.id.btn_save);
                 AlertDialog.Builder myDialog = new AlertDialog.Builder(TaskManagement.this);
@@ -118,18 +133,49 @@ public class TaskManagement extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         // Open date picker
-                        openDatePickerDialog();
+                        if(dateTimeButton.getText().toString().equalsIgnoreCase("CLICK HERE")){
+                            openDatePickerDialog();
+                        }
+                        else{
+                            try {
+                                long timeUpdate = dtFormat.parse(dateTimeButton.getText().toString()).getTime();
+                                openDatePickerDialogForUpdate(timeUpdate);
+                            } catch (ParseException e) {
+                            }
+
+                        }
+
+                    }
+                });
+
+                pickTimeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Open date picker
+                        if(pickTimeBtn.getText().toString().equalsIgnoreCase("CLICK HERE")){
+                            openTimePickerDialog();
+                        }
+                        else{
+                            try {
+                                long timeUpdate = timeFormat.parse(pickTimeBtn.getText().toString()).getTime();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timeUpdate);
+                                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                                int min = calendar.get(Calendar.MINUTE);
+                                openTimePickerDialog(hour, min);
+                            } catch (ParseException e) {
+                            }
+                        }
                     }
                 });
 
                 btnSave.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
-
-
                         String mtitle = title.getText().toString().trim(); //to remove leading and trailing whitespace characters.
                         String mNote = note.getText().toString().trim();
                         String mDueDate = dateTimeButton.getText().toString().trim();
+                        String mDueTime = pickTimeBtn.getText().toString().trim();
 
                         if (TextUtils.isEmpty(mtitle)){ //is used to check if the mtitle variable is empty or null
                             title.setError("Required Input");
@@ -143,13 +189,27 @@ public class TaskManagement extends AppCompatActivity {
                             dateTimeButton.setError("Required Input");
                             return;
                         }
+                        if (TextUtils.isEmpty(mDueTime)){
+                            pickTimeBtn.setError("Required Input");
+                            return;
+                        }
 
 
                         String id = mDatabase.push().getKey();
                         Date now = new Date();
                         String date = DateFormat.getDateInstance().format(now);
+                        long timeStamp;
 
-                        Data data = new Data(mtitle, mNote, date, now.getTime(), mDueDate, id);
+                        // convert dueDate into timestamp
+                        try {
+                            Date dueDateTS = dtimeFormat.parse(mDueDate + " " + mDueTime);
+                            timeStamp = dueDateTS.getTime();
+                        } catch (ParseException e) {
+                            pickTimeBtn.setError("Required Input");
+                            return;
+                        }
+
+                        Data data = new Data(mtitle, mNote, date, timeStamp, mDueDate, mDueTime, id);
 
                         mDatabase.child(id).setValue(data);
                         setNotification("Task: "+mtitle);
@@ -166,10 +226,7 @@ public class TaskManagement extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Query q = mDatabase.orderByChild("timestamp").limitToLast(1000);
-        //FirebaseRecyclerOptions<Data> options = new FirebaseRecyclerOptions.Builder<Data>() //not sure
-        //        .setQuery(mDatabase, Data.class)
-        //        .build();
+        Query q = mDatabase.orderByChild("timestamp");
 
         FirebaseRecyclerOptions<Data> options = new FirebaseRecyclerOptions.Builder<Data>() //not sure
                 .setQuery(q, Data.class)
@@ -179,6 +236,7 @@ public class TaskManagement extends AppCompatActivity {
         FirebaseRecyclerAdapter<Data, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Data, MyViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position, @NonNull Data model) {
+
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setNote(model.getNote());
                 viewHolder.setDate(model.getDate());
@@ -193,8 +251,9 @@ public class TaskManagement extends AppCompatActivity {
                         title = model.getTitle(); //to show data in dialog when its clicked
                         note = model.getNote();
                         dueDate = model.getDueDate();
+                        dueTime = model.getDueTime();
+                        updateData(model);
 
-                        updateData();
                     }
                 });
             }
@@ -240,7 +299,7 @@ public class TaskManagement extends AppCompatActivity {
         }
     }
 
-    public void updateData(){
+    public void updateData(Data model){
 
         AlertDialog.Builder mydialog = new AlertDialog.Builder(TaskManagement.this);
         LayoutInflater inflater = LayoutInflater.from(TaskManagement.this);
@@ -263,16 +322,45 @@ public class TaskManagement extends AppCompatActivity {
         btnUpdateUp = myview.findViewById(R.id.btn_update_upd);
 
         dateTimeButton = myview.findViewById(R.id.date_time_button);
-        //dueDate = dateTimeButton.getText().toString().trim(); //Does not give me back the duedate for some reason
         dateTimeButton.setText(dueDate);
+
+        pickTimeBtn = myview.findViewById(R.id.time_button);
+        pickTimeBtn.setText(dueTime);
 
         dateTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Open date picker
-                openDatePickerDialogForUpdate();
+                try {
+                    long timeUpdate = dtFormat.parse(dateTimeButton.getText().toString()).getTime();
+                    openDatePickerDialogForUpdate(timeUpdate);
+                } catch (ParseException e) {
+                    openDatePickerDialog();
+                }
+
+
             }
         });
+
+        pickTimeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open date picker
+                try {
+                    long timeUpdate = timeFormat.parse(pickTimeBtn.getText().toString()).getTime();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(timeUpdate);
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int min = calendar.get(Calendar.MINUTE);
+                    openTimePickerDialog(hour, min);
+                } catch (ParseException e) {
+                    openTimePickerDialog();
+                }
+
+
+            }
+        });
+
         btnUpdateUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,9 +369,19 @@ public class TaskManagement extends AppCompatActivity {
                 note = noteUpdate.getText().toString().trim();
                 Date now = new Date();
                 String mDate = DateFormat.getDateInstance().format(now); //updating to new date
-                dueDate = dateTimeButton.getText().toString().trim(); //getting the button text which is the date
+                String mDueDate = dateTimeButton.getText().toString().trim(); //getting the button text which is the date
+                String mDueTime = pickTimeBtn.getText().toString().trim();
+                long timeStamp;
 
-                Data data = new Data(title,note,mDate, now.getTime(), dueDate, post_key); //creating new data object
+                // convert dueDate into timestamp
+                try {
+                    Date dueDateTS = dtimeFormat.parse(mDueDate+" "+mDueTime);
+                    timeStamp = dueDateTS.getTime();
+                } catch (ParseException e) {
+                    dateTimeButton.setError("Required Input");
+                    return;
+                }
+                Data data = new Data(title,note,mDate, timeStamp, mDueDate, mDueTime, post_key); //creating new data object
 
                 mDatabase.child(post_key).setValue(data); //Changing Data for that ID to the new updated Data
 
@@ -343,8 +441,9 @@ public class TaskManagement extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void openDatePickerDialogForUpdate() {
+    private void openDatePickerDialogForUpdate(long objTimeStamp) {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(objTimeStamp);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -361,4 +460,29 @@ public class TaskManagement extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    private void openTimePickerDialog(){
+        // time now when open dialog
+        final Calendar c = Calendar.getInstance();
+        // on below line we are getting our hour, minute.
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        openTimePickerDialog(hour, minute);
+    }
+    private void openTimePickerDialog(int hour, int minute){
+            // customize time for update.
+            // on below line we are initializing our Time Picker Dialog
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                    (view, hourOfDay, minute1) -> {
+                        // on below line we are setting selected time
+                        // in our text view.
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.HOUR, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute1);
+                        String timeSet = timeFormat.format(calendar.getTime());
+                        pickTimeBtn.setText(timeSet);
+                    }, hour, minute, false);
+            // at last we are calling show to
+            // display our time picker dialog.
+            timePickerDialog.show();
+    }
 }

@@ -7,16 +7,18 @@ public class Data {
     private String date;
     private long timestamp;
     private String dueDate;
+    private String dueTime; // hh:mma 01:12pm
     private String id;
 
     public Data(){}
 
-    public Data(String title, String note, String date, long timestamp, String dueDate,String id) {
+    public Data(String title, String note, String date, long timestamp, String dueDate, String dueTime, String id) {
         this.title = title;
         this.note = note;
         this.date = date;
         this.timestamp = timestamp;
         this.dueDate = dueDate;
+        this.dueTime = dueTime;
         this.id = id;
     }
 
@@ -65,5 +67,13 @@ public class Data {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDueTime() {
+        return dueTime;
+    }
+
+    public void setDueTime(String dueTime) {
+        this.dueTime = dueTime;
     }
 }
