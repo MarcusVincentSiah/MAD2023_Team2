@@ -17,9 +17,12 @@ import com.example.efficenz.model.Data;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -27,6 +30,8 @@ public class TimeManagementTaskList extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    private TimeManagementTaskAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,53 +40,37 @@ public class TimeManagementTaskList extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase.keepSynced(true);
+
+
+
+        setUpRecyclerView();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        View myview;
+    private void setUpRecyclerView() {
+        Query q = mDatabase.orderByChild("timestamp");
+        FirebaseRecyclerOptions<TaskManagementData> options = new FirebaseRecyclerOptions.Builder<TaskManagementData>()
+                .setQuery(q, TaskManagementData.class)
+                .build();
 
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            myview = itemView;
-        }
+        adapter = new TimeManagementTaskAdapter(options);
 
-        public void setTitle(String title) {
-            TextView task = myview.findViewById(R.id.task_item);
-            task.setText(title);
-        }
+        RecyclerView recyclerView = findViewById(R.id.timeManagementRecyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Query q = mDatabase.orderByChild("timestamp").limitToLast(1000);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) RecyclerView recyclerView = findViewById(R.id.timeManagementRecyclerView);
-        FirebaseRecyclerOptions<Data> task_list = new FirebaseRecyclerOptions.Builder<Data>() //not sure
-                .setQuery(q, Data.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Data, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Data, MyViewHolder>(task_list) {
-            @Override
-            protected void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position, @NonNull Data model) {
-                viewHolder.setTitle(model.getTitle());
-
-                viewHolder.myview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) { //when a recycle view is clicked, updateData will be called. Which is the alert dialog
-                    }
-                });
-            }
-
-            @NonNull
-            @Override
-            public TimeManagementTaskList.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.time_management_task_item, parent, false);
-                return new TimeManagementTaskList.MyViewHolder(view);
-            }
-        };
-
-        recyclerView.setAdapter(adapter);
         adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
