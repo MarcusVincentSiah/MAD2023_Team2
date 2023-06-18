@@ -56,7 +56,7 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
                 public void onClick(View v) {
                     int position = getLayoutPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(position);
+
                     }
                 }
             });
