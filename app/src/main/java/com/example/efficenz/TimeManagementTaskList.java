@@ -52,7 +52,7 @@ public class TimeManagementTaskList extends AppCompatActivity {
                 .setQuery(q, TaskManagementData.class)
                 .build();
 
-        adapter = new TimeManagementTaskAdapter(options);
+        adapter = new TimeManagementTaskAdapter(options, TimeManagementTaskList.this);
 
         RecyclerView recyclerView = findViewById(R.id.timeManagementRecyclerView);
         recyclerView.setHasFixedSize(true);

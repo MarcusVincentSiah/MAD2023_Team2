@@ -1,6 +1,6 @@
 package com.example.efficenz;
-
-public class TaskManagementData {
+import java.io.Serializable;
+public class TaskManagementData implements Serializable{
 
     private String title;
     private String note;

@@ -1,5 +1,6 @@
 package com.example.efficenz;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -16,6 +18,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.efficenz.model.Data;
 
 import java.util.Locale;
 
@@ -37,6 +41,9 @@ public class TimeManagement extends AppCompatActivity {
     private long endTime;
 
     private Fragment defaultFrag;
+    private Fragment newFrag;
+
+    private TextView task_title;
 
 
     @Override
@@ -44,15 +51,18 @@ public class TimeManagement extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_management);
 
-        taskFrag = findViewById(R.id.task_frag);
+        /*taskFrag = findViewById(R.id.task_frag);
         defaultFrag = new DefaultTimeManagementFrag();
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.task_frag, defaultFrag);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
 
-        taskFrag.setOnClickListener(new View.OnClickListener() {
+        task_title = findViewById(R.id.task);
+
+        task_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TimeManagement.this, TimeManagementTaskList.class);
@@ -238,4 +248,30 @@ public class TimeManagement extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        newFrag = new newTimeManagementFrag();
+
+        Intent receivingEnd = getIntent();
+        Data data = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT");
+        if(data != null) {
+            /*FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.task_frag, newFrag);
+            fragmentTransaction.commit();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("TASK_TITLE", task.getTitle());
+            newFrag.setArguments(bundle);*/
+
+            task_title.setText("Task: " + data.getTitle());
+            task_title.setTextSize(30);
+
+        }
+        Log.v("h", "hello");
+    }
+
 }

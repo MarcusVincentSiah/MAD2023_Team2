@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.efficenz.model.Data;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -21,14 +22,17 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
 
     private OnItemClickListener listener;
 
+    private Context context;
+
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
      * @param options
      */
-    public TimeManagementTaskAdapter(@NonNull FirebaseRecyclerOptions<TaskManagementData> options) {
+    public TimeManagementTaskAdapter(@NonNull FirebaseRecyclerOptions<TaskManagementData> options, Context context) {
         super(options);
+        this.context = context;
     }
 
     @Override
@@ -56,11 +60,34 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
                 public void onClick(View v) {
                     int position = getLayoutPosition();
                     if (position != RecyclerView.NO_POSITION) {
+                        DataSnapshot dataSnapshot = getSnapshots().getSnapshot(position);
 
+                        Data data = dataSnapshot.getValue(Data.class);
+
+                        showAlertDialog(data);
                     }
                 }
             });
         }
+    }
+
+    private void showAlertDialog(Data data) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(data.getTitle())
+                .setMessage("Hello")
+                .setPositiveButton("Start task", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Open user profile activity
+                        // Replace UserProfileActivity.class with your actual activity class
+                        Intent intent = new Intent(context, TimeManagement.class);
+                        // Pass any necessary data to the profile activity using intent extras
+                        intent.putExtra("TASK_OBJECT", data);
+                        context.startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Close", null)
+                .show();
     }
 
     public interface OnItemClickListener {
@@ -72,23 +99,6 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
         this.listener = listener;
     }
 
-    private void showAlertDialog() {
-        Context context = null;
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Profile")
-                .setMessage("Hello")
-                .setPositiveButton("View", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Open user profile activity
-                        // Replace UserProfileActivity.class with your actual activity class
-                        Intent intent = new Intent(context, MainActivity.class);
-                        // Pass any necessary data to the profile activity using intent extras
-                        intent.putExtra("USER_OBJECT", 1);
-                        context.startActivity(intent);
-                    }
-                })
-                .setNegativeButton("Close", null)
-                .show();
-    }
+
 }
+
