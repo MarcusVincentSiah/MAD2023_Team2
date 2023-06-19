@@ -244,7 +244,7 @@ public class TimeManagement extends AppCompatActivity {
 
     }
 
-    /*@Override
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -252,32 +252,17 @@ public class TimeManagement extends AppCompatActivity {
 
         Intent receivingEnd = getIntent();
         TaskManagementData task = (TaskManagementData) receivingEnd.getSerializableExtra("TASK_OBJECT");
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.task_frag, newFrag);
-        fragmentTransaction.commit();
+        if(task != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.task_frag, newFrag);
+            fragmentTransaction.commit();
 
-        Bundle bundle = new Bundle();
-        bundle.putString("TASK_TITLE", task.getTitle());
-        newFrag.setArguments(bundle);
-    }*/
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_TASK && resultCode == RESULT_OK && data != null) {
-            TaskManagementData task = (TaskManagementData) data.getSerializableExtra("TASK_OBJECT");
-            if (task != null) {
-                newFrag = new newTimeManagementFrag();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.task_frag, newFrag);
-                fragmentTransaction.commit();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("TASK_TITLE", task.getTitle());
-                newFrag.setArguments(bundle);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString("TASK_TITLE", task.getTitle());
+            newFrag.setArguments(bundle);
         }
+
     }
+
 }
