@@ -24,6 +24,9 @@
             android:name=".ui.notes.NotesList"
             android:exported="false" />
         <activity
+            android:name=".TimeManagementTaskList"
+            android:exported="true" />
+        <activity
             android:name=".TimeManagement"
             android:exported="true" />
         <activity
