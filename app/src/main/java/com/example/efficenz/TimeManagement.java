@@ -1,5 +1,6 @@
 package com.example.efficenz;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -37,6 +38,9 @@ public class TimeManagement extends AppCompatActivity {
     private long endTime;
 
     private Fragment defaultFrag;
+    private Fragment newFrag;
+
+    private static final int REQUEST_CODE_TASK = 1;
 
 
     @Override
@@ -46,6 +50,7 @@ public class TimeManagement extends AppCompatActivity {
 
         taskFrag = findViewById(R.id.task_frag);
         defaultFrag = new DefaultTimeManagementFrag();
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -237,5 +242,42 @@ public class TimeManagement extends AppCompatActivity {
             else startTimer();
         }
 
+    }
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+
+        newFrag = new newTimeManagementFrag();
+
+        Intent receivingEnd = getIntent();
+        TaskManagementData task = (TaskManagementData) receivingEnd.getSerializableExtra("TASK_OBJECT");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.task_frag, newFrag);
+        fragmentTransaction.commit();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("TASK_TITLE", task.getTitle());
+        newFrag.setArguments(bundle);
+    }*/
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_TASK && resultCode == RESULT_OK && data != null) {
+            TaskManagementData task = (TaskManagementData) data.getSerializableExtra("TASK_OBJECT");
+            if (task != null) {
+                newFrag = new newTimeManagementFrag();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.task_frag, newFrag);
+                fragmentTransaction.commit();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("TASK_TITLE", task.getTitle());
+                newFrag.setArguments(bundle);
+            }
+        }
     }
 }
