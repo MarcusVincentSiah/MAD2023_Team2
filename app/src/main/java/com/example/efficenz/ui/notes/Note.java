@@ -4,7 +4,7 @@ package com.example.efficenz.ui.notes;
 public class Note {
     String title;
     String content;
-    int id;
+    String id;
 
     public Note() {}
 
@@ -24,11 +24,11 @@ public class Note {
         this.content = content;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

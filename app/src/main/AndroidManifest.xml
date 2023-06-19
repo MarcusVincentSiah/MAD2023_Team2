@@ -23,7 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.notes.NotesList"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".TimeManagementTaskList"
             android:exported="true" />
