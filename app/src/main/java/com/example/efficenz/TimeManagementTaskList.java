@@ -41,8 +41,6 @@ public class TimeManagementTaskList extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase.keepSynced(true);
 
-
-
         setUpRecyclerView();
     }
 
@@ -58,8 +56,6 @@ public class TimeManagementTaskList extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-
     }
 
     @Override

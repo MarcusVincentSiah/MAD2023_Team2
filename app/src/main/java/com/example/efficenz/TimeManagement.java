@@ -20,8 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.efficenz.model.Data;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
+
+import io.reactivex.rxjava3.annotations.NonNull;
 
 public class TimeManagement extends AppCompatActivity {
 
@@ -42,26 +52,26 @@ public class TimeManagement extends AppCompatActivity {
 
     private Fragment defaultFrag;
     private Fragment newFrag;
-
     private TextView task_title;
 
+    private DatabaseReference mDatabase;
+    private DatabaseReference dataRef;
+    private FirebaseAuth mAuth;
+    private TimeManagementTaskAdapter adapter;
+    private Data data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_management);
 
-        /*taskFrag = findViewById(R.id.task_frag);
-        defaultFrag = new DefaultTimeManagementFrag();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        mDatabase.keepSynced(true);
 
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.task_frag, defaultFrag);
-        fragmentTransaction.commit();*/
+        Query q = mDatabase.orderByChild("timestamp");
 
         task_title = findViewById(R.id.task);
-
         task_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +79,6 @@ public class TimeManagement extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         time_input = findViewById(R.id.time_input);
         set_time = findViewById(R.id.btn_set);
@@ -117,9 +126,22 @@ public class TimeManagement extends AppCompatActivity {
     }
 
     private void setTime(long time) {
-        startTime = time;
-        resetTimer();
-        closeKeyboard();
+
+        if(data == null) {
+            Toast.makeText(TimeManagement.this, "Please choose a task first", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            startTime = time;
+            String dataKey = data.getId();
+            String time_needed = String.valueOf(time);
+            String time_left = time_needed;
+            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_left);
+            mDatabase.child(dataKey).setValue(newData);
+            Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
+            resetTimer();
+            closeKeyboard();
+        }
+
     }
 
     private void startTimer() {
@@ -146,12 +168,31 @@ public class TimeManagement extends AppCompatActivity {
         countDownTimer.cancel();
         timeRunning = false;
         updateInterface();
+        String dataKey = data.getId();
+        String time_left = String.valueOf(timeLeft);
+        Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
+                data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+
+        mDatabase.child(dataKey).setValue(newData);
+        Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
     }
 
-    private void  resetTimer() {
+    private void resetTimer() {
         timeLeft = startTime;
         updateCountDownText();
         updateInterface();
+        if (data != null) {
+            String dataKey = data.getId();
+            String time_left = String.valueOf(timeLeft);
+            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
+                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+
+            mDatabase.child(dataKey).setValue(newData);
+            Toast.makeText(TimeManagement.this, "Timer has been reset", Toast.LENGTH_SHORT).show();
+        }
+       else {
+           time.setText("00:00");
+        }
     }
 
     private void updateCountDownText() {
@@ -214,6 +255,9 @@ public class TimeManagement extends AppCompatActivity {
         editor.putLong("timeLeft", timeLeft);
         editor.putBoolean("timerRunning", timeRunning);
         editor.putLong("endTime", endTime);
+        if(data != null) {
+            editor.putString("TaskID", data.getId());
+        }
 
         editor.apply();
 
@@ -230,6 +274,29 @@ public class TimeManagement extends AppCompatActivity {
         startTime = prefs.getLong("startTime", 60000);
         timeLeft = prefs.getLong("timeLeft", startTime);
         timeRunning = prefs.getBoolean("timerRunning", false);
+        String dataKey = prefs.getString("TaskID", null);
+
+        if(dataKey != null) {
+            mDatabase.child(dataKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        data = dataSnapshot.getValue(Data.class);
+                        if (data.getTime_needed() != null){
+                            startTime = Long.parseLong(data.getTime_needed());
+                            endTime = Long.parseLong(data.getTime_left());
+                        }
+                    } else {
+                        // Data does not exist in the database
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle any errors that occurred while retrieving the data
+                }
+            });
+        }
 
         updateCountDownText();
         updateInterface();
@@ -246,17 +313,14 @@ public class TimeManagement extends AppCompatActivity {
             }
             else startTimer();
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        newFrag = new newTimeManagementFrag();
-
+        //newFrag = new newTimeManagementFrag();
         Intent receivingEnd = getIntent();
-        Data data = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT");
+        data = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT");
         if(data != null) {
             /*FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -271,7 +335,5 @@ public class TimeManagement extends AppCompatActivity {
             task_title.setTextSize(30);
 
         }
-        Log.v("h", "hello");
     }
-
 }
