@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.efficenz.model.Data;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -61,18 +62,18 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
                     if (position != RecyclerView.NO_POSITION) {
                         DataSnapshot dataSnapshot = getSnapshots().getSnapshot(position);
 
-                        TaskManagementData task = dataSnapshot.getValue(TaskManagementData.class);
+                        Data data = dataSnapshot.getValue(Data.class);
 
-                        showAlertDialog(task);
+                        showAlertDialog(data);
                     }
                 }
             });
         }
     }
 
-    private void showAlertDialog(TaskManagementData task) {
+    private void showAlertDialog(Data data) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Task")
+        builder.setTitle(data.getTitle())
                 .setMessage("Hello")
                 .setPositiveButton("Start task", new DialogInterface.OnClickListener() {
                     @Override
@@ -81,7 +82,7 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
                         // Replace UserProfileActivity.class with your actual activity class
                         Intent intent = new Intent(context, TimeManagement.class);
                         // Pass any necessary data to the profile activity using intent extras
-                        intent.putExtra("TASK_OBKECT", task);
+                        intent.putExtra("TASK_OBJECT", data);
                         context.startActivity(intent);
                     }
                 })

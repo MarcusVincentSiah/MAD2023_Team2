@@ -1,6 +1,7 @@
 package com.example.efficenz.model;
+import java.io.Serializable;
 
-public class Data {
+public class Data implements Serializable {
 
     private String title;
     private String note;
