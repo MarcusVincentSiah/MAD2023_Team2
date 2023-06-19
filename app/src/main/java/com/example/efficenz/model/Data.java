@@ -10,9 +10,13 @@ public class Data {
     private String dueTime; // hh:mma 01:12pm
     private String id;
 
+    //For timer
+    private String time_needed;
+    private String time_left;
+
     public Data(){}
 
-    public Data(String title, String note, String date, long timestamp, String dueDate, String dueTime, String id) {
+    public Data(String title, String note, String date, long timestamp, String dueDate, String dueTime, String id, String time_needed, String time_left) {
         this.title = title;
         this.note = note;
         this.date = date;
@@ -20,6 +24,8 @@ public class Data {
         this.dueDate = dueDate;
         this.dueTime = dueTime;
         this.id = id;
+        this.time_needed = time_needed;
+        this.time_left = time_left;
     }
 
     public String getTitle() {
@@ -75,5 +81,21 @@ public class Data {
 
     public void setDueTime(String dueTime) {
         this.dueTime = dueTime;
+    }
+
+    public String getTime_needed() {
+        return time_needed;
+    }
+
+    public void setTime_needed(String time_needed) {
+        this.time_needed = time_needed;
+    }
+
+    public String getTime_left() {
+        return time_left;
+    }
+
+    public void setTime_left(String time_left) {
+        this.time_left = time_left;
     }
 }

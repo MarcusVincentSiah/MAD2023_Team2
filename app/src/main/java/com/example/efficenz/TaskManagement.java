@@ -209,7 +209,7 @@ public class TaskManagement extends AppCompatActivity {
                             return;
                         }
 
-                        Data data = new Data(mtitle, mNote, date, timeStamp, mDueDate, mDueTime, id);
+                        Data data = new Data(mtitle, mNote, date, timeStamp, mDueDate, mDueTime, id, null, null);
 
                         mDatabase.child(id).setValue(data);
                         setNotification("Task: "+mtitle);
@@ -381,7 +381,7 @@ public class TaskManagement extends AppCompatActivity {
                     dateTimeButton.setError("Required Input");
                     return;
                 }
-                Data data = new Data(title,note,mDate, timeStamp, mDueDate, mDueTime, post_key); //creating new data object
+                Data data = new Data(title,note,mDate, timeStamp, mDueDate, mDueTime, post_key, null, null); //creating new data object
 
                 mDatabase.child(post_key).setValue(data); //Changing Data for that ID to the new updated Data
 
