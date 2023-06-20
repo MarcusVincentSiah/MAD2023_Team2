@@ -307,6 +307,7 @@ public class TimeManagement extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         Intent receivingEnd = getIntent();
 
         Data dataReceived = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT"); //Get data object from recycler view
@@ -316,11 +317,11 @@ public class TimeManagement extends AppCompatActivity {
             //Set textview to show task name
             task_title.setText("Task: " + dataReceived.getTitle());
             task_title.setTextSize(30);
-            Log.d(data.getTitle(), "Resumed");
+            Log.d(data.getTitle(), "tasklist data");
             if (dataReceived.getTime_needed() != null && dataReceived.getTime_left() != null) {
                 startTime = Long.parseLong(dataReceived.getTime_needed());
                 timeLeft = Long.parseLong(dataReceived.getTime_left());
-                Log.d(data.getTitle() + "Resumed", data.getTime_left());
+                Log.d(data.getTitle() + "Started", data.getTime_left());
             }
 
             else {
@@ -332,69 +333,72 @@ public class TimeManagement extends AppCompatActivity {
             Toast.makeText(TimeManagement.this, "Data received", Toast.LENGTH_SHORT).show();
         }
 
+        else {
+            SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
+            startTime = prefs.getLong("startTime", 60000);
+            timeLeft = prefs.getLong("timeLeft", startTime);
+            timeRunning = prefs.getBoolean("timerRunning", false);
+            String dataKey = prefs.getString("TaskID", null);
 
+            updateCountDownText();
+            updateInterface();
 
+            if(timeRunning) {
+                endTime = prefs.getLong("endTime", 0);
+                timeLeft = endTime - System.currentTimeMillis(); //Update the time left by subtracting the end time from the current time
 
+                //check if timer has finished
+                if(timeLeft < 0) {
+                    timeLeft = 0;
+                    timeRunning = false;
+                    updateCountDownText();
+                    updateInterface();
+                }
 
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-
-        startTime = prefs.getLong("startTime", 60000);
-        timeLeft = prefs.getLong("timeLeft", startTime);
-        timeRunning = prefs.getBoolean("timerRunning", false);
-        String dataKey = prefs.getString("TaskID", null);
-
-        updateCountDownText();
-        updateInterface();
-
-        if(timeRunning) {
-            endTime = prefs.getLong("endTime", 0);
-            timeLeft = endTime - System.currentTimeMillis(); //Update the time left by subtracting the end time from the current time
-
-            //check if timer has finished
-            if(timeLeft < 0) {
-                timeLeft = 0;
-                timeRunning = false;
-                updateCountDownText();
-                updateInterface();
+                else startTimer();
             }
 
-            else startTimer();
-        }
+            if(dataKey != null && data == null) {
+                mDatabase.child(dataKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get the Data object from the snapshot
+                        data = dataSnapshot.getValue(Data.class);
 
-        if(dataKey != null && data == null) {
-            mDatabase.child(dataKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Get the Data object from the snapshot
-                    data = dataSnapshot.getValue(Data.class);
+                        // Use the retrieved Data object
+                        if (data != null) {
+                            String time_left = String.valueOf(timeLeft);
+                            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
+                                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
 
-                    // Use the retrieved Data object
-                    if (data != null) {
-                        String time_left = String.valueOf(timeLeft);
-                        Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                                data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
-
-                        mDatabase.child(dataKey).setValue(newData);//update
-                        Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
-                        Log.d(data.getTitle()+"Started", data.getTime_left());
+                            mDatabase.child(dataKey).setValue(newData);//update
+                            Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
+                            Log.d(data.getTitle()+"Started", data.getTime_left());
+                        }
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle any errors that occur
-                    Log.e("Data Retrieval Error", databaseError.getMessage());
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle any errors that occur
+                        Log.e("Data Retrieval Error", databaseError.getMessage());
+                    }
+                });
+            }
         }
+
+
+
+
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        Intent receivingEnd = getIntent();
+        /*Intent receivingEnd = getIntent();
 
         Data dataReceived = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT"); //Get data object from recycler view
 
@@ -418,6 +422,6 @@ public class TimeManagement extends AppCompatActivity {
 
             updateCountDownText();
             Toast.makeText(TimeManagement.this, "Data received", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 }
