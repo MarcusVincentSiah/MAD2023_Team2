@@ -69,14 +69,20 @@ public class TimeManagement extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase.keepSynced(true);
 
-        Query q = mDatabase.orderByChild("timestamp");
-
         task_title = findViewById(R.id.task);
+
+        //When user clicks on the "Choose a task" textview
         task_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TimeManagement.this, TimeManagementTaskList.class);
-                startActivity(intent);
+                //Ensure user pauses timer before switching tasks
+                if(timeRunning) {
+                    Toast.makeText(TimeManagement.this, "Pause Timer before selecting another task", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Intent intent = new Intent(TimeManagement.this, TimeManagementTaskList.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -86,16 +92,21 @@ public class TimeManagement extends AppCompatActivity {
         start_pause = findViewById(R.id.btn_start_pause);
         reset = findViewById(R.id.btn_reset);
 
+        //When user clicks on the set button
         set_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String input = time_input.getText().toString();
+                String input = time_input.getText().toString();//get input
+
+                //Checks of user entered a value
                 if(input.length() == 0) {
                     Toast.makeText(TimeManagement.this, "Enter a time", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                long timeInput = Long.parseLong(input) * 60000;
+                long timeInput = Long.parseLong(input) * 60000; //Convert min to ms
+
+                //check if user entered 0
                 if(timeInput == 0) {
                     Toast.makeText(TimeManagement.this, "Please enter a time greater than 0", Toast.LENGTH_SHORT).show();
                     return;
@@ -126,26 +137,28 @@ public class TimeManagement extends AppCompatActivity {
     }
 
     private void setTime(long time) {
-
+        //Checks if a task has been choose before user sets a time
         if(data == null) {
             Toast.makeText(TimeManagement.this, "Please choose a task first", Toast.LENGTH_SHORT).show();
         }
         else {
             startTime = time;
+            resetTimer();
+            closeKeyboard();
+
+            //Update the database with the new time_set values
             String dataKey = data.getId();
             String time_needed = String.valueOf(time);
             String time_left = time_needed;
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_left);
-            mDatabase.child(dataKey).setValue(newData);
+            mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
-            resetTimer();
-            closeKeyboard();
+            Log.d(data.getTitle() + "Setted", data.getTime_left());
         }
-
     }
 
     private void startTimer() {
-        endTime = System.currentTimeMillis() + timeLeft;
+        endTime = System.currentTimeMillis() + timeLeft;   //time when timer finishes
         countDownTimer = new CountDownTimer(timeLeft, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -168,31 +181,37 @@ public class TimeManagement extends AppCompatActivity {
         countDownTimer.cancel();
         timeRunning = false;
         updateInterface();
-        String dataKey = data.getId();
-        String time_left = String.valueOf(timeLeft);
-        Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
 
-        mDatabase.child(dataKey).setValue(newData);
-        Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
+        if (data!= null) {
+            //Update the database with the new time_set values
+            String dataKey = data.getId();
+            String time_left = String.valueOf(timeLeft);
+            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
+                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+
+            mDatabase.child(dataKey).setValue(newData);//update
+            Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
+            Log.d(data.getTitle() + "Paused", data.getTime_left());
+        }
+        else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
     }
 
     private void resetTimer() {
         timeLeft = startTime;
         updateCountDownText();
         updateInterface();
-        if (data != null) {
+        if (data!= null) {
+            //Update the database with the new time_set values
             String dataKey = data.getId();
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
                     data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
 
-            mDatabase.child(dataKey).setValue(newData);
-            Toast.makeText(TimeManagement.this, "Timer has been reset", Toast.LENGTH_SHORT).show();
+            mDatabase.child(dataKey).setValue(newData);//update
+            Log.d(data.getTitle() + "Reset", data.getTime_left());
+            Toast.makeText(TimeManagement.this, "Timer has been resetted", Toast.LENGTH_SHORT).show();
         }
-       else {
-           time.setText("00:00");
-        }
+        else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
     }
 
     private void updateCountDownText() {
@@ -212,6 +231,8 @@ public class TimeManagement extends AppCompatActivity {
     }
 
     private void updateInterface() {
+
+        //If timer is running, change start button to pause & hide the time-input, set btn and reset btn
         if(timeRunning) {
             time_input.setVisibility(View.INVISIBLE);
             set_time.setVisibility(View.INVISIBLE);
@@ -219,17 +240,20 @@ public class TimeManagement extends AppCompatActivity {
             start_pause.setText("Pause");
         }
 
+        //If timer is not running, show set btn and tim-input field and change pause to start
         else {
             time_input.setVisibility(View.VISIBLE);
             set_time.setVisibility(View.VISIBLE);
             start_pause.setText("Start");
 
+            //if timer runs out, start/pause btn gets hidden
             if(timeLeft < 1000) {
                 start_pause.setVisibility(View.INVISIBLE);
             } else {
                 start_pause.setVisibility(View.VISIBLE);
             }
 
+            //if time left and time start are equal, hide reset btn
             if (timeLeft < startTime) {
                 reset.setVisibility(View.VISIBLE);
             }
@@ -248,6 +272,7 @@ public class TimeManagement extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        //Save values when closed
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor =prefs.edit();
 
@@ -255,9 +280,22 @@ public class TimeManagement extends AppCompatActivity {
         editor.putLong("timeLeft", timeLeft);
         editor.putBoolean("timerRunning", timeRunning);
         editor.putLong("endTime", endTime);
-        if(data != null) {
+
+        if (data!= null) {
             editor.putString("TaskID", data.getId());
+            //Update the database with the new time_set values
+            String dataKey = data.getId();
+            String time_left = String.valueOf(timeLeft);
+            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
+                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+            Log.d(data.getTitle()+"STOPPED", data.getTime_left());
+
+
+            mDatabase.child(dataKey).setValue(newData);//update
+            Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
         }
+        else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
+
 
         editor.apply();
 
@@ -269,6 +307,36 @@ public class TimeManagement extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Intent receivingEnd = getIntent();
+
+        Data dataReceived = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT"); //Get data object from recycler view
+
+        if(dataReceived != null) {
+            data = dataReceived;
+            //Set textview to show task name
+            task_title.setText("Task: " + dataReceived.getTitle());
+            task_title.setTextSize(30);
+            Log.d(data.getTitle(), "Resumed");
+            if (dataReceived.getTime_needed() != null && dataReceived.getTime_left() != null) {
+                startTime = Long.parseLong(dataReceived.getTime_needed());
+                timeLeft = Long.parseLong(dataReceived.getTime_left());
+                Log.d(data.getTitle() + "Resumed", data.getTime_left());
+            }
+
+            else {
+                startTime = 0;
+                timeLeft = 0;
+            }
+
+            updateCountDownText();
+            Toast.makeText(TimeManagement.this, "Data received", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+
+
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
         startTime = prefs.getLong("startTime", 60000);
@@ -276,64 +344,80 @@ public class TimeManagement extends AppCompatActivity {
         timeRunning = prefs.getBoolean("timerRunning", false);
         String dataKey = prefs.getString("TaskID", null);
 
-        if(dataKey != null) {
-            mDatabase.child(dataKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        data = dataSnapshot.getValue(Data.class);
-                        if (data.getTime_needed() != null){
-                            startTime = Long.parseLong(data.getTime_needed());
-                            endTime = Long.parseLong(data.getTime_left());
-                        }
-                    } else {
-                        // Data does not exist in the database
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Handle any errors that occurred while retrieving the data
-                }
-            });
-        }
-
         updateCountDownText();
         updateInterface();
 
         if(timeRunning) {
             endTime = prefs.getLong("endTime", 0);
-            timeLeft = endTime - System.currentTimeMillis();
+            timeLeft = endTime - System.currentTimeMillis(); //Update the time left by subtracting the end time from the current time
 
+            //check if timer has finished
             if(timeLeft < 0) {
                 timeLeft = 0;
                 timeRunning = false;
                 updateCountDownText();
                 updateInterface();
             }
+
             else startTimer();
+        }
+
+        if(dataKey != null && data == null) {
+            mDatabase.child(dataKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Get the Data object from the snapshot
+                    data = dataSnapshot.getValue(Data.class);
+
+                    // Use the retrieved Data object
+                    if (data != null) {
+                        String time_left = String.valueOf(timeLeft);
+                        Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
+                                data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+
+                        mDatabase.child(dataKey).setValue(newData);//update
+                        Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
+                        Log.d(data.getTitle()+"Started", data.getTime_left());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle any errors that occur
+                    Log.e("Data Retrieval Error", databaseError.getMessage());
+                }
+            });
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //newFrag = new newTimeManagementFrag();
+
         Intent receivingEnd = getIntent();
-        data = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT");
-        if(data != null) {
-            /*FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.task_frag, newFrag);
-            fragmentTransaction.commit();
 
-            Bundle bundle = new Bundle();
-            bundle.putString("TASK_TITLE", task.getTitle());
-            newFrag.setArguments(bundle);*/
+        Data dataReceived = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT"); //Get data object from recycler view
 
-            task_title.setText("Task: " + data.getTitle());
+
+        if(dataReceived != null) {
+            data = dataReceived;
+            //Set textview to show task name
+            task_title.setText("Task: " + dataReceived.getTitle());
             task_title.setTextSize(30);
+            Log.d(data.getTitle(), "Resumed");
+            if (dataReceived.getTime_needed() != null && dataReceived.getTime_left() != null) {
+                startTime = Long.parseLong(dataReceived.getTime_needed());
+                timeLeft = Long.parseLong(dataReceived.getTime_left());
+                Log.d(data.getTitle() + "Resumed", data.getTime_left());
+            }
 
+            else {
+                startTime = 0;
+                timeLeft = 0;
+            }
+
+            updateCountDownText();
+            Toast.makeText(TimeManagement.this, "Data received", Toast.LENGTH_SHORT).show();
         }
     }
 }
