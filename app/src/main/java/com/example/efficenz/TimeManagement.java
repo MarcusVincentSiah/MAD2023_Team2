@@ -345,7 +345,7 @@ public class TimeManagement extends AppCompatActivity {
             if(timeRunning) {
                 endTime = prefs.getLong("endTime", 0);
                 timeLeft = endTime - System.currentTimeMillis(); //Update the time left by subtracting the end time from the current time
-
+                updateCountDownText();
                 //check if timer has finished
                 if(timeLeft < 0) {
                     timeLeft = 0;
@@ -353,7 +353,6 @@ public class TimeManagement extends AppCompatActivity {
                     updateCountDownText();
                     updateInterface();
                 }
-
                 else startTimer();
             }
 
