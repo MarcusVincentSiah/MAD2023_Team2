@@ -208,8 +208,7 @@ public class TimeManagement extends AppCompatActivity {
                     data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
 
             mDatabase.child(dataKey).setValue(newData);//update
-            Log.d(data.getTitle() + "Reset", data.getTime_left());
-            Toast.makeText(TimeManagement.this, "Timer has been resetted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TimeManagement.this, "Timer has been reseted", Toast.LENGTH_SHORT).show();
         }
         else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
     }
@@ -282,14 +281,13 @@ public class TimeManagement extends AppCompatActivity {
         editor.putLong("endTime", endTime);
 
         if (data!= null) {
-            editor.putString("TaskID", data.getId());
-            //Update the database with the new time_set values
             String dataKey = data.getId();
+            editor.putString("TaskID", dataKey);
+            //Update the database with the new time_set values
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
                     data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
             Log.d(data.getTitle()+"STOPPED", data.getTime_left());
-
 
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
@@ -375,6 +373,8 @@ public class TimeManagement extends AppCompatActivity {
                             mDatabase.child(dataKey).setValue(newData);//update
                             Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
                             Log.d(data.getTitle()+"Started", data.getTime_left());
+                            task_title.setText("Task: " + data.getTitle());
+                            task_title.setTextSize(30);
                         }
                     }
 
