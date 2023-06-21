@@ -74,7 +74,7 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
     private void showAlertDialog(Data data) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(data.getTitle())
-                .setMessage("Hello")
+                .setMessage(data.getNote())
                 .setPositiveButton("Start task", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
