@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.efficenz.model.Data;
 import com.example.efficenz.ui.notes.NotesList;
-import com.example.efficenz.ui.notifications.NotificationsFragment;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Button noteButton;
     private Button timeTrackingButton;
+
+    private Button taskButton;
 
     private ProgressBar taskProgress;
     private Date now;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         // buttons
         noteButton = findViewById(R.id.noteTakingButton);
         timeTrackingButton = findViewById(R.id.timeTrackingButton);
+        taskButton = findViewById(R.id.taskButton);
 
         // progress bar for task list
         taskProgress = findViewById(R.id.progressBar);
@@ -88,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent timeIntent = new Intent(MainActivity.this, TimeManagement.class);
                 startActivity(timeIntent);
+            }
+        });
+
+        taskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent taskIntent = new Intent(MainActivity.this, TaskManagement.class);
+                startActivity(taskIntent);
             }
         });
 
