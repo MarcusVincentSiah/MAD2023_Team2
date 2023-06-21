@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.efficenz.model.Data;
 import com.example.efficenz.ui.notes.NotesList;
+import com.example.efficenz.ui.notifications.NotificationsFragment;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
-
+        // database reference
         databaseRef = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         databaseRef.keepSynced(true);
 
@@ -66,8 +67,10 @@ public class MainActivity extends AppCompatActivity {
         noteButton = findViewById(R.id.noteTakingButton);
         timeTrackingButton = findViewById(R.id.timeTrackingButton);
 
+        // progress bar for task list
         taskProgress = findViewById(R.id.progressBar);
 
+        // dates used for progress bar logic
         sdf = new SimpleDateFormat("dd/MM/yyyy");
         now = new Date();
         mDate = sdf.format(now);
@@ -91,15 +94,13 @@ public class MainActivity extends AppCompatActivity {
 //        notifBell.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                Intent notif = new Intent(MainActivity.this, TimeManagement.class);
-//                startActivity(notif);
+//                Intent notification = new Intent(MainActivity.this, NotificationsFragment.class);
+//                startActivity(notification);
 //            }
 //        });
-
-
-
     }
 
+    // date to string method for database query to work
     public String DatetoString() {
         weeklyC = Calendar.getInstance();
         weeklyC.setTime(now);
@@ -113,11 +114,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Query taskListQ = databaseRef.orderByChild("timestamp").limitToLast(4);
+        Query taskListQ = databaseRef.orderByChild("timestamp").limitToLast(4); // query for displaying task list
         FirebaseRecyclerOptions<Data> taskList = new FirebaseRecyclerOptions.Builder<Data>()
                 .setQuery(taskListQ, Data.class)
                 .build();
 
+        // adapter for task list recyclerview
         FirebaseRecyclerAdapter<Data, TaskViewHolder> adapter = new FirebaseRecyclerAdapter<Data, TaskViewHolder>(taskList) {
             @Override
             protected void onBindViewHolder(@NonNull TaskViewHolder holder, int position, @NonNull Data model) {
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-
+        // query all the weekly tasks for the progress bar
 //        mWeeklyDate = DatetoString();
 //        Query taskDateQ = databaseRef.orderByChild("dueDate").startAt(mDate).endAt(mWeeklyDate);
 
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // ViewHolder class for the RecyclerView items
+    // viewHolder class for the recyclerview items
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
         View taskView;
 
