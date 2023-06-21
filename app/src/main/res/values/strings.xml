@@ -5,4 +5,19 @@
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="song_titles">
+        <item>Lofi 1</item>
+        <item>Lofi 2</item>
+        <item>Lofi 3</item>
+        <item>Lofi 4</item>
+        <item>Lofi 5</item>
+        <item>Lofi 6</item>
+        <item>Lofi 7</item>
+        <item>Cafe ambience</item>
+        <item>Rain and storm</item>
+        <item>Rain in rainforest</item>
+    </string-array>
+
+
 </resources>
