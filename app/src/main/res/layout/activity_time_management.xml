@@ -89,7 +89,7 @@
         android:id="@+id/task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#ECE9E8"
+        android:background="@color/secondary_color"
         android:text="Choose a task"
         app:layout_constraintBottom_toTopOf="@+id/time_input"
         app:layout_constraintEnd_toEndOf="parent"
