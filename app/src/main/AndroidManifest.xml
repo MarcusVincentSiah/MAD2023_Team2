@@ -31,10 +31,10 @@
             android:name=".TimeManagement"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true" /> <!-- Can swap .TaskManagement with .MainActivity if u want it to launch in the home page -->
-        <activity
             android:name=".TaskManagement"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name" >
             <intent-filter>
