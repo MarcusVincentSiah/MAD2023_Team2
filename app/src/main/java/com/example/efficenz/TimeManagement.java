@@ -158,6 +158,10 @@ public class TimeManagement extends AppCompatActivity {
     }
 
     private void startTimer() {
+        if(timeLeft <= 0.5) {
+            Toast.makeText(TimeManagement.this, "Reset the timer of enter a new time first", Toast.LENGTH_SHORT).show();
+            return;
+        }
         endTime = System.currentTimeMillis() + timeLeft;   //time when timer finishes
         countDownTimer = new CountDownTimer(timeLeft, 1000) {
             @Override
