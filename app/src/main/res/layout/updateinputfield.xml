@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="#676565"
+                android:background="@color/secondary_color"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="Add Your Task"
@@ -204,7 +204,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:backgroundTint="#E15353"
+                        android:backgroundTint="@color/secondary_color"
                         android:text="DELETE"
                         app:cornerRadius="20dp" />
 
@@ -219,8 +219,11 @@
                         android:id="@+id/btn_update_upd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:backgroundTint="#E15353"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="@color/secondary_color"
                         android:text="UPDATE"
                         app:cornerRadius="20dp" />
 

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.efficenz'
+    namespace 'sg.edu.np.mad.EfficenZ'
     compileSdk 33
 
     defaultConfig {
-        applicationId 'com.example.efficenz'
+        applicationId 'sg.edu.np.mad.EfficenZ'
         minSdk 24
         targetSdk 33
         versionCode 1

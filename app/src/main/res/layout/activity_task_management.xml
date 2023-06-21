@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="20dp"
-            android:backgroundTint="#DD5A5A"
+            android:backgroundTint="@color/secondary_color"
             app:fabSize="normal"
             android:src="@drawable/editpen"
             android:id="@+id/Pen_btn"
