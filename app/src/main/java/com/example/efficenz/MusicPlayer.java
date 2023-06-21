@@ -87,7 +87,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         }
 
 
-        Intent MainActivity = new Intent(MusicPlayer.this, com.example.efficenz.MainActivity.class);
+        Intent MainActivity = new Intent(MusicPlayer.this, MainActivity.class);
         MainActivity.putExtra("Song title", currentSongName);
 
 

@@ -31,12 +31,13 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private RecyclerView recyclerView;
+
     private Button noteButton;
     private Button timeTrackingButton;
-
     private Button taskButton;
-
+    private TextView musicText;
     private ProgressBar taskProgress;
+
     private Date now;
     private Date weeklyDate;
     private Calendar weeklyC;
@@ -64,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
         databaseRef = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         databaseRef.keepSynced(true);
 
-        // buttons
+        // buttons + textview
         noteButton = findViewById(R.id.noteTakingButton);
         timeTrackingButton = findViewById(R.id.timeTrackingButton);
         taskButton = findViewById(R.id.taskButton);
+        musicText = findViewById(R.id.musicText);
 
         // progress bar for task list
         taskProgress = findViewById(R.id.progressBar);
@@ -98,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent taskIntent = new Intent(MainActivity.this, TaskManagement.class);
                 startActivity(taskIntent);
+            }
+        });
+
+        musicText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent musicIntent = new Intent(MainActivity.this, MusicPlayer.class);
+                startActivity(musicIntent);
             }
         });
 
@@ -152,6 +162,11 @@ public class MainActivity extends AppCompatActivity {
 //        Query taskDateQ = databaseRef.orderByChild("dueDate").startAt(mDate).endAt(mWeeklyDate);
 
         taskProgress.setProgress(47);
+
+        // music title (if no song playing shows default text)
+        Intent music = getIntent();
+        String musicTitle = music.getStringExtra("Song title");
+        musicText.setText(musicTitle);
     }
 
 
