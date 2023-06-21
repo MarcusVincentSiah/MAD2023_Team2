@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,8 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
     int[] songMp3Array = {R.raw.lofi_song_1, R.raw.lofi_song_2, R.raw.lofi_song_3, R.raw.lofi_song_4, R.raw.lofi_song_5, R.raw.lofi_song_6, R.raw.lofi_song_7, R.raw.cafe_ambience, R.raw.rain_and_storm, R.raw.rain_rainforest,
     };
     int currentSongIndex = 0;
+
+    String currentSongName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,22 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
                 skipToNextSong();
             }
         });
+
+
+        for (int i = 0; i < songs.size(); i++) {
+            song temp = songs.get(i);
+            int tempSongMp3 = temp.songMp3;
+
+            if (tempSongMp3 == songMp3Array[currentSongIndex]) {
+                currentSongName = temp.songName;
+            }
+        }
+
+
+        Intent MainActivity = new Intent(MusicPlayer.this, com.example.efficenz.MainActivity.class);
+        MainActivity.putExtra("Song title", currentSongName);
+
+
     }
 
     private void toggleMediaPlayer() {
