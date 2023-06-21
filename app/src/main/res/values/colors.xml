@@ -7,7 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="bg_color">#f2ffeb</color> <!-- app bg -->
+    <color name="bg_color">#FFFFFF</color> <!-- app bg -->
     <color name="primary_color">#4f6b4e</color> <!-- Header -->
-    <color name="secondary_color">#98bf64</color> <!-- Buttons -->
+    <color name="secondary_color">#988057</color> <!-- Buttons -->
+    <color name="tertiary_color">#EFEFE2</color> <!-- items?-->
 </resources>
