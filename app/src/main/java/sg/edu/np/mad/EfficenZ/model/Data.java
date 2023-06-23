@@ -3,6 +3,7 @@ import java.io.Serializable;
 
 public class Data implements Serializable {
 
+    //Creating data object and the constructor for TaskManagement
     private String title;
     private String note;
     private String date;
