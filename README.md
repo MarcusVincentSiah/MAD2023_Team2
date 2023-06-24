@@ -18,7 +18,7 @@ Stage 1:
 2.	Time tracking (ThuTa) – Keeping track of time. Users can start, pause, and stop timers for specific tasks.
 3.	Percentage bar & Homepage (Rachelle) – Have a progress bar on what you have achieved on a weekly basis. Have a homepage which redirects you to each feature and briefly shows some information.
 4.	Focus music/sounds (Javier) – A collection of ambient sounds and music to improve concentration/focus. Users can choose sounds like nature, instrumental music, lofi, etc. This can help block distractions. 
-5.	Note-taking (GUANXI) – Note-taking feature that enables users to create and organize notes within the app. Users can attach files like images or links. Notes can be stored in different folders. Have a search bar to easily search and retrieve notes when needed. 
+5.	Note-taking (GUANXI) – Note-taking feature that enables users to create and organize notes within the app. Notes can be stored in different folders. Have a search bar to easily search and retrieve notes when needed. 
 
 
 Stage 2:
