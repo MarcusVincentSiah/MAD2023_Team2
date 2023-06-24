@@ -1,6 +1,13 @@
 # MAD2023_Team2
 MAD Assignment Draft for App
 
+Team Members:
+Marcus Vincent Siah - s10220964
+Lee Guan Xi - s1-244223
+Rachelle Lim Si Tong - s10243170
+Javier Toh Seng Hong - s10243660
+Thant Thu Ta - s10242515
+
 EfficienZ
 Brief introduction to the app
 EfficienZ is a productivity app which aims to help individuals optimize their time by being more organized and staying on track with their tasks to complete their goals efficiently. With a range of features, EfficienZ aims to enhance productivity and overall work-life balance. Features like task management and time tracking can help organize tasks and work better. 
