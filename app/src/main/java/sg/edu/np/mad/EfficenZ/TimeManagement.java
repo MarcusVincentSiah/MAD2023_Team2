@@ -158,7 +158,6 @@ public class TimeManagement extends AppCompatActivity {
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_needed);
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
-            Log.d(data.getTitle() + "Setted", data.getTime_left());
         }
     }
 
