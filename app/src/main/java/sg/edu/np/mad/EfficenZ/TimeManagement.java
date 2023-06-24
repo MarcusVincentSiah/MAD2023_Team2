@@ -29,7 +29,9 @@ import java.util.Locale;
 public class TimeManagement extends AppCompatActivity {
 
     private FrameLayout taskFrag;
-    private EditText time_input;
+    private EditText time_input_min;
+
+    private EditText time_input_hours;
     private TextView time;
     private Button set_time;
     private Button start_pause;
@@ -79,7 +81,8 @@ public class TimeManagement extends AppCompatActivity {
             }
         });
 
-        time_input = findViewById(R.id.time_input);
+        time_input_min = findViewById(R.id.time_input_min);
+        time_input_hours =findViewById(R.id.time_input_hours);
         set_time = findViewById(R.id.btn_set);
         time = findViewById(R.id.timer);
         start_pause = findViewById(R.id.btn_start_pause);
@@ -89,15 +92,24 @@ public class TimeManagement extends AppCompatActivity {
         set_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String input = time_input.getText().toString();//get input
+                String hours = time_input_hours.getText().toString();
+                String minutes = time_input_min.getText().toString();
 
                 //Checks of user entered a value
-                if(input.length() == 0) {
+                if(hours.length() == 0 && minutes.length() == 0) {
                     Toast.makeText(TimeManagement.this, "Enter a time", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                long timeInput = Long.parseLong(input) * 60000; //Convert min to ms
+                else if (hours.length() == 0) {
+                    hours = "0";
+                }
+
+                else if(minutes.length() == 0) {
+                    minutes = "0";
+                }
+
+                long timeInput = Long.parseLong(minutes) * 60000 + Long.parseLong(hours) * 3600000; //Convert min to ms
 
                 //check if user entered 0
                 if(timeInput == 0) {
@@ -106,7 +118,8 @@ public class TimeManagement extends AppCompatActivity {
                 }
 
                 setTime(timeInput);
-                time_input.setText("");
+                time_input_hours.setText("");
+                time_input_min.setText("");
             }
         });
 
@@ -142,8 +155,7 @@ public class TimeManagement extends AppCompatActivity {
             //Update the database with the new time_set values
             String dataKey = data.getId();
             String time_needed = String.valueOf(time);
-            String time_left = time_needed;
-            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_left);
+            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_needed);
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
             Log.d(data.getTitle() + "Setted", data.getTime_left());
@@ -230,15 +242,18 @@ public class TimeManagement extends AppCompatActivity {
 
         //If timer is running, change start button to pause & hide the time-input, set btn and reset btn
         if(timeRunning) {
-            time_input.setVisibility(View.INVISIBLE);
+            time_input_hours.setVisibility(View.INVISIBLE);
+            time_input_min.setVisibility(View.INVISIBLE);
             set_time.setVisibility(View.INVISIBLE);
             reset.setVisibility(View.INVISIBLE);
+
             start_pause.setText("Pause");
         }
 
         //If timer is not running, show set btn and tim-input field and change pause to start
         else {
-            time_input.setVisibility(View.VISIBLE);
+            time_input_hours.setVisibility(View.VISIBLE);
+            time_input_min.setVisibility(View.VISIBLE);
             set_time.setVisibility(View.VISIBLE);
             start_pause.setText("Start");
 
