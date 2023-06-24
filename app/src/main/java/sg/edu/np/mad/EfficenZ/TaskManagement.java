@@ -107,11 +107,11 @@ public class TaskManagement extends AppCompatActivity {
         penBtn=findViewById(R.id.Pen_btn);
 
         //notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("task_channel_id", "Channel Task", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel("task_channel_id", "Channel Task", NotificationManager.IMPORTANCE_DEFAULT);
+//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//            notificationManager.createNotificationChannel(channel);
+//        }
         penBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -219,7 +219,7 @@ public class TaskManagement extends AppCompatActivity {
                         Data data = new Data(mtitle, mNote, date, timeStamp, mDueDate, mDueTime, id, null, null);
 
                         mDatabase.child(id).setValue(data);
-                        setNotification("Task: "+mtitle);
+                        //setNotification("Task: "+mtitle);
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Data Insert", Toast.LENGTH_SHORT).show();
                     }
@@ -427,24 +427,24 @@ public class TaskManagement extends AppCompatActivity {
     }
 
     //Notification cannot be seen because emulator does not have
-    public void setNotification(String message){
-        // Get the current time
-        Calendar calendar = Calendar.getInstance();
-
-        // Set the desired time to trigger the notification (e.g., 10:00 AM)
-        //calendar.set(Calendar.HOUR_OF_DAY, 10);
-        calendar.add(Calendar.SECOND, 10);
-
-        // Create an intent to launch your notification
-        Intent intent = new Intent(this, TaskNotificationReceiver.class);
-        intent.putExtra("Title", "Time is running out!");
-        intent.putExtra("Message", message);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Schedule the notification using AlarmManager
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-    }
+//    public void setNotification(String message){
+//        // Get the current time
+//        Calendar calendar = Calendar.getInstance();
+//
+//        // Set the desired time to trigger the notification (e.g., 10:00 AM)
+//        //calendar.set(Calendar.HOUR_OF_DAY, 10);
+//        calendar.add(Calendar.SECOND, 10);
+//
+//        // Create an intent to launch your notification
+//        Intent intent = new Intent(this, TaskNotificationReceiver.class);
+//        intent.putExtra("Title", "Time is running out!");
+//        intent.putExtra("Message", message);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        // Schedule the notification using AlarmManager
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+//    }
 
     //DatePicker function. A calender dialog will appear for user to select a duedate
     private void openDatePickerDialog() {
