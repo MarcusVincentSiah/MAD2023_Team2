@@ -14,7 +14,7 @@ EfficienZ is a productivity app which aims to help individuals optimize their ti
 App category: Productivity
 
 Stage 1:
-1.	Managing Tasks (Marcus) – Create and organize tasks easily. Users will be able to set due dates and due time. Tasks will be stored from what is due first to last. Users can also update current tasks if they want to make changes. 
+1.	Managing Tasks (Marcus) – Create and organize tasks easily. Users will be able to set due dates and due time. Tasks will be stored from what is due first to last. Users can also update/edit current tasks if they want to make changes. Users will also be able to delete the tasks once done.
 2.	Time tracking (ThuTa) – Keeping track of time. Users can start, pause, and stop timers for specific tasks.
 3.	Percentage bar & Homepage (Rachelle) – Have a progress bar on what you have achieved on a weekly basis. Have a homepage which redirects you to each feature and briefly shows some information.
 4.	Focus music/sounds (Javier) – A collection of ambient sounds and music to improve concentration/focus. Users can choose sounds like nature, instrumental music, lofi, etc. This can help block distractions. 
