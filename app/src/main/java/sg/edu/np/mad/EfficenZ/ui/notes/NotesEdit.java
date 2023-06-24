@@ -1,23 +1,41 @@
 package sg.edu.np.mad.EfficenZ.ui.notes;
 
+// NOTE TAKING
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import sg.edu.np.mad.EfficenZ.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import sg.edu.np.mad.EfficenZ.R;
 
 public class NotesEdit extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private CollectionReference notesCollection;
+    private CollectionReference foldersCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,59 +49,64 @@ public class NotesEdit extends AppCompatActivity {
         ImageButton deleteBtn = findViewById(R.id.deleteBtn);
 
         db = FirebaseFirestore.getInstance();
-        notesCollection = db.collection("notes");
+        //notesCollection = db.collection("notes");
+        foldersCollection = db.collection("folders");
 
         // receive data from NotesList/NotesAdapter
         Intent intent = getIntent();
         String title = intent.getStringExtra("TITLE");
         String content = intent.getStringExtra("CONTENT");
         String id = intent.getStringExtra("ID");
+        String folderid = intent.getStringExtra("FOLDERID");
+        String folderName = intent.getStringExtra("FOLDERNAME");
 
         // set EditText
         titleText.setText(title);
         contentText.setText(content);
 
 
-        boolean newNote;
-        if (id == null){ // check whether new note or existing note
+        // check whether new note or existing note
+        String noteid;
+        if (id == null){
             pageTitle.setText("New Note");
             deleteBtn.setVisibility(View.GONE); // remove delete button in new note
-            newNote = true;
+            noteid = "Note-"+String.valueOf(System.currentTimeMillis()); // generate id for new note
+
         } else {
             pageTitle.setText("Edit Note");
-            newNote = false;
+            noteid = id;
         }
 
-        // save button
+        // SAVE button
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(newNote){
-                    saveNote(titleText, contentText);
+                // Validate empty notes (cannot save empty notes)
+                if (titleText.getText().toString().isEmpty() && contentText.getText().toString().isEmpty()){
+                    Toast.makeText(getBaseContext(), "Failed to save: Please enter some text.", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    updateNote(titleText,contentText, id);
+                else {
+                    saveNote(titleText, contentText, noteid, folderid, folderName);
                 }
-
             }
         });
 
-        // delete button
+        // DELETE button
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteNote(id);
+                deleteNote(folderid, noteid);
             }
         });
     }
 
-    void saveNote(EditText titleText, EditText contentText)
+    // SAVE NOTE
+    void saveNote(EditText titleText, EditText contentText, String id, String folderid, String folderName)
     {
-        // save note
+        // convert to string
         String title = titleText.getText().toString();
         String content = contentText.getText().toString();
-        String id = String.valueOf(System.currentTimeMillis());
 
         // create note object
         Note note = new Note();
@@ -92,55 +115,92 @@ public class NotesEdit extends AppCompatActivity {
         note.setContent(content);
 
 
-        // Save the note to the Firestore database
+        // create folder object
+        Folder folder = new Folder();
+        if (folderid == null){ // if note is created outside a folder, note will be placed in "Others" folder
+            folder.setName("Others");
+            folder.setId("Folder-0");
+            note.setFolderId("Folder-0");
+        }
+        else {
+            folder.setName(folderName);
+            folder.setId(folderid);
+            note.setFolderId(folderid);
+        }
+
+        /*
+        notesCollection = db.collection("notes");
+        // save note to firestore
         notesCollection.document(id)
                 .set(note)
-                .addOnSuccessListener(documentReference -> {
-                    // Note saved successfully
-                    Toast.makeText(NotesEdit.this, "Note saved", Toast.LENGTH_SHORT).show();
-                    finish(); // Finish the activity
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(NotesEdit.this, "Note saved", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 })
-                .addOnFailureListener(e -> {
-                    // Failed to save note
-                    Toast.makeText(NotesEdit.this, "Failed to save note", Toast.LENGTH_SHORT).show();
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(NotesEdit.this, e+"\nFailed to save note :(", Toast.LENGTH_SHORT).show();
+                    }
+                }); */
+
+        notesCollection = foldersCollection.document(note.getFolderId()).collection("notes"); // sub-collection
+
+        // parent-collection
+        foldersCollection.document(folder.getId())
+                .set(folder)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        // sub-collection
+                        notesCollection.document(note.getId())
+                                .set(note)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(NotesEdit.this, "Note saved in " + folder.getName() + "! :D", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(NotesEdit.this, e+"\nFailed to save note :(", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(NotesEdit.this, e+"\nFailed to save note :(", Toast.LENGTH_SHORT).show();
+                    }
                 });
-
-
-
-        //Intent intent = new Intent(NotesEdit.this, NotesList.class);
-        //NotesEdit.this.startActivity(intent);
     }
 
-    private void updateNote(EditText titleText, EditText contentText, String noteId) {
-        // Update an existing note in Firestore
-        String updatedTitle = titleText.getText().toString();
-        String updatedContent = contentText.getText().toString();
+    // DELETE NOTE
+    private void deleteNote(String folderid, String noteid) {
 
-        Note note = new Note();
-        note.setTitle(updatedTitle);
-        note.setContent(updatedContent);
-        note.setId(noteId);
-
-        notesCollection.document(noteId)
-                .set(note)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(NotesEdit.this, "Note updated", Toast.LENGTH_SHORT).show();
-                    finish(); // Finish the activity
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(NotesEdit.this, "Failed to update note", Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private void deleteNote(String noteId) {
-        notesCollection.document(noteId)
+        // folders > folderid > notes > noteid
+        foldersCollection.document(folderid).collection("notes").document(noteid)
                 .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(NotesEdit.this, "Note deleted", Toast.LENGTH_SHORT).show();
-                    finish(); // Finish the activity
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(NotesEdit.this, "Note deleted", Toast.LENGTH_SHORT).show();
+                        finish(); // Finish the activity
+                    }
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(NotesEdit.this, "Failed to delete note", Toast.LENGTH_SHORT).show();
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(NotesEdit.this, e+"\nFailed to delete note", Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
+
+
 }

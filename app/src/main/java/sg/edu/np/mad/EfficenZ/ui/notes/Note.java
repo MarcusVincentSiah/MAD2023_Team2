@@ -1,13 +1,19 @@
 package sg.edu.np.mad.EfficenZ.ui.notes;
 
 
+// NOTE TAKING
 public class Note {
+
+    // attributes
     String title;
     String content;
     String id;
+    String folderid;
 
+    // constructor
     public Note() {}
 
+    // getters and setters
     public String getTitle() {
         return title;
     }
@@ -31,5 +37,9 @@ public class Note {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getFolderId() {return folderid;}
+
+    public void setFolderId(String folderid) {this.folderid = folderid;}
 }
 

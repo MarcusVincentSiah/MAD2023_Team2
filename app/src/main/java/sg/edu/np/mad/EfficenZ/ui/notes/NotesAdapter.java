@@ -1,6 +1,8 @@
 package sg.edu.np.mad.EfficenZ.ui.notes;
 
 
+// NOTE TAKING
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import sg.edu.np.mad.EfficenZ.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import sg.edu.np.mad.EfficenZ.R;
 
 public class NotesAdapter extends FirestoreRecyclerAdapter<Note, NotesAdapter.NotesViewHolder> {
 
@@ -74,4 +77,5 @@ public class NotesAdapter extends FirestoreRecyclerAdapter<Note, NotesAdapter.No
     public void setOnNoteClickListener(OnNoteClickListener listener){
         this.listener = listener;
     }
+
 }
