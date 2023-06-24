@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Query taskListQ = databaseRef.orderByChild("timestamp").limitToLast(4); // query for displaying task list
+        Query taskListQ = databaseRef.orderByChild("timestamp"); // query for displaying task list
         FirebaseRecyclerOptions<Data> taskList = new FirebaseRecyclerOptions.Builder<Data>()
                 .setQuery(taskListQ, Data.class)
                 .build();
@@ -144,12 +144,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull TaskViewHolder holder, int position, @NonNull Data model) {
                 holder.setTitle(model.getTitle());
+                holder.setDueDate(model.getDueDate());
             }
 
             @NonNull
             @Override
             public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View itemView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task, parent, false);
                 return new TaskViewHolder(itemView);
             }
         };
@@ -157,10 +158,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-        // query all the weekly tasks for the progress bar
+        // query all the weekly tasks for the progress bar - currently no indicator for completed tasks so cannot be implemented
 //        mWeeklyDate = DatetoString();
 //        Query taskDateQ = databaseRef.orderByChild("dueDate").startAt(mDate).endAt(mWeeklyDate);
 
+        // placeholder code for progress bar
         taskProgress.setProgress(47);
 
         // music title (if no song playing shows default text)
@@ -180,9 +182,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void setTitle(String title) {
+            TextView mTitle = taskView.findViewById(R.id.title);
+            mTitle.setText(title);
+        }
 
-            TextView task = taskView.findViewById(android.R.id.text1);
-            task.setText(title);
+        public void setDueDate(String duedate) {
+            TextView mDate = taskView.findViewById(R.id.dueDate);
+            mDate.setText("Due: " +duedate);
         }
     }
 

@@ -90,7 +90,7 @@
         android:id="@+id/task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/secondary_color"
+        android:background="@color/tertiary_color"
         android:text="@string/choose_a_task"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/time_input_min"
