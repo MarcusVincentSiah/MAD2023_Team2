@@ -9,15 +9,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+//This receiver is triggered when a broadcast intent is received by the system.
+//It handles notifications
 public class TaskNotificationReceiver extends BroadcastReceiver {
     @Override
+    //method is called when the broadcast is received,
+    //and it creates a notification using the NotificationCompat.Builder class.
     public void onReceive(Context context, Intent intent) {
+
         // Create and display the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
                 .setSmallIcon(R.drawable.editpen)
                 .setContentTitle(intent.getStringExtra("Title"))
                 .setContentText(intent.getStringExtra("Message"));
 
+        //Used to display the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

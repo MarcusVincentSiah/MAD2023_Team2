@@ -2,6 +2,7 @@ package sg.edu.np.mad.EfficenZ;
 import java.io.Serializable;
 public class TaskManagementData implements Serializable{
 
+    //This is not used. Use model\Data instead
     private String title;
     private String note;
     private String date;
