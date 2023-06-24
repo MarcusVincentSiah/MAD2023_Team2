@@ -9,16 +9,18 @@
 
     <EditText
         android:id="@+id/time_input"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/timer"
         android:layout_centerHorizontal="true"
-        android:hint="Minutes"
+        android:layout_marginStart="60dp"
+        android:hint="@string/mins"
         android:inputType="number"
-        android:maxLength="4"
+        android:maxLength="2"
         app:layout_constraintBottom_toTopOf="@+id/timer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/time_input_hours"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -26,9 +28,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/time_input"
-        android:layout_marginLeft="200dp"
+        android:layout_marginStart="200dp"
         android:layout_toEndOf="@+id/time_input"
-        android:text="Set"
+        android:text="@string/set"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -59,9 +61,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/timer"
         android:layout_centerHorizontal="true"
-
-        android:layout_marginRight="200dp"
-        android:text="start"
+        android:layout_marginEnd="200dp"
+        android:text="@string/start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -75,7 +76,7 @@
         android:layout_below="@+id/timer"
 
         android:layout_toEndOf="@+id/btn_start_pause"
-        android:text="reset"
+        android:text="@string/reset"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,13 +91,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/secondary_color"
-        android:text="Choose a task"
+        android:text="@string/choose_a_task"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/time_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="30dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/time_input_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/hour"
+        android:inputType="number"
+        android:layout_marginEnd="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/time_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
