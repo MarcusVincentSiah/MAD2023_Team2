@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         now = new Date();
         mDate = sdf.format(now);
 
+        // all onClickListener
+
         noteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // both image and text link to music player
         musicText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        // notification does not work currently
 //        notifBell.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -186,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
             mTitle.setText(title);
         }
 
-        public void setDueDate(String duedate) {
+        public void setDueDate(String dueDate) {
             TextView mDate = taskView.findViewById(R.id.dueDate);
-            mDate.setText("Due: " +duedate);
+            mDate.setText(dueDate);
         }
     }
 
