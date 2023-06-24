@@ -2,11 +2,11 @@
 MAD Assignment Draft for App
 
 Team Members:
-Marcus Vincent Siah - s10220964
-Lee Guan Xi - s1-244223
-Rachelle Lim Si Tong - s10243170
-Javier Toh Seng Hong - s10243660
-Thant Thu Ta - s10242515
+Marcus Vincent Siah-s10220964
+Lee Guan Xi-s10244223
+Rachelle Lim Si Tong-s10243170
+Javier Toh Seng Hong-s10243660
+Thant Thu Ta-s10242515
 
 EfficienZ
 Brief introduction to the app
