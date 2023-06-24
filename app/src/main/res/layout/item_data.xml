@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFF1E2"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -38,21 +39,21 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Title"
-                android:padding="8dp"
                 android:maxLines="1"
+                android:padding="8dp"
+                android:text="Title"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/black" />
 
-<!--            android:maxLines="3"-->
+            <!--            android:maxLines="3"-->
             <TextView
                 android:id="@+id/note"
                 android:layout_width="match_parent"
