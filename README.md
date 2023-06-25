@@ -40,9 +40,37 @@ User Guide
 Home Page 
 
 ![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/e32c526c-47f8-4cda-9388-6984c4d00c27)
+
 For the task preview, users can scroll to see all their incomplete tasks and their due dates.
 The music preview button shows the current music playing and when clicked it leads to the music page.
 The task list button when clicked brings the user to the task management page.
 The notes buttons when clicked brings the user to the notes page.
 The timer button when clicked brings the user to the timer page.
+
+Task Management Page
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/379e781f-ed8b-4ab6-a057-85de966765b4)
+
+In the task management page users can see all their tasks they have along with a small note and when the task is due.
+If users have completed their tasks, they can simply click on the checkbox and the cross will turn into a tick. 
+They can also click on a task to update or delete it
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/deed2971-02f1-408c-9682-102d928bd8fb)
+
+In order to add tasks users can click on the add button(pen symbol) at the bottom right corner of the task management page 
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/0241e5c8-c9e2-4b8a-aa9f-750ad437300e)
+
+Users must set a title, note, due date and due time before clicking the save button. Now the new task will appear in the task management list.
+
+Time Management Page
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/3ace7321-4167-47ca-a7d1-cf60779ac04c)
+
+The time management shows the current task the user is working on. If users have not selected a task yet, they will not be able to set a time. Users can click on the current task(area shaded with a  different colour) to select another task 
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/e1e19d97-57c6-4c48-8dbd-f86962d69392)
+
+Here it will show the tasks that have not been completed users can click on the task where they will be prompted to start the task or choose another one.
+
 
