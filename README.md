@@ -109,6 +109,7 @@ Note Taking
 3.1	Menu Button – Lets user to edit the folder name or delete the folder
 4.	Note – User can preview the notes and click into the note to edit it.
   4.1.	Title – Users can enter a title for their note.
+  	
   4.2.	Content – Users can type in the contents of their notes. (supports multiple lines)
   4.3.	Delete - Users can delete their notes by clicking the trash can icon.
   4.4.	Save – Users can save their notes by clicking on the save icon.
