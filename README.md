@@ -36,7 +36,9 @@ Stage 2:
 6.	Share badges (Javier) and achievements with others – Users can share their progress with friends and family through apps like Facebook and twitter. 	
 
 User Guide
+
 Home Page 
+
 ![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/e32c526c-47f8-4cda-9388-6984c4d00c27)
 For the task preview, users can scroll to see all their incomplete tasks and their due dates.
 The music preview button shows the current music playing and when clicked it leads to the music page.
