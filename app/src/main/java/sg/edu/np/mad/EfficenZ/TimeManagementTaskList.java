@@ -25,9 +25,8 @@ public class TimeManagementTaskList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_management_task_list);
 
-        mAuth = FirebaseAuth.getInstance();
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
-        mDatabase.keepSynced(true);
 
         setUpRecyclerView();
     }

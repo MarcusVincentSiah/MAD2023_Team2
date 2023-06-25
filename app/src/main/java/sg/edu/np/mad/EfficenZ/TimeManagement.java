@@ -432,7 +432,7 @@ public class TimeManagement extends AppCompatActivity {
         }
     }
 
-    //User end up at homepage when back button is pressed on thier phones
+    //User end up at homepage when back button is pressed on their phones
     @Override
     public void onBackPressed() {
             Intent intent = new Intent(this, MainActivity.class);

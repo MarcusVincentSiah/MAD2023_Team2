@@ -65,6 +65,7 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<Data, Tim
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //When user clicks on a task
                     int position = getLayoutPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         DataSnapshot dataSnapshot = getSnapshots().getSnapshot(position);
@@ -85,10 +86,9 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<Data, Tim
                 .setPositiveButton("Start task", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Open user profile activity
-                        // Replace UserProfileActivity.class with your actual activity class
+
                         Intent intent = new Intent(context, TimeManagement.class);
-                        // Pass any necessary data to the profile activity using intent extras
+                        // Pass data to the profile activity using intent extras
                         intent.putExtra("TASK_OBJECT", data);
                         context.startActivity(intent);
                     }
@@ -96,9 +96,5 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<Data, Tim
                 .setNegativeButton("Close", null)
                 .show();
     }
-
-
-
-
 }
 
