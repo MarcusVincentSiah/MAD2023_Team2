@@ -10,21 +10,20 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="552dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="626dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="106dp" />
 
     <ImageButton
         android:id="@+id/ppbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="99dp"
+        android:layout_width="89dp"
+        android:layout_height="98dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="156dp"
-        android:layout_marginEnd="148dp"
+        android:layout_marginStart="165dp"
+        android:layout_marginEnd="156dp"
         android:layout_marginBottom="4dp"
         android:adjustViewBounds="true"
         android:background="#00FFFFFF"
@@ -46,13 +45,13 @@
 
     <ImageButton
         android:id="@+id/rightskipbtn"
-        android:layout_width="97dp"
-        android:layout_height="98dp"
+        android:layout_width="130dp"
+        android:layout_height="96dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="255dp"
-        android:layout_marginEnd="41dp"
+        android:layout_marginEnd="26dp"
         android:layout_marginBottom="3dp"
         android:background="#00FFFFFF"
         android:scaleType="fitCenter"
