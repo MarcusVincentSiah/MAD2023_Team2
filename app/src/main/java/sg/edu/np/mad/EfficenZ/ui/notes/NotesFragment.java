@@ -1,6 +1,7 @@
 package sg.edu.np.mad.EfficenZ.ui.notes;
 
 // NOTE TAKING
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +35,7 @@ public class NotesFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference notesCollection;
+    private OnFragmentChangeListener fragmentChangeListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +58,10 @@ public class NotesFragment extends Fragment {
         String folderName = bundle.getString("FOLDERNAME");
 
         setUpRecyclerView(view, folderid, folderName);
+
+        // hide create folder button
+        ImageButton createFolder = getActivity().findViewById(R.id.createFolder);
+        createFolder.setVisibility(View.GONE);
     }
 
     private void setUpRecyclerView(View view, String folderid, String folderName) {
@@ -123,6 +130,18 @@ public class NotesFragment extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fragmentChangeListener.onFragmentChanged("NotesFragment");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        fragmentChangeListener = (OnFragmentChangeListener) context;
     }
 
 }
