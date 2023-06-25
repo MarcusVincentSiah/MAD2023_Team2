@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#009688">
+            android:background="@color/tertiary_color">
 
             <TextView
                 android:id="@+id/textView"
@@ -34,7 +34,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="100dp"
                 android:layout_height="93dp"
-                android:background="#009688"
+                android:background="@color/tertiary_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
