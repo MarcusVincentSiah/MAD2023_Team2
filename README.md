@@ -73,4 +73,45 @@ The time management shows the current task the user is working on. If users have
 
 Here it will show the tasks that have not been completed users can click on the task where they will be prompted to start the task or choose another one.
 
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/733eec3d-bebb-4241-82c9-aa1b3cebaedc)
+
+After selecting a task users can set their times in the input fields and click on the set button
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/3f7b28ca-d8cd-405d-a5df-3155359b1848)
+
+When ready user can press start and the timer will start counting down. 
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/fd4cc3f7-f4c7-4586-a051-3da1af7052a8)
+
+Once the timer starts, users can no longer click on the current task or change it unless they pause the timer first. This is so users can do one task at a time.
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/9a4d3b9c-c039-40ef-a37f-456e5cd1bcae)
+
+After the user pauses the task, they have the option to reset it by pressing the reset button, continue it by pressing the start button or choose another task by clicking on the current task again. If the users were to come back to this task, the timer will continue from the time they paused at. 
+
+To return back to the homepage, users can click the back button on their phone.
+
+Music
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/03b6892a-ce75-4cf4-96f8-1650516cfa95)
+
+For music, users can click on the music they would like to listen from the list of music given. They can also use the rewind or skip buttons at the bottom to navigate through the music list.
+
+Note Taking
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/62af2673-71e2-4887-997e-10dd84d9136c)
+
+![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/dbb3078f-eebc-4d08-aa59-49524b6f82c1)
+
+1.	Create Folder – Allow users to create a new folder to store notes
+2.	Search – Allows users to search for their folders or notes.
+3.	Folders – Allow users to categorise their notes by storing them in a folder. User can click into the folder to view the list of notes stored inside.
+3.1	Menu Button – Lets user to edit the folder name or delete the folder
+4.	Note – User can preview the notes and click into the note to edit it.
+4.1.	Title – Users can enter a title for their note.
+4.2.	Content – Users can type in the contents of their notes. (supports multiple lines)
+4.3.	Delete - Users can delete their notes by clicking the trash can icon.
+4.4.	Save – Users can save their notes by clicking on the save icon.
+5.	Create Note - Allow users to create a new note.
+
 
