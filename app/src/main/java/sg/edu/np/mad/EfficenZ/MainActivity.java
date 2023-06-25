@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         Intent music = getIntent();
         String musicTitle = music.getStringExtra("Song title");
         if(musicTitle != null && !musicTitle.isEmpty()){
-            musicText.setText(musicTitle);
+            musicText.setText("Now Playing: " + musicTitle);
         }
 
     }

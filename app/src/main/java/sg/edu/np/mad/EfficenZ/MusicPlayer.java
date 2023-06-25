@@ -51,8 +51,8 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         rightskipbtn = findViewById(R.id.rightskipbtn);
 
         if(mediaPlayer.isPlaying()) {
-            ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
-        } else ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.play_button));
+            ppbtn.setBackgroundResource(R.drawable.play_button);
+        } else ppbtn.setBackgroundResource(R.drawable.play_button);
 
 
         ppbtn.setOnClickListener(new View.OnClickListener() {
@@ -106,12 +106,12 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
     private void toggleMediaPlayer() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            //ppbtn.setBackgroundResource(R.drawable.play_button);
-            ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.play_button));
+            ppbtn.setBackgroundResource(R.drawable.play_button);
+
         } else {
             mediaPlayer.start();
-            //ppbtn.setBackgroundResource(R.drawable.pause_button);
-            ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
+            ppbtn.setBackgroundResource(R.drawable.pause_button);
+
         }
     }
 
@@ -147,6 +147,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
     public void onItemClick(int position) {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
+
         } else {
             song temp = songs.get(position);
             currentSongIndex = position;
@@ -154,6 +155,34 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             mediaPlayer = MediaPlayer.create(getApplicationContext(), temp.songMp3);
             mediaPlayer.start();
             ppbtn.setBackgroundResource(R.drawable.pause_button);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mediaPlayer.isPlaying()) {
+
+            for (int i = 0; i < songs.size(); i++) {
+
+                song temp = songs.get(i);
+                int tempSongMp3 = temp.songMp3;
+
+                if (tempSongMp3 == songMp3Array[currentSongIndex]) {
+                    currentSongName = temp.songName;
+                }
+            }
+
+
+            Intent MainActivity = new Intent(MusicPlayer.this, MainActivity.class);
+            MainActivity.putExtra("Song title", currentSongName);
+            startActivity(MainActivity);
+
+        }
+
+        else {
+            Intent MainActivity = new Intent(MusicPlayer.this, MainActivity.class);
+            MainActivity.putExtra("Song title", "No music playing");
+            startActivity(MainActivity);
         }
     }
 }

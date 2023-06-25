@@ -13,7 +13,8 @@
         android:layout_height="32dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
-        android:progressBackgroundTint="#534C4C"
+        android:progressTint="@color/secondary_color"
+        android:progressBackgroundTint="@color/tertiary_color"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressText" />
@@ -69,7 +70,7 @@
         android:layout_marginBottom="24dp"
         android:gravity="center"
         android:text="No music playing"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/taskButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
@@ -95,29 +96,29 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:text="Your Tasks:"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <TextView
         android:id="@+id/progressText"
-        android:layout_width="149dp"
-        android:layout_height="29dp"
+        android:layout_width="181dp"
+        android:layout_height="30dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="44dp"
         android:text="Your Progress"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/musicTitle"
-        android:layout_width="60dp"
-        android:layout_height="29dp"
+        android:layout_width="84dp"
+        android:layout_height="39dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:text="Music:"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskRecycler" />
 
