@@ -103,11 +103,11 @@ Note Taking
 
 ![image](https://github.com/MarcusVincentSiah/MAD2023_Team2/assets/130948765/dbb3078f-eebc-4d08-aa59-49524b6f82c1)
 
-1.	Create Folder – Allow users to create a new folder to store notes
-2.	Search – Allows users to search for their folders or notes.
-3.	Folders – Allow users to categorise their notes by storing them in a folder. User can click into the folder to view the list of notes stored inside.
+1. Create Folder – Allow users to create a new folder to store notes
+2. Search – Allows users to search for their folders or notes.
+3. Folders – Allow users to categorise their notes by storing them in a folder. User can click into the folder to view the list of notes stored inside.
 3.1	Menu Button – Lets user to edit the folder name or delete the folder
-4.	Note – User can preview the notes and click into the note to edit it.
+4. Note – User can preview the notes and click into the note to edit it.
   4.1.	Title – Users can enter a title for their note.
   	
   4.2.	Content – Users can type in the contents of their notes. (supports multiple lines)
