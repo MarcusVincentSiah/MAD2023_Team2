@@ -71,7 +71,29 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             }
         });
 
-        onBackPressed();
+
+        if (mediaPlayer.isPlaying()) {
+
+            for (int i = 0; i < songs.size(); i++) {
+
+                song temp = songs.get(i);
+                int tempSongMp3 = temp.songMp3;
+
+                if (tempSongMp3 == songMp3Array[currentSongIndex]) {
+                    currentSongName = temp.songName;
+                }
+            }
+
+
+            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
+            MainActivity.putExtra("Song title", currentSongName);
+
+        }
+
+        else {
+            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
+            MainActivity.putExtra("Song title", "");
+        }
 
 
     }
@@ -127,31 +149,4 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             ppbtn.setBackgroundResource(R.drawable.pause_button);
         }
     }
-
-    public void onBackPressed() {
-
-        if (mediaPlayer.isPlaying()) {
-
-            for (int i = 0; i < songs.size(); i++) {
-
-                song temp = songs.get(i);
-                int tempSongMp3 = temp.songMp3;
-
-                if (tempSongMp3 == songMp3Array[currentSongIndex]) {
-                    currentSongName = temp.songName;
-                }
-            }
-
-
-            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
-            MainActivity.putExtra("Song title", currentSongName);
-
-        }
-
-        else {
-            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
-            MainActivity.putExtra("Song title", "");
-        }
-    }
-
 }

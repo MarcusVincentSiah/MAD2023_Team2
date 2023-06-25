@@ -26,6 +26,7 @@
         android:layout_marginEnd="156dp"
         android:layout_marginBottom="4dp"
         android:adjustViewBounds="true"
+        android:background="#00FFFFFF"
         android:scaleType="fitStart" />
 
     <ImageButton
@@ -38,6 +39,7 @@
         android:layout_marginStart="34dp"
         android:layout_marginEnd="247dp"
         android:layout_marginBottom="6dp"
+        android:background="#00FFFFFF"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/left_skip_button" />
 
@@ -51,6 +53,7 @@
         android:layout_marginStart="255dp"
         android:layout_marginEnd="26dp"
         android:layout_marginBottom="3dp"
+        android:background="#00FFFFFF"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/right_skip_button" />
 

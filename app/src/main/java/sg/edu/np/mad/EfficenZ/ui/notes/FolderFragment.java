@@ -32,6 +32,7 @@ public class FolderFragment extends Fragment {
     private CollectionReference foldersCollection = db.collection("folders");
 
     private OnFolderDataPassListener dataPassListener;
+    private OnFragmentChangeListener fragmentChangeListener;
 
 
     @Override
@@ -46,6 +47,10 @@ public class FolderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setUpRecyclerView(view);
+
+        // show create folder button
+        ImageButton createFolder = getActivity().findViewById(R.id.createFolder);
+        createFolder.setVisibility(View.VISIBLE);
     }
 
     private void setUpRecyclerView(View view) {
@@ -63,15 +68,12 @@ public class FolderFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
+        // Handle folder click
         adapter.setOnFolderClickListener(new FolderAdapter.OnFolderClickListener() {
             @Override
             public void onFolderClick(DocumentSnapshot documentSnapshot, int position) {
                 String folderid = documentSnapshot.getId();
                 String folderName = documentSnapshot.getString("name");
-
-                // remove create folder button
-                //ImageButton createFolder = view.findViewById(R.id.createFolder);
-                //createFolder.setVisibility(View.GONE);
 
                 // pass foldername and folderid to NotesFragment (needed for NotesEdit)
                 Bundle bundle = new Bundle();
@@ -107,6 +109,14 @@ public class FolderFragment extends Fragment {
         adapter.stopListening();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Pass fragment name to parent activity (NotesList) (used for search)
+        fragmentChangeListener.onFragmentChanged("FolderFragment");
+    }
+
+    // Pass folderName and folderID to parent activity (NotesList)
     public interface OnFolderDataPassListener {
         void onFolderDataPass(String folderid, String folderName);
     }
@@ -116,6 +126,7 @@ public class FolderFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         dataPassListener = (OnFolderDataPassListener) context;
+        fragmentChangeListener = (OnFragmentChangeListener) context;
     }
 
 }

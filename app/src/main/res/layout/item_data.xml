@@ -41,7 +41,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/task_body">
 
             <TextView
                 android:id="@+id/title"
@@ -63,5 +64,24 @@
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/black" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="0.15"
+            android:orientation="vertical"
+            android:id="@+id/task_status"
+            >
+
+            <ImageView
+                android:id="@+id/tick_cross"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_tick" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

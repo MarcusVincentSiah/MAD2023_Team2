@@ -16,9 +16,11 @@ public class Data implements Serializable {
     private String time_needed;
     private String time_left;
 
+    private boolean task_status;
+
     public Data(){}
 
-    public Data(String title, String note, String date, long timestamp, String dueDate, String dueTime, String id, String time_needed, String time_left) {
+    public Data(String title, String note, String date, long timestamp, String dueDate, String dueTime, String id, String time_needed, String time_left, boolean task_status) {
         this.title = title;
         this.note = note;
         this.date = date;
@@ -28,6 +30,7 @@ public class Data implements Serializable {
         this.id = id;
         this.time_needed = time_needed;
         this.time_left = time_left;
+        this.task_status = task_status;
     }
 
     public String getTitle() {
@@ -99,5 +102,13 @@ public class Data implements Serializable {
 
     public void setTime_left(String time_left) {
         this.time_left = time_left;
+    }
+
+    public boolean getTask_status() {
+        return task_status;
+    }
+
+    public void setTask_status(boolean task_status) {
+        this.task_status = task_status;
     }
 }

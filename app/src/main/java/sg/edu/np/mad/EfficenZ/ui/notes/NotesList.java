@@ -1,7 +1,6 @@
 package sg.edu.np.mad.EfficenZ.ui.notes;
 
 // NOTE TAKING
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -20,30 +19,27 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 import sg.edu.np.mad.EfficenZ.R;
 
-public class NotesList extends AppCompatActivity implements SearchView.OnQueryTextListener, FolderFragment.OnFolderDataPassListener {
+public class NotesList extends AppCompatActivity implements SearchView.OnQueryTextListener, FolderFragment.OnFolderDataPassListener, OnFragmentChangeListener {
 
     private RecyclerView recyclerView;
-    //private NotesAdapter adapter;
     private SearchView searchView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference foldersCollection = db.collection("folders");
-    private CollectionReference notesCollection = db.collection("notes");
+    private CollectionReference notesCollection;
 
     private Folder folder = new Folder();
+
+    private String currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +100,7 @@ public class NotesList extends AppCompatActivity implements SearchView.OnQueryTe
         alertdialog.setPositiveButton("CREATE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Folder folder = new Folder();
+
                 folder.setName(folderName.getText().toString());
                 folder.setId("Folder-"+String.valueOf(System.currentTimeMillis()));
                 foldersCollection.document(folder.getId()).set(folder); // add folder to firestore
@@ -120,75 +116,6 @@ public class NotesList extends AppCompatActivity implements SearchView.OnQueryTe
         alertdialog.show();
     }
 
-
-    /*
-    private void setUpRecyclerView() {
-        // FETCH DATA
-        Query query = foldersCollection.orderBy("id", Query.Direction.DESCENDING);
-
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class)
-                .build();
-
-        adapter = new NotesAdapter(options);
-
-        recyclerView = findViewById(R.id.notesRecyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-
-        adapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
-            @Override
-            public void onNoteClick(DocumentSnapshot documentSnapshot, int position) {
-                //Note note = documentSnapshot.toObject(Note.class);
-                String id = documentSnapshot.getId();
-                String title = documentSnapshot.getString("title");
-                String content = documentSnapshot.getString("content");
-                // Toast.makeText(NotesList.this, id , Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(NotesList.this, NotesEdit.class);
-                intent.putExtra("ID", id);
-                intent.putExtra("TITLE", title);
-                intent.putExtra("CONTENT", content);
-                NotesList.this.startActivity(intent);
-            }
-        });
-
-        adapter.setOnFolderClickListener(new NotesAdapter.OnFolderClickListener(){
-
-            @Override
-            public void onFolderClick(DocumentSnapshot documentSnapshot, int position, String folderName) {
-                Query query1 = notesCollection.whereEqualTo("folder", folderName);
-
-                FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                        .setQuery(query1, Note.class)
-                        .build();
-
-                adapter.updateOptions(options);
-            }
-
-        });
-    }
-
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-
-     */
-
-
     // receive folder data passed from FolderFragment
     @Override
     public void onFolderDataPass(String folderid, String folderName) {
@@ -198,92 +125,113 @@ public class NotesList extends AppCompatActivity implements SearchView.OnQueryTe
 
     }
 
-    // TODO: FIX SEARCH BOX
     // SEARCH NOTES
-    /*
-    private void searchNotes(String input) {
-
-        //input = input.toLowerCase();
-
+    private void searchNotes(String input){
         Query query;
 
-        if (input.isEmpty()) {
-            // If the search input is empty, display all notes
-            query = notesCollection.orderBy("title", Query.Direction.DESCENDING);
-        } else {
-            // Perform search
-            query = notesCollection.whereGreaterThanOrEqualTo("title", input).whereLessThanOrEqualTo("title", input + "\uf8ff");
+        // Search Folder Name
+        if (currentFragment.equals("FolderFragment")){
+
+            if (input.isEmpty()){
+                // display everything when search box is empty
+                query = foldersCollection.orderBy("name", Query.Direction.ASCENDING);
+            } else {
+                query = foldersCollection.whereGreaterThanOrEqualTo("name", input).whereLessThanOrEqualTo("name", input + "\uf8ff");
+            }
+
+            FirestoreRecyclerOptions<Folder> options = new FirestoreRecyclerOptions.Builder<Folder>()
+                    .setQuery(query, Folder.class)
+                    .build();
+
+
+            FolderAdapter adapter = new FolderAdapter(options, this);
+            recyclerView = findViewById(R.id.notesRecyclerView1);
+            recyclerView.setAdapter(adapter);
+            adapter.startListening();
+
+            adapter.setOnFolderClickListener(new FolderAdapter.OnFolderClickListener() {
+                @Override
+                public void onFolderClick(DocumentSnapshot documentSnapshot, int position) {
+                    searchView.clearFocus();
+                    searchView.setQuery("", false);
+
+                    // retrieve folder data
+                    String folderid = documentSnapshot.getId();
+                    String folderName = documentSnapshot.getString("name");
+
+                    // remove create folder button
+                    ImageButton createFolder = findViewById(R.id.createFolder);
+                    createFolder.setVisibility(View.GONE);
+
+                    // pass foldername and folderid to NotesFragment (needed for NotesEdit)
+                    Bundle bundle = new Bundle();
+                    bundle.putString("FOLDERNAME", folderName);
+                    bundle.putString("FOLDERID", folderid);
+                    NotesFragment notesFragment = new NotesFragment();
+                    notesFragment.setArguments(bundle);
+
+                    // pass folderName and folderid to NotesList (needed for the create note button)
+                    folder.setName(folderName);
+                    folder.setId(folderid);
+
+
+                    // start NotesFragment
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment, notesFragment)
+                            .addToBackStack(notesFragment.toString()) // return to prev fragment when back button is pressed.
+                            .commit();
+                }
+            });
         }
 
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class)
-                .build();
+        // Search Note Name
+        else {
+            notesCollection = foldersCollection.document(folder.getId()).collection("notes");
+            if (input.isEmpty()){
+                query = notesCollection.orderBy("title", Query.Direction.ASCENDING);
 
-        adapter.updateOptions(options);
-    }
 
-     */
+            } else {
+                query = notesCollection.whereGreaterThanOrEqualTo("title", input).whereLessThanOrEqualTo("title", input + "\uf8ff");
+            }
 
-    /*
-    private void searchNotes(String query) {
+            FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                    .setQuery(query, Note.class)
+                    .build();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment, new NotesFragment()).commit();
+            NotesAdapter adapter = new NotesAdapter(options);
+            recyclerView = findViewById(R.id.notesRecyclerView2);
+            recyclerView.setAdapter(adapter);
+            adapter.startListening();
 
-        // Assuming "foldersCollection" is your Firestore collection reference for folders
-        foldersCollection.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> folders = queryDocumentSnapshots.getDocuments();
-                        List<DocumentSnapshot> results = new ArrayList<>();
 
-                        for (DocumentSnapshot folder : folders) {
-                            String folderId = folder.getId();
-                            CollectionReference notesCollection = foldersCollection.document(folderId).collection("notes");
+            adapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
+                @Override
+                public void onNoteClick(DocumentSnapshot documentSnapshot, int position) {
+                    searchView.clearFocus();
+                    searchView.setQuery("", false);
 
-                            notesCollection.whereGreaterThanOrEqualTo("title", query).whereLessThanOrEqualTo("title", query + "\uf8ff")
-                                    .get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            results.addAll(queryDocumentSnapshots.getDocuments());
-                                            // Update your adapter with the search results or perform any necessary operations
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Handle any errors that occur during the search
-                                        }
-                                    });
-                        }
+                    // retrieve notes data
+                    String id = documentSnapshot.getId();
+                    String title = documentSnapshot.getString("title");
+                    String content = documentSnapshot.getString("content");
 
-                        // Handle the search results after all queries have completed
-                        // Update your adapter with the final search results or perform any necessary operations
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle any errors that occur during the search
-                    }
-                });
-    }
+                    // pass note data to NotesEdit
+                    Intent intent = new Intent(NotesList.this, NotesEdit.class);
+                    intent.putExtra("ID", id);
+                    intent.putExtra("TITLE", title);
+                    intent.putExtra("CONTENT", content);
 
-     */
+                    intent.putExtra("FOLDERID", folder.getId());
+                    intent.putExtra("FOLDERNAME", folder.getName());
 
-    private void searchNotes(String input){ // BROKEN (for now)
+                    NotesList.this.startActivity(intent);
+                }
+            });
 
-        Query query = db.collectionGroup("notes").whereGreaterThanOrEqualTo("title", input).whereLessThanOrEqualTo("title", input + "\uf8ff");
+        }
 
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class)
-                .build();
-
-        NotesAdapter adapter = new NotesAdapter(options);
-
-        adapter.updateOptions(options);
 
     }
 
@@ -299,7 +247,10 @@ public class NotesList extends AppCompatActivity implements SearchView.OnQueryTe
         return true;
     }
 
-
-
+    @Override
+    public void onFragmentChanged(String fragmentName) {
+        currentFragment = fragmentName;
+    }
 
 }
+
