@@ -2,6 +2,7 @@ package sg.edu.np.mad.EfficenZ;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,12 @@ import sg.edu.np.mad.EfficenZ.model.Data;
 import sg.edu.np.mad.EfficenZ.ui.notes.NotesList;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // database reference
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         databaseRef = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         databaseRef.keepSynced(true);
 
@@ -168,12 +173,38 @@ public class MainActivity extends AppCompatActivity {
 //        Query taskDateQ = databaseRef.orderByChild("dueDate").startAt(mDate).endAt(mWeeklyDate);
 
         // placeholder code for progress bar
-        taskProgress.setProgress(47);
+        databaseRef.addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+              float counter = 0;
+              float total = 0;
+
+              //Loop all the data snapshots to check if each task_status is true or false
+              for (DataSnapshot taskItem : dataSnapshot.getChildren()) {
+                  // Access individual child data
+                  Boolean status = taskItem.child("task_status").getValue(Boolean.class);
+                  if(status){
+                      counter += 1;
+                  }
+
+                  total += 1;
+              }
+              taskProgress.setProgress(Math.round((counter/total)*100));
+          }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle error if data retrieval is unsuccessful
+                Log.d("FirebaseError", databaseError.getMessage());
+            }
+      });
+        //taskProgress.setProgress(47);
 
         // music title (if no song playing shows default text)
         Intent music = getIntent();
         String musicTitle = music.getStringExtra("Song title");
-        musicText.setText(musicTitle);
+        if(musicTitle != null && !musicTitle.isEmpty()){
+            musicText.setText(musicTitle);
+        }
+
     }
 
 

@@ -11,6 +11,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,10 +89,10 @@ public class TaskManagement extends AppCompatActivity {
         //Creating the heading "task management"
         toolbar = findViewById(R.id.toolbar_home);
         toolbar.setTitle("Task Management");
-
         //This line initializes an instance of Firebase Realtime Database and retrieves
         // a reference to the "TaskNote" node within the database
         mAuth = FirebaseAuth.getInstance();
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase.keepSynced(true);
 
@@ -216,7 +220,7 @@ public class TaskManagement extends AppCompatActivity {
                         }
 
                         //Storing the Data into data object and inserting it into database.
-                        Data data = new Data(mtitle, mNote, date, timeStamp, mDueDate, mDueTime, id, null, null);
+                        Data data = new Data(mtitle, mNote, date, timeStamp, mDueDate, mDueTime, id, null, null, false);
 
                         mDatabase.child(id).setValue(data);
                         //setNotification("Task: "+mtitle);
@@ -253,8 +257,8 @@ public class TaskManagement extends AppCompatActivity {
                 viewHolder.setNote(model.getNote());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setDueDate(model.getDueDate());
-
-                viewHolder.myview.setOnClickListener(new View.OnClickListener() {
+                viewHolder.setTick(model.getTask_status());
+                viewHolder.taskBody.setOnClickListener(new View.OnClickListener() {
                     @Override
                     //when a recycle view is clicked, updateData will be called. Which is the alert dialog
                     public void onClick(View view) {
@@ -269,6 +273,14 @@ public class TaskManagement extends AppCompatActivity {
                         //calling update data function
                         updateData(model);
 
+                    }
+                });
+                viewHolder.taskStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewHolder.animate(view);
+                        model.setTask_status(!model.getTask_status());
+                        mDatabase.child(model.getId()).setValue(model);
                     }
                 });
             }
@@ -287,12 +299,50 @@ public class TaskManagement extends AppCompatActivity {
     }
 
     //responsible for holding and managing the views for each item in the RecyclerView
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         View myview;
+        LinearLayout taskBody;
+        LinearLayout taskStatus;
+        ImageView tickCross;
+
+        private AnimatedVectorDrawable tickToCross;
+        private AnimatedVectorDrawable crossToTick;
+        private boolean tick = true;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             myview = itemView;
+            taskBody = myview.findViewById(R.id.task_body);
+            taskStatus = myview.findViewById(R.id.task_status);
+            tickCross =  myview.findViewById(R.id.tick_cross);
+            tickToCross = (AnimatedVectorDrawable)
+                    getDrawable(
+                            R.drawable.avd_tick_to_cross);
+
+            crossToTick = (AnimatedVectorDrawable)
+                    getDrawable(
+                            R.drawable.avd_cross_to_tick);
+        }
+
+        public void animate(View view)
+        {
+            tick = !tick;
+            setTick(tick);
+        }
+
+        public void setTick(boolean isTick){
+            tick = isTick;
+            AnimatedVectorDrawable drawable
+                    = tick ?  crossToTick : tickToCross;
+            tickCross.setImageDrawable(drawable);
+            if(tick){
+                tickCross.setColorFilter(Color.parseColor("#44FF99"));
+            }
+            else{
+                tickCross.setColorFilter(Color.parseColor("#FFB769"));
+
+            }
+            drawable.start();
         }
 
         public void setTitle(String title) {
@@ -404,7 +454,7 @@ public class TaskManagement extends AppCompatActivity {
                     return;
                 }
                 //Creating new data object
-                Data data = new Data(title,note,mDate, timeStamp, mDueDate, mDueTime, post_key, null, null);
+                Data data = new Data(title,note,mDate, timeStamp, mDueDate, mDueTime, post_key, null, null, model.getTask_status());
 
                 //Changing Data for that ID (the clicked recycleView Item) to the new updated Data
                 mDatabase.child(post_key).setValue(data);

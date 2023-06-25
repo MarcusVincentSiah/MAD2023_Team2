@@ -11,4 +11,6 @@
     <color name="primary_color">#4f6b4e</color> <!-- Header -->
     <color name="secondary_color">#988057</color> <!-- Buttons -->
     <color name="tertiary_color">#EFEFE2</color> <!-- items?-->
+    <color name="tick_green">#44FF99</color>
+    <color name="cross_red">#FFB769</color>
 </resources>

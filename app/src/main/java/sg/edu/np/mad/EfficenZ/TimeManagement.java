@@ -155,7 +155,7 @@ public class TimeManagement extends AppCompatActivity {
             //Update the database with the new time_set values
             String dataKey = data.getId();
             String time_needed = String.valueOf(time);
-            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_needed);
+            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_needed, data.getTask_status());
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
         }
@@ -195,7 +195,7 @@ public class TimeManagement extends AppCompatActivity {
             String dataKey = data.getId();
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
 
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Values updated successfully", Toast.LENGTH_SHORT).show();
@@ -213,7 +213,7 @@ public class TimeManagement extends AppCompatActivity {
             String dataKey = data.getId();
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
 
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Timer has been reseted", Toast.LENGTH_SHORT).show();
@@ -297,7 +297,7 @@ public class TimeManagement extends AppCompatActivity {
             //Update the database with the new time_set values
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
             Log.d(data.getTitle()+"STOPPED", data.getTime_left());
 
             mDatabase.child(dataKey).setValue(newData);//update
@@ -378,7 +378,7 @@ public class TimeManagement extends AppCompatActivity {
                         if (data != null) {
                             String time_left = String.valueOf(timeLeft);
                             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left);
+                                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
 
                             mDatabase.child(dataKey).setValue(newData);//update
                             Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
