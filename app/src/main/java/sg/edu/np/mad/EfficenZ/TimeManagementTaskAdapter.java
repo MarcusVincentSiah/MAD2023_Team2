@@ -18,7 +18,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManagementData, TimeManagementTaskAdapter.TimeManagementTaskHolder> {
+public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<Data, TimeManagementTaskAdapter.TimeManagementTaskHolder> {
 
     private OnItemClickListener listener;
 
@@ -30,13 +30,21 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<TaskManag
      *
      * @param options
      */
-    public TimeManagementTaskAdapter(@NonNull FirebaseRecyclerOptions<TaskManagementData> options, Context context) {
+    public TimeManagementTaskAdapter(@NonNull FirebaseRecyclerOptions<Data> options, Context context) {
         super(options);
         this.context = context;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull TimeManagementTaskHolder holder, int position, @NonNull TaskManagementData model) {
+    protected void onBindViewHolder(@NonNull TimeManagementTaskHolder holder, int position, @NonNull Data model) {
+        if (!model.getTask_status()) {
+            holder.textviewTask.setText(model.getTitle());
+        } else {
+            // If task_status is true, hide the item view
+            holder.itemView.setVisibility(View.GONE);
+            // Set the item view's height to 0 to ensure it doesn't occupy space
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+        }
         holder.textviewTask.setText(model.getTitle());
     }
 

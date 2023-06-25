@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import sg.edu.np.mad.EfficenZ.model.Data;
+
 public class TimeManagementTaskList extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
@@ -32,8 +34,8 @@ public class TimeManagementTaskList extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         Query q = mDatabase.orderByChild("timestamp");
-        FirebaseRecyclerOptions<TaskManagementData> options = new FirebaseRecyclerOptions.Builder<TaskManagementData>()
-                .setQuery(q, TaskManagementData.class)
+        FirebaseRecyclerOptions<Data> options = new FirebaseRecyclerOptions.Builder<Data>()
+                .setQuery(q, Data.class)
                 .build();
 
         adapter = new TimeManagementTaskAdapter(options, TimeManagementTaskList.this);
