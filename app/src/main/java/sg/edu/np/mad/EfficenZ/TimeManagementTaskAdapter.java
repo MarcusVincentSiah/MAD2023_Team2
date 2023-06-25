@@ -20,7 +20,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<Data, TimeManagementTaskAdapter.TimeManagementTaskHolder> {
 
-    private OnItemClickListener listener;
 
     private Context context;
 
@@ -98,14 +97,7 @@ public class TimeManagementTaskAdapter extends FirebaseRecyclerAdapter<Data, Tim
                 .show();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(DocumentSnapshot documentSnapshot, int position);
 
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
 
 
 }
