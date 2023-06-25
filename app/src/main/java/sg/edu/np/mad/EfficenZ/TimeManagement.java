@@ -1,18 +1,20 @@
 package sg.edu.np.mad.EfficenZ;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,40 +29,31 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Locale;
 
 public class TimeManagement extends AppCompatActivity {
-
-    private FrameLayout taskFrag;
     private EditText time_input_min;
-
     private EditText time_input_hours;
     private TextView time;
     private Button set_time;
     private Button start_pause;
     private Button reset;
-
     private CountDownTimer countDownTimer;
-
     private boolean timeRunning;
     private long startTime;
-
     private long timeLeft;
     private long endTime;
-
-    private Fragment defaultFrag;
-    private Fragment newFrag;
     private TextView task_title;
-
     private DatabaseReference mDatabase;
-    private DatabaseReference dataRef;
     private FirebaseAuth mAuth;
-    private TimeManagementTaskAdapter adapter;
     private Data data;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_management);
 
-        mAuth = FirebaseAuth.getInstance();
+        mediaPlayer = MediaPlayer.create(this, R.raw.timer_sound);
+
+        //mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase.keepSynced(true);
 
@@ -183,6 +176,19 @@ public class TimeManagement extends AppCompatActivity {
             public void onFinish() {
                 timeRunning = false;
                 updateInterface();
+
+                timeRunning = false;
+                updateInterface();
+
+                // Play sound for 3 seconds
+                mediaPlayer.start();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mediaPlayer.pause();
+                        mediaPlayer.seekTo(0);
+                    }
+                }, 10000);
             }
         }.start();
 
@@ -287,6 +293,13 @@ public class TimeManagement extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        // Release MediaPlayer resources
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+
         //Save values when closed
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor =prefs.edit();
@@ -303,8 +316,6 @@ public class TimeManagement extends AppCompatActivity {
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
                     data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
-            Log.d(data.getTitle()+"STOPPED", data.getTime_left());
-
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
         }
