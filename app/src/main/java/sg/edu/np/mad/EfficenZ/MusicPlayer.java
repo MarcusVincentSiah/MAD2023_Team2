@@ -50,6 +50,11 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         leftskipbtn = findViewById(R.id.leftskipbtn);
         rightskipbtn = findViewById(R.id.rightskipbtn);
 
+        if(mediaPlayer.isPlaying()) {
+            ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
+        } else ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.play_button));
+
+
         ppbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,10 +106,12 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
     private void toggleMediaPlayer() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            ppbtn.setBackgroundResource(R.drawable.play_button);
+            //ppbtn.setBackgroundResource(R.drawable.play_button);
+            ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.play_button));
         } else {
             mediaPlayer.start();
-            ppbtn.setBackgroundResource(R.drawable.pause_button);
+            //ppbtn.setBackgroundResource(R.drawable.pause_button);
+            ppbtn.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
         }
     }
 
