@@ -99,7 +99,7 @@ public class FolderAdapter extends FirestoreRecyclerAdapter<Folder, FolderAdapte
         this.listener = listener;
     }
 
-    // handle folder menu
+    // handle folder menu (display edit and delete)
     private void showFolderOptions(View view, String folderid){
         PopupMenu folderOptions = new PopupMenu(view.getContext(), view);
         folderOptions.inflate(R.menu.folder_option);
@@ -124,7 +124,9 @@ public class FolderAdapter extends FirestoreRecyclerAdapter<Folder, FolderAdapte
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference foldersCollection = db.collection("folders");
 
+    // EDIT FOLDER NAME
     private void editFolder(String folderid) {
+        // show AlertDialog with EditText
         AlertDialog.Builder editDialog = new AlertDialog.Builder(context);
         editDialog.setTitle("Rename Folder");
 
@@ -143,6 +145,7 @@ public class FolderAdapter extends FirestoreRecyclerAdapter<Folder, FolderAdapte
         editDialog.setPositiveButton("RENAME", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // update folder name in FireStore database
                 foldersCollection.document(folderid)
                         .update("name", folderName.getText().toString())
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -162,14 +165,17 @@ public class FolderAdapter extends FirestoreRecyclerAdapter<Folder, FolderAdapte
         editDialog.show();
     }
 
+    // DELETE FOLDER
     private void deleteFolder(String folderid) {
 
+        // AlertDialog to show warning and receive user's confirmation
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(context);
         deleteDialog.setTitle("CAUTION");
         deleteDialog.setMessage("Deleting this folder will also delete all the contents inside. Proceed?");
         deleteDialog.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // delete folder and notes from FireStore database
                 foldersCollection.document(folderid)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

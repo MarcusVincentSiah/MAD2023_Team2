@@ -49,7 +49,6 @@ public class NotesEdit extends AppCompatActivity {
         ImageButton deleteBtn = findViewById(R.id.deleteBtn);
 
         db = FirebaseFirestore.getInstance();
-        //notesCollection = db.collection("notes");
         foldersCollection = db.collection("folders");
 
         // receive data from NotesList/NotesAdapter
@@ -128,26 +127,8 @@ public class NotesEdit extends AppCompatActivity {
             note.setFolderId(folderid);
         }
 
-        /*
-        notesCollection = db.collection("notes");
-        // save note to firestore
-        notesCollection.document(id)
-                .set(note)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(NotesEdit.this, "Note saved", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(NotesEdit.this, e+"\nFailed to save note :(", Toast.LENGTH_SHORT).show();
-                    }
-                }); */
-
-        notesCollection = foldersCollection.document(note.getFolderId()).collection("notes"); // sub-collection
+        // sub-collection (folders > documents > notes)
+        notesCollection = foldersCollection.document(note.getFolderId()).collection("notes");
 
         // parent-collection
         foldersCollection.document(folder.getId())

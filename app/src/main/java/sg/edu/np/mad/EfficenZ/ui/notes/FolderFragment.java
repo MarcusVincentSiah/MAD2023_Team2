@@ -68,6 +68,7 @@ public class FolderFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
+        // Handle folder click
         adapter.setOnFolderClickListener(new FolderAdapter.OnFolderClickListener() {
             @Override
             public void onFolderClick(DocumentSnapshot documentSnapshot, int position) {
@@ -111,9 +112,11 @@ public class FolderFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // Pass fragment name to parent activity (NotesList) (used for search)
         fragmentChangeListener.onFragmentChanged("FolderFragment");
     }
 
+    // Pass folderName and folderID to parent activity (NotesList)
     public interface OnFolderDataPassListener {
         void onFolderDataPass(String folderid, String folderName);
     }
