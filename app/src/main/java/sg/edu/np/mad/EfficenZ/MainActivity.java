@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // database reference
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         databaseRef = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         databaseRef.keepSynced(true);
 
