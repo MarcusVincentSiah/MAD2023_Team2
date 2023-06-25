@@ -42,9 +42,6 @@ public class NotesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_folder, container, false);
-        //setUpRecyclerView(view);
-
-        // Inflate the layout for this fragment
         return view;
     }
 
@@ -52,7 +49,7 @@ public class NotesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // receive folderid from FolderFragment
+        // receive folderid and folderName from FolderFragment
         Bundle bundle = this.getArguments();
         String folderid = bundle.getString("FOLDERID");
         String folderName = bundle.getString("FOLDERNAME");
@@ -65,6 +62,7 @@ public class NotesFragment extends Fragment {
     }
 
     private void setUpRecyclerView(View view, String folderid, String folderName) {
+        // fetch data
         notesCollection = db.collection("folders").document(folderid).collection("notes");
 
         Query query = notesCollection.orderBy("title", Query.Direction.ASCENDING);
@@ -79,34 +77,15 @@ public class NotesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
-        /* DEBUGGING
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Note note = documentSnapshot.toObject(Note.class);
-                        Log.d("NotesFragment_2", "Note: " + note.getTitle() + ", " + note.getContent());
-                    }
-                } else {
-                    Log.d("NotesFragment_2", "No notes found");
-                }
-            }
-        });
-
-         */
-
         adapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
             @Override
             public void onNoteClick(DocumentSnapshot documentSnapshot, int position) {
-                //Note note = documentSnapshot.toObject(Note.class);
+
                 String id = documentSnapshot.getId();
                 String title = documentSnapshot.getString("title");
                 String content = documentSnapshot.getString("content");
-                //String folderid = documentSnapshot.getString("folderid");
-                //Toast.makeText(NotesList.this, id , Toast.LENGTH_SHORT).show();
 
+                // pass notes data to NotesEdit
                 Intent intent = new Intent(getActivity(), NotesEdit.class);
                 intent.putExtra("ID", id);
                 intent.putExtra("TITLE", title);
@@ -143,5 +122,4 @@ public class NotesFragment extends Fragment {
         super.onAttach(context);
         fragmentChangeListener = (OnFragmentChangeListener) context;
     }
-
 }
