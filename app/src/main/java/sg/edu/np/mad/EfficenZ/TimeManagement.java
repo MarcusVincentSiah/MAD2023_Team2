@@ -109,6 +109,11 @@ public class TimeManagement extends AppCompatActivity {
                     minutes = "0";
                 }
 
+                if (Long.parseLong(minutes) > 60) {
+                    Toast.makeText(TimeManagement.this, "Minutes field must be less than 60", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 long timeInput = Long.parseLong(minutes) * 60000 + Long.parseLong(hours) * 3600000; //Convert min to ms
 
                 //check if user entered 0
@@ -396,12 +401,12 @@ public class TimeManagement extends AppCompatActivity {
                 });
             }
         }
+    }
 
-
-
-
-
-
+    @Override
+    public void onBackPressed() {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
     }
 
     @Override
