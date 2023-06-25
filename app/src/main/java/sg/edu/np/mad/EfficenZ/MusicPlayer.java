@@ -92,7 +92,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
 
         else {
             Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
-            MainActivity.putExtra("Song title", "");
+            MainActivity.putExtra("Song title", "No music playing");
         }
 
 
