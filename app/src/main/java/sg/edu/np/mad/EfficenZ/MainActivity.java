@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Query taskListQ = databaseRef.orderByChild("timestamp"); // query for displaying task list
+        Query taskListQ = databaseRef.orderByChild("task_status").equalTo(false); // query for displaying task list
         FirebaseRecyclerOptions<Data> taskList = new FirebaseRecyclerOptions.Builder<Data>()
                 .setQuery(taskListQ, Data.class)
                 .build();
