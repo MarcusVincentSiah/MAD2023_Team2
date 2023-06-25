@@ -50,6 +50,12 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         leftskipbtn = findViewById(R.id.leftskipbtn);
         rightskipbtn = findViewById(R.id.rightskipbtn);
 
+        if (mediaPlayer.isPlaying()){
+            ppbtn.setBackgroundResource(R.drawable.pause_button);
+        } else {
+            ppbtn.setBackgroundResource(R.drawable.play_button);
+        }
+
         ppbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +153,35 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             mediaPlayer = MediaPlayer.create(getApplicationContext(), temp.songMp3);
             mediaPlayer.start();
             ppbtn.setBackgroundResource(R.drawable.pause_button);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (mediaPlayer.isPlaying()) {
+
+            for (int i = 0; i < songs.size(); i++) {
+
+                song temp = songs.get(i);
+                int tempSongMp3 = temp.songMp3;
+
+                if (tempSongMp3 == songMp3Array[currentSongIndex]) {
+                    currentSongName = temp.songName;
+                }
+            }
+
+
+            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
+            MainActivity.putExtra("Song title", currentSongName);
+            startActivity(MainActivity);
+        }
+
+        else {
+            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
+            MainActivity.putExtra("Song title", "");
+            startActivity(MainActivity);
         }
     }
 }
