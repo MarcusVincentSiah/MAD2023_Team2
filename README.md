@@ -34,8 +34,11 @@ Stage 2:
 6.	Share badges (Javier) and achievements with others – Users can share their progress with friends and family through apps like Facebook and twitter.
 
 Some additional considerations for features:
+
 Smart Suggestions: Implement smart suggestions or auto-completion features when creating tasks or notes, based on the user's previous entries or commonly used phrases.
+
 Daily Inspiration/Quotes: Provide users with daily inspirational quotes or motivational messages to boost their productivity and mindset.
+
 Voice Input: Enable users to create tasks or take notes using voice input. This feature can enhance convenience and efficiency, especially for users on the go.(https://developer.android.com/training/wearables/user-input/voice)
 
 User Guide:
