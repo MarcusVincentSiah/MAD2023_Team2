@@ -29,10 +29,12 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
 
+        // Implementing recycler view adapter
         RecyclerView recyclerView = findViewById(R.id.mRecyclerView);
         recycler_view_adapter adapter = new recycler_view_adapter(this, songs, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         setUpSongsList();
 
@@ -56,6 +58,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             ppbtn.setBackgroundResource(R.drawable.play_button);
         }
 
+        //calling methods for skipping, pause and play
         ppbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,33 +80,9 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             }
         });
 
-
-        if (mediaPlayer.isPlaying()) {
-
-            for (int i = 0; i < songs.size(); i++) {
-
-                song temp = songs.get(i);
-                int tempSongMp3 = temp.songMp3;
-
-                if (tempSongMp3 == songMp3Array[currentSongIndex]) {
-                    currentSongName = temp.songName;
-                }
-            }
-
-
-            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
-            MainActivity.putExtra("Song title", currentSongName);
-
-        }
-
-        else {
-            Intent MainActivity = new Intent(MusicPlayer.this, sg.edu.np.mad.EfficenZ.MainActivity.class);
-            MainActivity.putExtra("Song title", "");
-        }
-
-
     }
 
+    // method for pause/play button. when pressed, background resource will be switched from pause to play button drawable
     private void toggleMediaPlayer() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -114,6 +93,8 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         }
     }
 
+
+    //method to skip to previous song
     private void skipToPreviousSong() {
         if (currentSongIndex > 0) {
             currentSongIndex--;
@@ -124,6 +105,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         }
     }
 
+    //method to skip to next song
     private void skipToNextSong() {
         if (currentSongIndex < songMp3Array.length - 1) {
             currentSongIndex++;
@@ -134,6 +116,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         }
     }
 
+    //method to create song objects and store in songNames array
     private void setUpSongsList() {
         String[] songNames = getResources().getStringArray(R.array.song_titles);
 
@@ -142,11 +125,14 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         }
     }
 
+    //method to pause and play song
     @Override
     public void onItemClick(int position) {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-        } else {
+        }
+
+        else {
             song temp = songs.get(position);
             currentSongIndex = position;
             mediaPlayer.reset();
@@ -155,6 +141,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             ppbtn.setBackgroundResource(R.drawable.pause_button);
         }
     }
+
 
     @Override
     public void onBackPressed() {
