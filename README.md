@@ -41,6 +41,8 @@ Daily Inspiration/Quotes: Provide users with daily inspirational quotes or motiv
 
 Voice Input: Enable users to create tasks or take notes using voice input. This feature can enhance convenience and efficiency, especially for users on the go.(https://developer.android.com/training/wearables/user-input/voice)
 
+Virtual Study Rooms: a chat room that people can join to chat and ask questions. Chat rooms can be created by users, topic can be set by the host (i.e. Math, Science) and hosts can invite friends.
+
 User Guide:
 
 Home Page 
