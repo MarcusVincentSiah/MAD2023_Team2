@@ -17,6 +17,7 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import com.google.firebase.database.Query;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 public class TaskManagement extends AppCompatActivity {
@@ -160,6 +162,11 @@ public class TaskManagement extends AppCompatActivity {
                 pickTimeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String mDueDate = dateTimeButton.getText().toString().trim();
+                        if (mDueDate.equalsIgnoreCase("Click Here")) {
+                            Toast.makeText(getApplicationContext(), "Please select due date first!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         // Open time picker
                         if(pickTimeBtn.getText().toString().equalsIgnoreCase("CLICK HERE")){
                             openTimePickerDialog();
@@ -188,20 +195,36 @@ public class TaskManagement extends AppCompatActivity {
                         String mDueTime = pickTimeBtn.getText().toString().trim();
 
                         //is used to check if the variables are empty or null
+                        boolean hasError = false;
                         if (TextUtils.isEmpty(mtitle)){
-                            title.setError("Required Input");
-                            return;
+                            title.setError("Required Title");
+                            hasError = true;
                         }
                         if (TextUtils.isEmpty(mNote)){
-                            note.setError("Required Input");
-                            return;
+                            note.setError("Required Notes");
+                            hasError = true;
                         }
-                        if (TextUtils.isEmpty(mDueDate)){
-                            dateTimeButton.setError("Required Input");
-                            return;
+                        String errorMsg = "";
+                        if (mDueDate.equalsIgnoreCase("Click Here")){
+                            //dateTimeButton.setError("Required Input");
+                            //Toast t = Toast.makeText(getApplicationContext(), "Please set due date!", Toast.LENGTH_SHORT);
+                            //.show();
+                            errorMsg += "Please set due date!\n";
+                            hasError = true;
                         }
-                        if (TextUtils.isEmpty(mDueTime)){
-                            pickTimeBtn.setError("Required Input");
+                        if (mDueTime.equalsIgnoreCase("Click Here")){
+                            //pickTimeBtn.setError("Required Input");
+                            errorMsg += "Please set due time!";
+                            ///t.setGravity(Gravity.CENTER_VERTICAL, 0, 10);
+                            //t.show();
+                            hasError = true;
+                        }
+
+                        if(hasError){
+                            if(!errorMsg.isEmpty()) {
+                                Toast t = Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_SHORT);
+                                t.show();
+                            }
                             return;
                         }
 
@@ -244,7 +267,6 @@ public class TaskManagement extends AppCompatActivity {
         FirebaseRecyclerOptions<Data> options = new FirebaseRecyclerOptions.Builder<Data>() //not sure
                 .setQuery(q, Data.class)
                 .build();
-
 
         FirebaseRecyclerAdapter<Data, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Data, MyViewHolder>(options) {
             @Override
@@ -295,6 +317,7 @@ public class TaskManagement extends AppCompatActivity {
         };
 
         recyclerView.setAdapter(adapter);
+
         adapter.startListening();
     }
 
@@ -408,13 +431,28 @@ public class TaskManagement extends AppCompatActivity {
                     openDatePickerDialog();
                 }
 
-
             }
         });
 
         pickTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    String mDueDate = dateTimeButton.getText().toString().trim();
+                    Calendar nowCalendar = Calendar.getInstance();
+                    Date dueDate  = dateFormat.parse(mDueDate);
+                    String todayDateStr = dateFormat.format(nowCalendar.getTime());
+                    Date todayDate  = dateFormat.parse(todayDateStr);
+                    if (dueDate.before(todayDate)) {
+                        Toast.makeText(getApplicationContext(), "Please update due date!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (ParseException e) {
+                    return;
+                }
+
+
                 // Open time picker
                 try {
                     long timeUpdate = timeFormat.parse(pickTimeBtn.getText().toString()).getTime();
@@ -426,8 +464,6 @@ public class TaskManagement extends AppCompatActivity {
                 } catch (ParseException e) {
                     openTimePickerDialog();
                 }
-
-
             }
         });
 
@@ -439,6 +475,21 @@ public class TaskManagement extends AppCompatActivity {
                 //Getting the new updated data variables
                 title = titleUpdate.getText().toString().trim(); //getting input info
                 note = noteUpdate.getText().toString().trim();
+
+                boolean hasError = false;
+                if (TextUtils.isEmpty(title)){
+                    titleUpdate.setError("Required Title");
+                    hasError = true;
+                }
+                if (TextUtils.isEmpty(note)){
+                    noteUpdate.setError("Required Notes");
+                    hasError = true;
+                }
+
+                if(hasError){
+                    return;
+                }
+
                 Date now = new Date();
                 String mDate = DateFormat.getDateInstance().format(now); //updating to new date
                 String mDueDate = dateTimeButton.getText().toString().trim(); //getting the button text which is the date
@@ -511,6 +562,7 @@ public class TaskManagement extends AppCompatActivity {
                         dateTimeButton.setText(selectedDate);
                     }
                 }, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 
@@ -532,11 +584,14 @@ public class TaskManagement extends AppCompatActivity {
                         dueDate = selectedDate; // Update the dueDate variable with the selected date
                     }
                 }, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 
     //TimePicker function wll set Time.
     private void openTimePickerDialog(){
+
+
         // time now when open dialog
         final Calendar c = Calendar.getInstance();
         // on below line we are getting our hour, minute.
@@ -548,18 +603,39 @@ public class TaskManagement extends AppCompatActivity {
     //TimePicker function wll set new updated Time.
     //It will initially show the previously selected time when dialog appears
     private void openTimePickerDialog(int hour, int minute){
-            // customize time for update.
-            // on below line we are initializing our Time Picker Dialog
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                    (view, hourOfDay, minute1) -> {
-                        // on below line we are setting selected time in our text view.
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.HOUR, hourOfDay);
-                        calendar.set(Calendar.MINUTE, minute1);
-                        String timeSet = timeFormat.format(calendar.getTime());
+        // customize time for update.
+        // on below line we are initializing our Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                (view, chosenHour, chosenMinute) -> {
+                    // on below line we are setting selected time in our text view.
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR, chosenHour);
+                    calendar.set(Calendar.MINUTE, chosenMinute);
+                    String timeSet = timeFormat.format(calendar.getTime());
+
+                    String dateSelected = dateTimeButton.getText().toString().trim();
+                    String[] dateList = dateSelected.split("/");
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH)+1;
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    if(day == Integer.parseInt(dateList[0]) && month == Integer.parseInt(dateList[1]) && year == Integer.parseInt(dateList[2])){
+                        Calendar nowDateTime = Calendar.getInstance();
+                        int hourNow = nowDateTime.get(Calendar.HOUR_OF_DAY);
+                        int minuteNow = nowDateTime.get(Calendar.MINUTE);
+                        if(chosenHour < (hourNow + 1) || (chosenHour == hourNow && chosenMinute <= minuteNow)){
+                            Toast.makeText(this, "Choose a time more than 1hr from now." , Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            pickTimeBtn.setText(timeSet);
+                        }
+                    }
+                    else{
                         pickTimeBtn.setText(timeSet);
-                    }, hour, minute, false);
-            // at last we are calling show to display our time picker dialog.
-            timePickerDialog.show();
+                    }
+
+                }, hour, minute, false);
+
+        // at last we are calling show to display our time picker dialog.
+        timePickerDialog.show();
     }
 }
