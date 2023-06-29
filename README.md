@@ -25,17 +25,25 @@ Stage 1 Features
 
 5.	Note-taking (GUANXI) – Note-taking feature that enables users to create notes. Users are also able to edit and delete current notes. On top of that, Users can also create folders to store their notes in which will help organise their notes. There is also a search bar to quickly and conveniently search for notes
 
-
-
 Stage 2:
 1.	Login & personalization (rachelle) – Allow users to login with an existing account or sign up with a new account. Users can change their color scheme (light/dark mode) and change settings like name, password, email address, as well as profile picture.
 2.	Habit streaks (Thu Ta)– track and view streaks for maintaining daily habits. It allows users to set up habits they want to develop or break. It will track their consistency over time. Celebrate milestones streaks by giving motivational prompts/quotes. 
 3.	Notification (GUANXI) - Users will be notified when duedate is closing, when timer ends and maybe when achivements have been accomplished. 
 4.	Integration with Calendar (Marcus) – A Calendar showing tasks and events stated by the user. This allows users to have a more overall view of their tasks. 
 5.	Gamification (GUANXI) – Include achievements, badges, and rewards to encourage users to complete tasks and maintain productivity streaks.
-6.	Share badges (Javier) and achievements with others – Users can share their progress with friends and family through apps like Facebook and twitter. 	
+6.	Share badges (Javier) and achievements with others – Users can share their progress with friends and family through apps like Facebook and twitter.
 
-User Guide
+Some additional considerations for features:
+
+Smart Suggestions: Implement smart suggestions or auto-completion features when creating tasks or notes, based on the user's previous entries or commonly used phrases.
+
+Daily Inspiration/Quotes: Provide users with daily inspirational quotes or motivational messages to boost their productivity and mindset.
+
+Voice Input: Enable users to create tasks or take notes using voice input. This feature can enhance convenience and efficiency, especially for users on the go.(https://developer.android.com/training/wearables/user-input/voice)
+
+Virtual Study Rooms: a chat room that people can join to chat and ask questions. Chat rooms can be created by users, topic can be set by the host (i.e. Math, Science) and hosts can invite friends.
+
+User Guide:
 
 Home Page 
 
