@@ -30,8 +30,8 @@ Stage 2:
 2.	Habit streaks (Thu Ta)– track and view streaks for maintaining daily habits. It allows users to set up habits they want to develop or break. It will track their consistency over time. Celebrate milestones streaks by giving motivational prompts/quotes. 
 3.	Notification (GUANXI) - Users will be notified when duedate is closing, when timer ends and maybe when achivements have been accomplished. 
 4.	Integration with Calendar (Marcus) – A Calendar showing tasks and events stated by the user. This allows users to have a more overall view of their tasks. 
-5.	Gamification (GUANXI) – Include achievements, badges, and rewards to encourage users to complete tasks and maintain productivity streaks.
-6.	Share badges (Javier) and achievements with others – Users can share their progress with friends and family through apps like Facebook and twitter.
+5.	Gamification (Javier) – Include achievements, badges, and rewards to encourage users to complete tasks and maintain productivity streaks.
+6.	Share badges (Javier (If you can)) and achievements with others – Users can share their progress with friends and family through apps like Facebook and twitter.
 
 Some additional considerations for features:
 
