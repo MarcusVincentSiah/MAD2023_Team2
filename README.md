@@ -43,6 +43,8 @@ Voice Input: Enable users to create tasks or take notes using voice input. This 
 
 Virtual Study Rooms: a chat room that people can join to chat and ask questions. Chat rooms can be created by users, topic can be set by the host (i.e. Math, Science) and hosts can invite friends.
 
+Implement ChatGPT: implement using API. However, need to pay money.
+
 User Guide:
 
 Home Page 
