@@ -209,7 +209,7 @@ public class TimeManagement extends AppCompatActivity {
             String dataKey = data.getId();
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
+                    data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, data.getTask_status());
 
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Timer Paused", Toast.LENGTH_SHORT).show();
@@ -230,7 +230,7 @@ public class TimeManagement extends AppCompatActivity {
             String dataKey = data.getId();
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
+                    data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, data.getTask_status());
 
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Timer has been resetted", Toast.LENGTH_SHORT).show();
@@ -325,7 +325,7 @@ public class TimeManagement extends AppCompatActivity {
             //Update the database with the new time_set values
             String time_left = String.valueOf(timeLeft);
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, data.getTime_needed(), time_left, data.getTask_status());
+                    data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, data.getTask_status());
             mDatabase.child(dataKey).setValue(newData);//update
 
         }
