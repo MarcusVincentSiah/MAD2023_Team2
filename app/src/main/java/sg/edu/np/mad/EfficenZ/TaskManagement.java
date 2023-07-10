@@ -279,6 +279,7 @@ public class TaskManagement extends AppCompatActivity {
                 viewHolder.setNote(model.getNote());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setDueDate(model.getDueDate());
+                viewHolder.setDueTime(model.getDueTime());
                 viewHolder.setTick(model.getTask_status());
                 viewHolder.taskBody.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -338,13 +339,9 @@ public class TaskManagement extends AppCompatActivity {
             taskBody = myview.findViewById(R.id.task_body);
             taskStatus = myview.findViewById(R.id.task_status);
             tickCross =  myview.findViewById(R.id.tick_cross);
-            tickToCross = (AnimatedVectorDrawable)
-                    getDrawable(
-                            R.drawable.avd_tick_to_cross);
+            tickToCross = (AnimatedVectorDrawable) getDrawable(R.drawable.avd_tick_to_cross);
+            crossToTick = (AnimatedVectorDrawable) getDrawable(R.drawable.avd_cross_to_tick);
 
-            crossToTick = (AnimatedVectorDrawable)
-                    getDrawable(
-                            R.drawable.avd_cross_to_tick);
         }
 
         public void animate(View view)
@@ -386,6 +383,11 @@ public class TaskManagement extends AppCompatActivity {
         public void setDueDate(String duedate) {
             TextView mDate = myview.findViewById(R.id.duedate);
             mDate.setText("Due: " +duedate);
+        }
+
+        public void setDueTime(String duetime) {
+            TextView mTime = myview.findViewById(R.id.duetime);
+            mTime.setText("Time: " + duetime);
         }
     }
 
@@ -558,7 +560,9 @@ public class TaskManagement extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                        int monthVal = month + 1;
+                        String selectedDate = ((dayOfMonth < 10)?"0"+dayOfMonth:dayOfMonth) + "/" +
+                                ((monthVal < 10)?"0"+(monthVal):monthVal) + "/" + year;
                         dateTimeButton.setText(selectedDate);
                     }
                 }, year, month, day);
