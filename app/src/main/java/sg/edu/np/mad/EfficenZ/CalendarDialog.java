@@ -27,12 +27,14 @@ import java.util.ArrayList;
 
 import sg.edu.np.mad.EfficenZ.model.Data;
 
-// Define a DialogList class that extends Dialog
+/*
+ Define a CalendarDialog class that extends Dialog
+ Contain its own recycle view to display the tasks of the selected date.
+ */
 public abstract class CalendarDialog extends Dialog {
     private ArrayList<Data> list;
     private CalendarTaskAdapter adapter;
     private DatabaseReference mDatabase;
-    RecyclerView recyclerView;
     private String selectedDate;
 
     public TextView dayOfMonth;
@@ -91,19 +93,21 @@ public abstract class CalendarDialog extends Dialog {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list.clear();
-                boolean hasTasks = false;
                 for(DataSnapshot childItem: snapshot.getChildren()){
                     Data task = childItem.getValue(Data.class);
                     if(selectedDate.equals(task.getDueDate())){
                         list.add(task);
-                        hasTasks = true;
-                        //HolderWithTask(view);
                     }
                 }
+
+                // no task will put a fake task UI to display you are free today.
                 if (list.size() == 0){
                     list.add(new Data("No task", "You are free today", selectedDate,
                             0, selectedDate, selectedDate, "", "", "", false));
                 }
+
+                // Java lambda comparator, left vs right item.
+                // Simillar to task management where completed task is deprioritize and sorted by due time.
                 list.sort((lhs, rhs)->{
                     if(lhs.getTask_status() == false && rhs.getTask_status() == true){
                         return -1;
@@ -126,10 +130,6 @@ public abstract class CalendarDialog extends Dialog {
             }
         });
     }
-
-//    public void HolderWithTask(@NonNull View view){
-//        dayOfMonth.setBackground(AppCompatResources.getDrawable(view.getContext(), R.drawable.rounded_corner_task));
-//    }
 
 }
 

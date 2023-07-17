@@ -30,16 +30,18 @@ import java.util.Locale;
 
 import sg.edu.np.mad.EfficenZ.model.Data;
 
+/*
+Main View/class that manages the monthly calendar UI, and compute how many days of that month + year.
+Also in charge of spawning the dialogue when the day of month is being clicked.
+* */
 public class CalendarTask extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     private Calendar selectedDate;
     private DatabaseReference mDatabase;
-    //private FirebaseAuth mAuth;
+
     private ArrayList<Data> taskList;
-    private AlertDialog dialog;
-    //private ArrayList<Data> tasks;
 
     private CalendarAdapter calendarAdapter;
 
@@ -48,18 +50,16 @@ public class CalendarTask extends AppCompatActivity implements CalendarAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_task);
         initWidgets();
-        selectedDate = Calendar.getInstance();
+        selectedDate = Calendar.getInstance(); // initial calendar month, year page to show.
 
         // Initialize the tasks list
         taskList = new ArrayList<>();
-        setMonthView();
+        setMonthView(); // on page load, set the month view to current month and year.
         loadTasksForMonth();
 
         //Getting database
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase.keepSynced(true);
-
-        //taskList = new ArrayList<>();
     }
 
     private void initWidgets() {
@@ -71,13 +71,19 @@ public class CalendarTask extends AppCompatActivity implements CalendarAdapter.O
         monthYearText.setText(monthYearFromDate(selectedDate.getTime()));
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
         ArrayList<String> dateInMonth = dateInMonthArray(selectedDate);
-        //Adapter constuctor is used here
+        // creating the calendar adapter to generate the days on month on the recycler view
         calendarAdapter  = new CalendarAdapter(daysInMonth, dateInMonth,this, taskList);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
     }
 
+    // Logic to get the list of days in given year and month date.
+    // Feb -> 1-28, 1-29
+    // one month can be represented by 6 week overlap
+    // so we need 6 rows of 7 days to represent a month.
+    // considering max is 31 days. we need 7x5 minimum, but 35 - 31 = 4, 42 - 31 = 11
+    // ["","","1", ....., "31", "", ..., ""]
     private ArrayList<String> daysInMonthArray(Calendar date) {
         ArrayList<String> daysInMonthArray = new ArrayList<>();
         Calendar calendar = (Calendar) date.clone();
@@ -90,11 +96,16 @@ public class CalendarTask extends AppCompatActivity implements CalendarAdapter.O
             if (i <= dayOfWeek || i > daysInMonth + dayOfWeek) {
                 daysInMonthArray.add(""); //adding blank square
             } else {
+                // when its the start of first day, the number will be inputted on the right position
                 daysInMonthArray.add(String.valueOf(i - dayOfWeek)); //adding day of week
             }
         }
         return daysInMonthArray;
     }
+
+    // this is computed for the sake of task filtering when choosing the specific day.
+    // return list of dates of the month.
+    // ["","","01/07/2023", ....., "31/07/2023", "", ..., ""]
     private ArrayList<String> dateInMonthArray(Calendar date) {
         ArrayList<String> dateInMonthArray = new ArrayList<>();
         Calendar calendar = (Calendar) date.clone();
@@ -137,6 +148,7 @@ public class CalendarTask extends AppCompatActivity implements CalendarAdapter.O
         return formatter.format(date);
     }
 
+    // move to previous or next month and update view
     public void previousMonthAction(View view) {
         selectedDate.add(Calendar.MONTH, -1);
         setMonthView();
@@ -147,27 +159,34 @@ public class CalendarTask extends AppCompatActivity implements CalendarAdapter.O
         setMonthView();
     }
 
+    // On click item will be trigger when CalendarViewHolder fires it.
     @Override
     public void onItemClick(int position, String dayText, CalendarViewHolder holder) {
         if (!dayText.equals("")) {
             String message = "Selected Date " + dayText + " " + monthYearFromDate(selectedDate.getTime());
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-             selectedDate.set(Calendar.DATE, Integer.parseInt(dayText));
-
+            selectedDate.set(Calendar.DATE, Integer.parseInt(dayText));
             showTaskDataInDialog(dayMonthYearFromDate(selectedDate.getTime()), holder);
         }
     }
 
     public void showTaskDataInDialog(String selectedDate, CalendarViewHolder holder){
+        // provide dialog with dd/MM/yyyy to search fo tasks of that selected date to be displayed.
         CalendarDialog calDialog = new CalendarDialog(this, selectedDate){};
         calDialog.setOnDismissListener(new DialogInterface.OnDismissListener(){
             @Override
             public void onDismiss(DialogInterface dialog){
+                // during dismiss dialog, trigger unselectHolder to update Circle UI unselected background.
                 holder.unselectHolder();
             }
         });
+
+        // show the dialog
         calDialog.show();
     }
+
+    // Load all the tasks for current Month view
+    // then updates all the day holder the task count.
     private void loadTasksForMonth() {
         // Get a reference to the Firebase database
         mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
@@ -189,7 +208,9 @@ public class CalendarTask extends AppCompatActivity implements CalendarAdapter.O
                     taskList.add(task);
                 }
 
-                // Notify the adapter that the data has changed
+                // Notify the adapter that the data has changed, calendarAdapter will take the
+                // updated taskList and update the count for each circle holder.
+                // onBindViewHolder in calendarAdapter will re-trigger again.
                 calendarAdapter.notifyDataSetChanged();
             }
 

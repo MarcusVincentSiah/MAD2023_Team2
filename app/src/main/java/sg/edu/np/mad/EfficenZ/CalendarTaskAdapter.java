@@ -15,6 +15,9 @@ import java.util.List;
 
 import sg.edu.np.mad.EfficenZ.model.Data;
 
+/*
+* Recycler item holder to show read-only tasks.
+* */
 public class CalendarTaskAdapter extends RecyclerView.Adapter<CalendarTaskAdapter.CalendarViewHolder> {
     private List<Data> items;
     private Context context;

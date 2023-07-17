@@ -20,6 +20,10 @@ import java.util.List;
 
 import sg.edu.np.mad.EfficenZ.model.Data;
 
+/*
+* CalendarAdaper that manages the calendar days Circle UI.
+* Update task count of each day, so that days with task will have indicator for user to know there is tasks.
+* */
 class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
 {
     private final ArrayList<String> daysOfMonth;
@@ -28,7 +32,6 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
 
     private final ArrayList<Data> taskList;
 
-    private int prevClickPosition;
 
     private DatabaseReference mDatabase;
 
@@ -51,39 +54,30 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
         return new CalendarViewHolder(view, onItemListener);
     }
 
+    // CalendarViewHolder is the Circle UI with the date number
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position)
     {
         if(daysOfMonth.get(position).isEmpty()){
+            // Hide the circle that is not part of the day of Month
             holder.dayOfMonth.setBackground(null);
         }
         else{
             int count = 0;
+            // how many task on this day.
             for (Data d : taskList) {
                 if (d.getDueDate().equals(dateInMonth.get(position))){
                     count += 1;
                 }
             }
+
+            // update the task count to the circle and circle will self update its own color
+            // indicator to the user
             holder.setNumberOfTask(count);
         }
 
+        // update to empty or the rightful date number of the day of month.
         holder.dayOfMonth.setText(daysOfMonth.get(position));
-
-
-//        String dayText = daysOfMonth.get(position);
-//        if (dayText.isEmpty()) {
-//            holder.dayOfMonth.setBackground(null);
-//        } else {
-//            holder.dayOfMonth.setText(dayText);
-//            // Check if there is a task for this day
-//            boolean hasTask = checkIfDayHasTask(dayText);
-//            // Set the background color based on the task availability
-//            if (hasTask) {
-//                holder.dayOfMonth.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.rounded_corner_task));
-//            } else {
-//                holder.dayOfMonth.setBackground(null);
-//            }
-//        }
 
     }
 
@@ -98,12 +92,4 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
         void onItemClick(int position, String dayText, CalendarViewHolder holder);
     }
 
-//    private boolean checkIfDayHasTask(String dayText) {
-//        for (Data task : tasks) {
-//            if (dayText.equals(task.getDueDate())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 }

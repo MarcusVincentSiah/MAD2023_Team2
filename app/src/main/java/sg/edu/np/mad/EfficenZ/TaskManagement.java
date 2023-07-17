@@ -38,13 +38,17 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -76,7 +80,9 @@ public class TaskManagement extends AppCompatActivity {
 
     private String dueTime;
     private String post_key;
-
+    //For sorting tasks in ascending order
+    private ArrayList<Data> taskList = new ArrayList<>();
+    private TaskManagementAdapter taskAdapter;
     private SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
     // 17/6/2023 01:25pm
     // 17/6/2023 01:25am
@@ -258,68 +264,126 @@ public class TaskManagement extends AppCompatActivity {
     }
 
     @Override
-    //All this code sets up a FirebaseRecyclerAdapter to populate a RecyclerView
+    // Previously using FirebaseRecyclerAdapter but it has limitations to do data filtering.
+    // Re-coded with custom adapter to support filter and dual sorting.
     // with data from a Firebase Realtime Database.
     protected void onStart() {
         super.onStart();
+        taskAdapter  = new TaskManagementAdapter(taskList);
+        recyclerView.setAdapter(taskAdapter);
+
         Query q = mDatabase.orderByChild("timestamp");
+        //q.addListenerForSingleValueEvent(new ValueEventListener() {
 
-        FirebaseRecyclerOptions<Data> options = new FirebaseRecyclerOptions.Builder<Data>() //not sure
-                .setQuery(q, Data.class)
-                .build();
+        // Initially tried with addListenerForSingleValueEvent as we want to sort on page load
+        // But realised that when the task is marked as completed or date is adjusted, recycler view does not refresh
+        // We switch to addValueEventListener where it is updating recycler realtime with any data changes.
+        q.addValueEventListener(new ValueEventListener() {
 
-        FirebaseRecyclerAdapter<Data, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Data, MyViewHolder>(options) {
             @Override
-            //defines an onBindViewHolder() method to bind the data to ViewHolder views,
-            // and sets up an OnClickListener to handle clicks on RecyclerView items.
-            protected void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position, @NonNull Data model) {
+            public void onDataChange(@org.checkerframework.checker.nullness.qual.NonNull DataSnapshot dataSnapshot) {
+                // Clear the tasks list before populating it with new data
+                taskList.clear();
 
-                //setting data for each recycleView item
-                viewHolder.setTitle(model.getTitle());
-                viewHolder.setNote(model.getNote());
-                viewHolder.setDate(model.getDate());
-                viewHolder.setDueDate(model.getDueDate());
-                viewHolder.setDueTime(model.getDueTime());
-                viewHolder.setTick(model.getTask_status());
-                viewHolder.taskBody.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    //when a recycle view is clicked, updateData will be called. Which is the alert dialog
-                    public void onClick(View view) {
+                // Loop through the retrieved data and create task objects
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Data task = snapshot.getValue(Data.class);
+                    taskList.add(task);
+                }
 
-                        //post_key Gets position of the data in recycler view
-                        post_key=getRef(viewHolder.getBindingAdapterPosition()).getKey();
-                        title = model.getTitle();
-                        note = model.getNote();
-                        dueDate = model.getDueDate();
-                        dueTime = model.getDueTime();
-
-                        //calling update data function
-                        updateData(model);
-
+                // Firebase adapter takes in the Query to display out data but Firebase query does not support multi-variables sorting.
+                // There with customer adapter we have more control to get an ArrayList of Task.
+                // Then can leverage on the normal Java ArrayList sort functionalities
+                taskList.sort((lhs, rhs)->{
+                    // Java lambda comparator, left vs right item.
+                    // if right task status is completed and left isnt, -1 means left is smaller than right.
+                    if(lhs.getTask_status() == false && rhs.getTask_status() == true){
+                        return -1;
+                    }
+                    else if(lhs.getTask_status() == true && rhs.getTask_status() == false){
+                        // if left task status is completed and right isnt, 1 means left is bigger than right.
+                        return 1;
+                    }
+                    else{
+                        // tied between status means both are completed/incompleted.
+                        // sort by due time
+                        return Long.compare(lhs.getTimestamp(), rhs.getTimestamp());
                     }
                 });
-                viewHolder.taskStatus.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        viewHolder.animate(view);
-                        model.setTask_status(!model.getTask_status());
-                        mDatabase.child(model.getId()).setValue(model);
-                    }
-                });
+
+                // Notify the adapter that the data has changed, recycler view will update
+                taskAdapter.notifyDataSetChanged();
             }
 
-            @NonNull
             @Override
-            //creating and returning a new instance of the MyViewHolder class.
-            public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_data, parent, false);
-                return new MyViewHolder(view);
+            public void onCancelled(@org.checkerframework.checker.nullness.qual.NonNull DatabaseError databaseError) {
+                // Handle the error if the data retrieval is canceled or fails
             }
-        };
+        });
 
-        recyclerView.setAdapter(adapter);
+    }
 
-        adapter.startListening();
+    class TaskManagementAdapter extends RecyclerView.Adapter<MyViewHolder>{
+        private final ArrayList<Data> taskList;
+        public TaskManagementAdapter(ArrayList<Data> taskList)
+        {
+            this.taskList = taskList;
+        }
+
+        @Override
+        //defines an onBindViewHolder() method to bind the data to ViewHolder views,
+        // and sets up an OnClickListener to handle clicks on RecyclerView items.
+        public void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position) {
+            Data model = this.taskList.get(position);
+            //setting data for each recycleView item
+            viewHolder.setTitle(model.getTitle());
+            viewHolder.setNote(model.getNote());
+            viewHolder.setDate(model.getDate());
+            viewHolder.setDueDate(model.getDueDate());
+            viewHolder.setDueTime(model.getDueTime());
+            viewHolder.setTick(model.getTask_status());
+            viewHolder.taskBody.setOnClickListener(new View.OnClickListener() {
+                @Override
+                //when a recycle view is clicked, updateData will be called. Which is the alert dialog
+                public void onClick(View view) {
+
+                    //post_key Gets position of the data in recycler view
+                    post_key= model.getId();
+                    title = model.getTitle();
+                    note = model.getNote();
+                    dueDate = model.getDueDate();
+                    dueTime = model.getDueTime();
+
+                    //calling update data function
+                    updateData(model);
+
+                }
+            });
+            viewHolder.taskStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    viewHolder.animate(view);
+                    model.setTask_status(!model.getTask_status());
+                    mDatabase.child(model.getId()).setValue(model);
+                }
+            });
+
+
+        }
+        @Override
+        public int getItemCount()
+        {
+            return taskList.size();
+        }
+
+        @NonNull
+        @Override
+        //creating and returning a new instance of the MyViewHolder class.
+        public TaskManagement.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_data, parent, false);
+            return new TaskManagement.MyViewHolder(view);
+        }
+
     }
 
     //responsible for holding and managing the views for each item in the RecyclerView
