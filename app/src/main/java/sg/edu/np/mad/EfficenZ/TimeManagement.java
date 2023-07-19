@@ -418,7 +418,7 @@ public class TimeManagement extends AppCompatActivity {
                             Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
                             Log.d(data.getTitle()+"Started", data.getTime_left());
                             task_title.setText("Task: " + data.getTitle());
-                            task_title.setTextSize(30);
+                            task_title.setTextSize(20);
                         }
                     }
 
