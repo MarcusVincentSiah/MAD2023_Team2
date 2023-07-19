@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Button taskButton;
     private TextView musicText;
     private ProgressBar taskProgress;
+    private TextView progressNumber;
 
     private Date now;
     private Date weeklyDate;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         // progress bar for task list
         taskProgress = findViewById(R.id.progressBar);
+        progressNumber = findViewById(R.id.progressNumber);
 
         // dates used for progress bar logic
         sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                   total += 1;
               }
               taskProgress.setProgress(Math.round((counter/total)*100));
+              progressNumber.setText(Double.toString(Math.round((counter/total)*100))+"%");
           }
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle error if data retrieval is unsuccessful

@@ -6,6 +6,17 @@
     android:layout_height="match_parent">
 
 
+    <TextView
+        android:id="@+id/progressNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="44dp"
+        android:text="Num"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
@@ -17,7 +28,9 @@
         android:progressBackgroundTint="@color/tertiary_color"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressText" />
+        app:layout_constraintTop_toBottomOf="@+id/progressText"
+        />
+
 
     <ImageView
         android:id="@+id/notificationBell"
@@ -106,7 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="44dp"
-        android:text="Your Progress"
+        android:text="Your Progress: "
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
