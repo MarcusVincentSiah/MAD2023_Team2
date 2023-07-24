@@ -66,4 +66,8 @@ dependencies {
     // lottie animations
     implementation "com.airbnb.android:lottie:6.1.0"
 
+    //konfetti libary
+    implementation 'nl.dionsegijn:konfetti:1.3.2'
+    //implementation 'nl.dionsegijn:konfetti-compose:2.0.1'
+    //implementation 'nl.dionsegijn:konfetti-xml:2.0.1'
 }

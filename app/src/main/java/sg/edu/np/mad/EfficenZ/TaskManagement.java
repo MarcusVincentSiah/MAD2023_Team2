@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.icu.util.Calendar;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,6 +34,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 import sg.edu.np.mad.EfficenZ.model.Data;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -51,6 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class TaskManagement extends AppCompatActivity {
 
@@ -89,6 +94,7 @@ public class TaskManagement extends AppCompatActivity {
     private SimpleDateFormat dtimeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mma");
     private SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
 
+    private KonfettiView viewKonfetti;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,8 +121,9 @@ public class TaskManagement extends AppCompatActivity {
         layoutManager.setStackFromEnd(false);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
-
         penBtn=findViewById(R.id.Pen_btn);
+
+        viewKonfetti = findViewById(R.id.konfettiView);
 
         //notification
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -365,6 +372,34 @@ public class TaskManagement extends AppCompatActivity {
                     viewHolder.animate(view);
                     model.setTask_status(!model.getTask_status());
                     mDatabase.child(model.getId()).setValue(model);
+
+                    //using konfetti library to spawn konfetti particles
+                    if (model.getTask_status()){
+                        viewKonfetti.build()
+                                .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA, Color.BLUE, Color.RED)
+                                .setDirection(0.0, 359.0)
+                                .setSpeed(1f, 5f)
+                                .setFadeOutEnabled(true)
+                                .setTimeToLive(2000L)
+                                .addShapes(Shape.RECT, Shape.CIRCLE)
+                                .addSizes(new Size(12, 80.f))
+                                .setPosition(-50f, viewKonfetti.getWidth() + 50f, -50f, -50f)
+                                .stream(250, 3000L);
+
+                        //using media player to play sound when task is completed
+                        MediaPlayer media = MediaPlayer.create(getApplicationContext(), R.raw.clapping);
+                        media.start();
+                        media.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mediaPlayer) {
+                                mediaPlayer.stop();
+                                if (mediaPlayer != null) {
+                                    mediaPlayer.release();
+                                }
+
+                            }
+                        });
+                    }
                 }
             });
 
@@ -677,9 +712,10 @@ public class TaskManagement extends AppCompatActivity {
                 (view, chosenHour, chosenMinute) -> {
                     // on below line we are setting selected time in our text view.
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.HOUR, chosenHour);
+                    calendar.set(Calendar.HOUR_OF_DAY, chosenHour);
                     calendar.set(Calendar.MINUTE, chosenMinute);
-                    String timeSet = timeFormat.format(calendar.getTime());
+                    Date newTime = calendar.getTime();
+                    String timeSet = timeFormat.format(newTime);
 
                     String dateSelected = dateTimeButton.getText().toString().trim();
                     String[] dateList = dateSelected.split("/");
