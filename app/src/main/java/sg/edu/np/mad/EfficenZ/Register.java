@@ -40,19 +40,19 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
-
-        user_email = findViewById(R.id.user_email);
-        user_password = findViewById(R.id.user_password);
-        first_name = findViewById(R.id.first_name);
-        last_name = findViewById(R.id.last_name);
-
-        email = user_email.getText().toString();
-        password = user_password.getText().toString();
-        firstName = first_name.getText().toString();
-        lastName = last_name.getText().toString();
-
-        signup_btn = findViewById(R.id.register_btn);
+//        setContentView(R.layout.activity_sign_up);
+//
+//        user_email = findViewById(R.id.user_email);
+//        user_password = findViewById(R.id.user_password);
+//        first_name = findViewById(R.id.first_name);
+//        last_name = findViewById(R.id.last_name);
+//
+//        email = user_email.getText().toString();
+//        password = user_password.getText().toString();
+//        firstName = first_name.getText().toString();
+//        lastName = last_name.getText().toString();
+//
+//        signup_btn = findViewById(R.id.register_btn);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
