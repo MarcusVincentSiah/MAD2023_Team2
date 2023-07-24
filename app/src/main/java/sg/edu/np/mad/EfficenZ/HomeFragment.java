@@ -108,8 +108,8 @@ public class HomeFragment extends Fragment {
 
         notificationBtn = getView().findViewById(R.id.notificationBtn);
         notificationBtn.setOnClickListener(v -> {
-            // TODO: START NOTIFICATION ACTIVITY
-            Log.v("BUTTON TEST", "CLICKED");
+            Intent intent = new Intent(getContext(), NotificationActivity.class);
+            startActivity(intent);
         });
 
         accountBtn = getView().findViewById(R.id.accountBtn);

@@ -13,15 +13,14 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:text="Notifications"
-        android:textSize="30dp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/header1_text"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notificationRV"
-        android:layout_width="409dp"
-        android:layout_height="669dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

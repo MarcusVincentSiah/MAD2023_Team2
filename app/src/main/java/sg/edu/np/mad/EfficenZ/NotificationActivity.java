@@ -46,7 +46,6 @@ public class NotificationActivity extends AppCompatActivity {
 
         setUpRecyclerView();
 
-
     }
 
     private void setUpRecyclerView() {
