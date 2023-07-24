@@ -34,15 +34,15 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        input_email = findViewById(R.id.input_email);
-        input_password = findViewById(R.id.input_password);
-
-        email = input_email.getText().toString();
-        password = input_password.getText().toString();
-
-        login_btn = findViewById(R.id.login_btn);
-        signUp_btn_on_login = findViewById(R.id.signup_btn_on_login);
-        forgot_password_on_login = findViewById(R.id.forgot_password_on_login);
+//        input_email = findViewById(R.id.input_email);
+//        input_password = findViewById(R.id.input_password);
+//
+//        email = input_email.getText().toString();
+//        password = input_password.getText().toString();
+//
+//        login_btn = findViewById(R.id.login_btn);
+//        signUp_btn_on_login = findViewById(R.id.signup_btn_on_login);
+//        forgot_password_on_login = findViewById(R.id.forgot_password_on_login);
 
         mAuth = FirebaseAuth.getInstance();
 
