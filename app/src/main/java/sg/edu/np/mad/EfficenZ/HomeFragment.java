@@ -1,6 +1,8 @@
 package sg.edu.np.mad.EfficenZ;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment {
     ProgressBar taskProgress;
     private FirebaseAuth mAuth;
     private String userId;
+    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,6 +121,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
         ImageView blob = getView().findViewById(R.id.imageView8);
         ImageView blob1 = getView().findViewById(R.id.imageView7);
@@ -137,7 +142,9 @@ public class HomeFragment extends Fragment {
         accountBtn = getView().findViewById(R.id.accountBtn);
         accountBtn.setOnClickListener(v -> {
             // TODO: START ACCOUNT ACTIVITY
+            singOut();
             Log.v("BUTTON TEST", "CLICKED");
+
         });
 
         progressText = getView().findViewById(R.id.progressText);
@@ -160,6 +167,18 @@ public class HomeFragment extends Fragment {
             // TODO: ACHIEVEMENT PAGE
         });
 
+
+    }
+
+    private void singOut() {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =prefs.edit();
+        Log.v("userId", userId);
+        editor.putString("userId", null);
+        editor.apply();
+        Intent Success = new Intent(getContext(), LoginActivity.class);
+        requireActivity().finishAffinity();
+        startActivity(Success);
 
     }
 
