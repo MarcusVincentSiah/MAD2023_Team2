@@ -1,6 +1,8 @@
 package sg.edu.np.mad.EfficenZ;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,8 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,14 +84,35 @@ public class HomeFragment extends Fragment {
     ImageView notificationBtn, accountBtn;
     CardView achievementCard;
     FirebaseDatabase db = FirebaseDatabase.getInstance();
-    DatabaseReference taskReference = db.getReference().child("TaskNote");
+    DatabaseReference taskReference;
     RecyclerView recyclerView;
 
     ProgressBar taskProgress;
+    private FirebaseAuth mAuth;
+    private String userId;
+    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Getting database
+        //Getting firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            // Use the userId as needed (e.g., save to database, perform specific actions for this user).
+        } else {
+            // The user is not signed in or doesn't exist.
+            userId = "demo";
+        }
+
+        //This line initializes an instance of Firebase Realtime Database and retrieves
+        // a reference to the "TaskNote" node within the database
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        taskReference = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("TaskNote");
+
+        taskReference.keepSynced(true);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -95,6 +120,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
         ImageView blob = getView().findViewById(R.id.imageView8);
@@ -115,7 +142,9 @@ public class HomeFragment extends Fragment {
         accountBtn = getView().findViewById(R.id.accountBtn);
         accountBtn.setOnClickListener(v -> {
             // TODO: START ACCOUNT ACTIVITY
+            singOut();
             Log.v("BUTTON TEST", "CLICKED");
+
         });
 
         progressText = getView().findViewById(R.id.progressText);
@@ -138,6 +167,18 @@ public class HomeFragment extends Fragment {
             // TODO: ACHIEVEMENT PAGE
         });
 
+
+    }
+
+    private void singOut() {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =prefs.edit();
+        Log.v("userId", userId);
+        editor.putString("userId", null);
+        editor.apply();
+        Intent Success = new Intent(getContext(), LoginActivity.class);
+        requireActivity().finishAffinity();
+        startActivity(Success);
 
     }
 
