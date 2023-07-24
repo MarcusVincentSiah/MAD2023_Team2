@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,6 +22,8 @@ import sg.edu.np.mad.EfficenZ.model.Data;
 import sg.edu.np.mad.EfficenZ.ui.notes.NotesList;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,11 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView notifBell;
 
+    BottomNavigationView bottomNavigationView;
+    HomeFragment homeFragment = new HomeFragment();
+    ToolsFragment toolsFragment = new ToolsFragment();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         // recycler
@@ -228,8 +236,36 @@ public class MainActivity extends AppCompatActivity {
         public void setDueDate(String dueDate) {
             TextView mDate = taskView.findViewById(R.id.dueDate);
             mDate.setText(dueDate);
-        }
+        } */
+
+        bottomNavigationView  = findViewById(R.id.bottomNavigationView);
+        getSupportFragmentManager().beginTransaction().replace(R.id.navbarFragment,homeFragment).commit();
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.homeFragment){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.navbarFragment,homeFragment).commit();
+                    return true;
+                } else if (item.getItemId() == R.id.toolsFragment){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.navbarFragment,toolsFragment).commit();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+
     }
 
+    // date to string method for database query to work
+    public String DatetoString() {
+        weeklyC = Calendar.getInstance();
+        weeklyC.setTime(now);
+        weeklyC.add(Calendar.DATE, 7);
+        weeklyDate = new Date(weeklyC.getTimeInMillis());
+        mWeeklyDate = sdf.format(weeklyDate);
 
+        return mWeeklyDate;
+    }
 }

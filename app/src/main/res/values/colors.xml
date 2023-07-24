@@ -15,4 +15,14 @@
     <color name="tertiary_color">#EFEFE2</color> <!-- items?-->
     <color name="tick_green">#44FF99</color>
     <color name="cross_red">#FFB769</color>
+
+    <color name="light_grey">#F0F0F0</color>
+    <color name="primary_color_light">#83996F</color>
+    <color name="secondary_color_light">#AA8B56</color>
+    <color name="tertiary_color_light">#EFEFE2</color>
+
+    <color name="dark_grey">#434343</color>
+    <color name="primary_color_dark">#BCCDAC</color>
+    <color name="secondary_color_dark">#7C653D</color>
+    <color name="tertiary_color_dark">#3D4339</color>
 </resources>
