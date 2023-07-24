@@ -32,7 +32,6 @@ Stage 2:
 4.	Integration with Calendar (Marcus) – A Calendar showing tasks and events stated by the user. This allows users to have a more overall view of their tasks.
     Improvements to Task Management (Marcus) - Add input validation to create and update input dialogs, completed tasks should go to the bottem of recycle view, add            confetti shown on screen when task is completed, add duetime display to each recycle view item
 6.	Gamification (Javier) – Include achievements, badges, and rewards to encourage users to complete tasks and maintain productivity streaks.
-7.	Share badges (Javier (If you can)) and achievements with others – Users can share their progress with friends and family through apps like Facebook and twitter.
 
 Some additional considerations for features:
 
