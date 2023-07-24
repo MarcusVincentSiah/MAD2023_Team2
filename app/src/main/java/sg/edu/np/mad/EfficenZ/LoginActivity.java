@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         userId = prefs.getString("userId", null);
-        //Log.v("userId", userId);
         if(userId != null) {
             Intent Success = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(Success);
@@ -104,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 user = mAuth.getCurrentUser();
                                 SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+
                                 SharedPreferences.Editor editor =prefs.edit();
                                 userId = user.getUid(); // Retrieve the user ID here
                                 Log.v("userId", userId);
