@@ -93,7 +93,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // If sign in is successful, update UI to login page
                                 User user = new User(firstName, lastName, email);
-                                //saveName(user);
+                                saveName(user);
                                 updateUI();
                             }
 
