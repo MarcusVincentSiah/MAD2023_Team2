@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,7 +26,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 public class TimeManagement extends AppCompatActivity {
@@ -35,6 +38,7 @@ public class TimeManagement extends AppCompatActivity {
     private Button set_time;
     private Button start_pause;
     private Button reset;
+    private Button finish;
     private CountDownTimer countDownTimer;
     private boolean timeRunning;
     private long startTime;
@@ -77,6 +81,7 @@ public class TimeManagement extends AppCompatActivity {
         time = findViewById(R.id.timer);
         start_pause = findViewById(R.id.btn_start_pause);
         reset = findViewById(R.id.btn_reset);
+        finish = findViewById(R.id.btn_finish);
 
         //When user clicks on the set button
         set_time.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +135,14 @@ public class TimeManagement extends AppCompatActivity {
                 } else {
                     startTimer();
                 }
+            }
+        });
+
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishTask();
+                Toast.makeText(TimeManagement.this, "Finish", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -238,6 +251,43 @@ public class TimeManagement extends AppCompatActivity {
         else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
     }
 
+    private void finishTask() {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        String userid = prefs.getString("userid", null);
+        long timeStudied = startTime - timeLeft;
+
+        if (userid == null) {
+            HashMap<String, Object> studyStats = new HashMap<>();
+            studyStats.put("Time studied", timeStudied);
+            studyStats.put("userid", 1);
+
+            // Add the new document to the "Study stats" collection
+            database.collection("Study stats")
+                    .add(studyStats)
+                    .addOnSuccessListener(documentReference -> {
+                        // Save the document ID (userid) to SharedPreferences
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("userid", documentReference.getId());
+                        editor.apply();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle the failure if needed
+                    });
+        } else {
+            // Update the existing document with the new "Time studied" value
+            database.collection("Study stats").document(userid)
+                    .update("Time studied", timeStudied)
+                    .addOnSuccessListener(aVoid -> {
+                        // Update successful
+                        // Handle success if needed
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle the failure if needed
+                    });
+        }
+    }
+
     private void updateCountDownText() {
         //Converting to milis
         int hours = (int) (timeLeft / 1000) / 3600;
@@ -258,12 +308,13 @@ public class TimeManagement extends AppCompatActivity {
 
     private void updateInterface() {
 
-        //If timer is running, change start button to pause & hide the time-input, set btn and reset btn
+        //If timer is running, change start button to pause & hide the time-input, set btn, reset btn and finish btn
         if(timeRunning) {
             time_input_hours.setVisibility(View.INVISIBLE);
             time_input_min.setVisibility(View.INVISIBLE);
             set_time.setVisibility(View.INVISIBLE);
             reset.setVisibility(View.INVISIBLE);
+            finish.setVisibility(View.INVISIBLE);
 
             start_pause.setText("Pause");
         }
@@ -273,20 +324,28 @@ public class TimeManagement extends AppCompatActivity {
             time_input_hours.setVisibility(View.VISIBLE);
             time_input_min.setVisibility(View.VISIBLE);
             set_time.setVisibility(View.VISIBLE);
+            finish.setVisibility(View.VISIBLE);
             start_pause.setText("Start");
 
             //if timer runs out, start/pause btn gets hidden
             if(timeLeft < 1000) {
                 start_pause.setVisibility(View.INVISIBLE);
+                finish.setVisibility(View.VISIBLE);
             } else {
                 start_pause.setVisibility(View.VISIBLE);
+                finish.setVisibility(View.INVISIBLE);
             }
 
             //if time left and time start are equal, hide reset btn
             if (timeLeft < startTime) {
                 reset.setVisibility(View.VISIBLE);
+                finish.setVisibility(View.VISIBLE);
+
             }
-            else reset.setVisibility(View.INVISIBLE);
+            else {
+                reset.setVisibility(View.INVISIBLE);
+                finish.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
