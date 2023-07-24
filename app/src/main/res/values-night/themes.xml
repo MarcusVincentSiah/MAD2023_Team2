@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.EfficenZ" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.EfficenZ" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,4 +13,96 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style name="header1_text">
+        <item name="fontFamily">@font/poppinsbold</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+    </style>
+
+    <style name="header2_text">
+        <item name="fontFamily">@font/poppinsmedium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/secondary_text_dark</item>
+    </style>
+
+    <style name="normal_text">
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/secondary_text_dark</item>
+    </style>
+
+    <style name="green_blob_1">
+        <item name="tint">#526046</item>
+    </style>
+
+    <style name="green_blob_2">
+        <item name="tint">#4D5446</item>
+    </style>
+
+    <style name="green_blob_3">
+        <item name="tint">#3D4339</item>
+    </style>
+
+    <style name="wave">
+        <item name="tint">#526046</item>
+    </style>
+
+    <style name="wave2">
+        <item name="tint">#4D5446</item>
+    </style>
+
+    <!-- Bottom Nav Bar Indicator -->
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#3D4339</item>
+    </style>
+
+    <style name="BottomNavBar">
+        <item name="android:background">@color/black</item>
+        <item name="rippleColor">#3D4339</item>
+        <item name="itemIconTint">@drawable/bottom_nav_bar_color_dark</item>
+        <item name="itemTextColor">@drawable/bottom_nav_bar_color_dark</item>
+    </style>
+
+    <style name="roundedCorner_inputText">
+        <item name="android:background">@drawable/rounded_corner_input_text_dark</item>
+    </style>
+
+    <style name="button_yellow">
+        <item name="android:backgroundTint">@color/secondary_color_dark</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="button_green">
+        <item name="android:backgroundTint">#526046</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="button_grey">
+        <item name="android:backgroundTint">@color/dark_grey</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="cardView_style">
+        <item name="cardElevation">0dp</item>
+        <item name="android:backgroundTint">@color/dark_grey</item>
+        <item name="cardCornerRadius">10dp</item>
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
+    <style name="cardView_button_style">
+        <item name="cardElevation">0dp</item>
+        <item name="android:backgroundTint">@color/dark_grey</item>
+        <item name="cardCornerRadius">10dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="icons">
+        <item name="tint">@color/primary_color_dark</item>
+    </style>
+
 </resources>
