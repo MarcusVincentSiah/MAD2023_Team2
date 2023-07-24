@@ -10,6 +10,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
@@ -42,6 +43,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -95,19 +97,36 @@ public class TaskManagement extends AppCompatActivity {
     private SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
 
     private KonfettiView viewKonfetti;
+
+    private String userId;
+
+    private MediaPlayer media;
+    private Context myContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_management);
-
+        myContext = this;
         //Creating the heading "task management"
         toolbar = findViewById(R.id.toolbar_home);
         toolbar.setTitle("Task Management");
+
+        //Getting firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            // Use the userId as needed (e.g., save to database, perform specific actions for this user).
+        } else {
+            // The user is not signed in or doesn't exist.
+            userId = "demo";
+        }
+
         //This line initializes an instance of Firebase Realtime Database and retrieves
         // a reference to the "TaskNote" node within the database
-        mAuth = FirebaseAuth.getInstance();
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("TaskNote");
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase.keepSynced(true);
 
         //RecyclerView
@@ -259,7 +278,7 @@ public class TaskManagement extends AppCompatActivity {
                         Data data = new Data(mtitle, mNote, date, timeStamp, mDueDate, mDueTime, id, null, null, false);
 
                         mDatabase.child(id).setValue(data);
-                        //setNotification("Task: "+mtitle);
+
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Data Insert", Toast.LENGTH_SHORT).show();
                     }
@@ -268,6 +287,17 @@ public class TaskManagement extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Release MediaPlayer resources
+        if (media != null) {
+            media.release();
+            media = null;
+        }
     }
 
     @Override
@@ -386,19 +416,29 @@ public class TaskManagement extends AppCompatActivity {
                                 .setPosition(-50f, viewKonfetti.getWidth() + 50f, -50f, -50f)
                                 .stream(250, 3000L);
 
-                        //using media player to play sound when task is completed
-                        MediaPlayer media = MediaPlayer.create(getApplicationContext(), R.raw.clapping);
-                        media.start();
-                        media.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mediaPlayer) {
-                                mediaPlayer.stop();
-                                if (mediaPlayer != null) {
-                                    mediaPlayer.release();
-                                }
+                        if(media == null){
 
-                            }
-                        });
+                            media = MediaPlayer.create(myContext, R.raw.clapping);
+                            media.start();
+                        }
+                        else{
+                            media.reset();
+                            media = MediaPlayer.create(myContext, R.raw.clapping);
+                            media.start();
+                        }
+                        //using media player to play sound when task is completed
+
+
+//                        media.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                            @Override
+//                            public void onCompletion(MediaPlayer mediaPlayer) {
+//                                mediaPlayer.stop();
+//                                if (mediaPlayer != null) {
+//                                    mediaPlayer.release();
+//                                }
+//
+//                            }
+//                        });
                     }
                 }
             });

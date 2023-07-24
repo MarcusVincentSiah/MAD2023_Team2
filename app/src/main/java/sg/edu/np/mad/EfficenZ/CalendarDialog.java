@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +40,8 @@ public abstract class CalendarDialog extends Dialog {
     private String selectedDate;
 
     public TextView dayOfMonth;
+    private String userId;
+    private FirebaseAuth mAuth;
     public CalendarDialog(Context context, String selectedDate)
     {
         super(context);
@@ -85,7 +89,22 @@ public abstract class CalendarDialog extends Dialog {
         adapter = new CalendarTaskAdapter(getContext(), list);
         recyclerView.setAdapter(adapter);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        //Getting database
+        //Getting firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            // Use the userId as needed (e.g., save to database, perform specific actions for this user).
+        } else {
+            // The user is not signed in or doesn't exist.
+            userId = "demo";
+        }
+
+        //This line initializes an instance of Firebase Realtime Database and retrieves
+        // a reference to the "TaskNote" node within the database
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("TaskNote");
         mDatabase.keepSynced(true);
 
         Query q = mDatabase.orderByChild("timestamp");
