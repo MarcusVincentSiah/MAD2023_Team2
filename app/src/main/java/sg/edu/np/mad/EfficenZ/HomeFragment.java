@@ -38,47 +38,6 @@ import sg.edu.np.mad.EfficenZ.model.Data;
 
 public class HomeFragment extends Fragment {
 
-    /*
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     *
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    } */
-
     TextView home_greeting, home_msg;
     TextView progressText;
     ImageView notificationBtn, accountBtn;
@@ -90,7 +49,9 @@ public class HomeFragment extends Fragment {
     ProgressBar taskProgress;
     private FirebaseAuth mAuth;
     private String userId;
-    
+
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -133,6 +94,16 @@ public class HomeFragment extends Fragment {
 
         // TODO: add personalised welcome message
 
+        prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+
+        String first_name = prefs.getString("first_name", "there");
+        home_greeting = getView().findViewById(R.id.home_greeting);
+        home_greeting.setText("Hello, " + first_name + "!");
+
+        home_msg = getView().findViewById(R.id.home_msg);
+        home_msg.setText("Welcome!");
+
+
         notificationBtn = getView().findViewById(R.id.notificationBtn);
         notificationBtn.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), NotificationActivity.class);
@@ -142,7 +113,7 @@ public class HomeFragment extends Fragment {
         accountBtn = getView().findViewById(R.id.accountBtn);
         accountBtn.setOnClickListener(v -> {
             // TODO: START ACCOUNT ACTIVITY
-            singOut();
+            signOut();
             Log.v("BUTTON TEST", "CLICKED");
 
         });
@@ -170,11 +141,13 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void singOut() {
-        SharedPreferences prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor =prefs.edit();
+    private void signOut() {
+        editor = prefs.edit();
         Log.v("userId", userId);
         editor.putString("userId", null);
+        editor.putString("email", null);
+        editor.putString("first_name", null);
+        editor.putString("last_name", null);
         editor.apply();
         Intent Success = new Intent(getContext(), LoginActivity.class);
         requireActivity().finishAffinity();

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,12 +64,12 @@ public class SignUpActivity extends AppCompatActivity {
                 lastName = last_name.getText().toString();
                 Log.v("AAAAAAAAAA", email);
                 Log.v("AAAAAAAAAA", password);
-                signUpUser(email, password);
+                signUpUser(email, password, firstName, lastName);
             }
         });
     }
 
-    public void signUpUser(String e, String p) {
+    public void signUpUser(String e, String p, String fn, String ln) {
         if (e == "")  {
             Toast.makeText(SignUpActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
         }
@@ -77,11 +78,11 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(SignUpActivity.this, "Password is required", Toast.LENGTH_SHORT).show();
         }
 
-        else if (firstName == "") {
+        else if (fn == "") {
             Toast.makeText(SignUpActivity.this, "First name is required", Toast.LENGTH_SHORT).show();
         }
 
-        else if (lastName == "") {
+        else if (ln == "") {
             Toast.makeText(SignUpActivity.this, "Last name is required", Toast.LENGTH_SHORT).show();
         }
 
@@ -92,7 +93,7 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // If sign in is successful, update UI to login page
-                                User user = new User(firstName, lastName, email);
+                                User user = new User(fn, ln, e);
                                 saveName(user);
                                 updateUI();
                             }
@@ -115,7 +116,15 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void saveName(User user) {
-        String userId = mDatabase.push().getKey();
+        SharedPreferences pref = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String userId = mAuth.getCurrentUser().getUid();
+        editor.putString("userId", userId);
+        editor.putString("first_name", user.getFirst_name());
+        editor.putString("last_name", user.getLast_name());
+        editor.putString("email", user.getEmail());
+        editor.apply();
+        userId = mDatabase.push().getKey();
         mDatabase.child("users").child(userId).setValue(user);
     }
 }
