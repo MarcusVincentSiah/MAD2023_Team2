@@ -1,31 +1,31 @@
 package sg.edu.np.mad.EfficenZ;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-/*
-public class Login extends AppCompatActivity {
+
+public class LoginActivity extends AppCompatActivity {
+
 
     EditText input_email;
     EditText input_password;
     String email;
     String password;
     Button signUp_btn_on_login;
-    Button forgot_password_on_login;
+    TextView forgot_password_on_login;
     Button login_btn;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -38,8 +38,7 @@ public class Login extends AppCompatActivity {
         input_email = findViewById(R.id.login_email);
         input_password = findViewById(R.id.login_password);
 
-        email = input_email.getText().toString();
-        password = input_password.getText().toString();
+
 
         login_btn = findViewById(R.id.login_btn);
         signUp_btn_on_login = findViewById(R.id.login_signup_btn);
@@ -50,6 +49,8 @@ public class Login extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                email = input_email.getText().toString();
+                password = input_password.getText().toString();
                 loginUser(email, password);
             }
         });
@@ -57,7 +58,7 @@ public class Login extends AppCompatActivity {
         signUp_btn_on_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent Signup = new Intent(Login.this, Register.class);
+                Intent Signup = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(Signup);
             }
         });
@@ -73,11 +74,11 @@ public class Login extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         if(email == ""){
-            Toast.makeText(Login.this, "Email is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
         }
 
         else if(password == ""){
-            Toast.makeText(Login.this, "Password is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Password is required", Toast.LENGTH_SHORT).show();
         }
 
         else {
@@ -93,7 +94,7 @@ public class Login extends AppCompatActivity {
 
                             else {
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(Login.this, "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
                                 updateUI(null);
                             }
                         }
@@ -103,9 +104,8 @@ public class Login extends AppCompatActivity {
 
     public void updateUI(FirebaseUser user) {
         if (user != null) {
-            Intent Success = new Intent(Login.this, MainActivity.class);
+            Intent Success = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(Success);
         }
     }
 }
-*/
