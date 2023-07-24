@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import sg.edu.np.mad.EfficenZ.model.Data;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +49,8 @@ public class TimeManagement extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private Data data;
     private MediaPlayer mediaPlayer;
+    private String userId;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,25 @@ public class TimeManagement extends AppCompatActivity {
 
         mediaPlayer = MediaPlayer.create(this, R.raw.timer_sound);//set the timer sound
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        //Getting database
+        //Getting firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            // Use the userId as needed (e.g., save to database, perform specific actions for this user).
+        } else {
+            // The user is not signed in or doesn't exist.
+            userId = "demo";
+        }
+
+        //This line initializes an instance of Firebase Realtime Database and retrieves
+        // a reference to the "TaskNote" node within the database
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("TaskNote");
+
+        mDatabase.keepSynced(true);
 
         task_title = findViewById(R.id.task);
 
@@ -226,7 +247,9 @@ public class TimeManagement extends AppCompatActivity {
 
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Timer Paused", Toast.LENGTH_SHORT).show();
-            Log.d(data.getTitle() + "Paused", data.getTime_left());
+            String title = newData.getTitle();
+            String timeLeft = newData.getTime_left();
+            Log.d(title + "Paused", timeLeft);
         }
 
         else Toast.makeText(TimeManagement.this, "There is no task", Toast.LENGTH_SHORT).show();

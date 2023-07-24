@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,14 +82,34 @@ public class HomeFragment extends Fragment {
     ImageView notificationBtn, accountBtn;
     CardView achievementCard;
     FirebaseDatabase db = FirebaseDatabase.getInstance();
-    DatabaseReference taskReference = db.getReference().child("TaskNote");
+    DatabaseReference taskReference;
     RecyclerView recyclerView;
 
     ProgressBar taskProgress;
+    private FirebaseAuth mAuth;
+    private String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Getting database
+        //Getting firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            // Use the userId as needed (e.g., save to database, perform specific actions for this user).
+        } else {
+            // The user is not signed in or doesn't exist.
+            userId = "demo";
+        }
+
+        //This line initializes an instance of Firebase Realtime Database and retrieves
+        // a reference to the "TaskNote" node within the database
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
+        taskReference = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("TaskNote");
+
+        taskReference.keepSynced(true);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
