@@ -120,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                                 //Log.v("userId", userId);
                                 //editor.putString("userId", userId);
                                 //editor.apply();
+                                Log.v("userId", userId);
                                 getUserInfo(userId);
                                 updateUI(user);
                             }
@@ -142,7 +143,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getUserInfo(String userId){
-        mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+
+        /*mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
@@ -151,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     String last_name = snapshot.child("last_name").getValue(String.class);
 
                     SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-                    SharedPreferences.Editor editor =prefs.edit();
+                    SharedPreferences.Editor editor = prefs.edit();
                     Log.v("userId", userId);
                     Log.v("userId", first_name);
                     editor.putString("userId", userId);
@@ -159,15 +161,50 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("first_name", first_name);
                     editor.putString("last_name", last_name);
                     editor.apply();
+
                 }
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.v("userId", "FAILED");
+            }
+        });*/
 
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String userIdFromDatabase = snapshot.child("userId").getValue(String.class);
+                    if (userId.equals(userIdFromDatabase)) {
+                        Log.v("Hi", "HIIIIIIIIIII");
+                        String email = snapshot.child("email").getValue(String.class);
+                        String first_name = snapshot.child("first_name").getValue(String.class);
+                        String last_name = snapshot.child("last_name").getValue(String.class);
+
+                        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        Log.v("userId", userId);
+                        Log.v("userId", first_name);
+                        editor.putString("userId", userId);
+                        editor.putString("email", email);
+                        editor.putString("first_name", first_name);
+                        editor.putString("last_name", last_name);
+                        editor.apply();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error if data retrieval is cancelled
+                Log.e("Firebase Error", databaseError.getMessage());
             }
         });
+
+
     }
 }

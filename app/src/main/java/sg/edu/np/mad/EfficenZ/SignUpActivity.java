@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -93,7 +94,9 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // If sign in is successful, update UI to login page
-                                User user = new User(fn, ln, e);
+
+                                FirebaseUser aUser = mAuth.getCurrentUser();
+                                User user = new User(fn, ln, e, aUser.getUid());
                                 saveName(user);
                                 updateUI();
                             }
