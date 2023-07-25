@@ -173,13 +173,12 @@ public class HomeFragment extends Fragment {
     private void singOut() {
         SharedPreferences prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =prefs.edit();
-        Log.v("userId", userId);
+        //Log.v("userId", userId);
         editor.putString("userId", null);
         editor.apply();
         Intent Success = new Intent(getContext(), LoginActivity.class);
         requireActivity().finishAffinity();
         startActivity(Success);
-
     }
 
     @Override

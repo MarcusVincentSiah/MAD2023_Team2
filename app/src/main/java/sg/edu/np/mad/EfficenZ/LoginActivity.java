@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         userId = prefs.getString("userId", null);
+
         if(userId != null) {
             Intent Success = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(Success);

@@ -277,29 +277,31 @@ public class TimeManagement extends AppCompatActivity {
     private void finishTask() {
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        String userid = prefs.getString("userid", null);
+        String userId = prefs.getString("userId", null);
         long timeStudied = startTime - timeLeft;
 
-        if (userid == null) {
+        if (userId == null) {
             HashMap<String, Object> studyStats = new HashMap<>();
             studyStats.put("Time studied", timeStudied);
-            studyStats.put("userid", 1);
+            studyStats.put("Target", 69);
+            studyStats.put("days", 99);
+            studyStats.put("userid", userId);
 
             // Add the new document to the "Study stats" collection
             database.collection("Study stats")
                     .add(studyStats)
                     .addOnSuccessListener(documentReference -> {
                         // Save the document ID (userid) to SharedPreferences
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString("userid", documentReference.getId());
-                        editor.apply();
+                        //SharedPreferences.Editor editor = prefs.edit();
+                        //editor.putString("userid", documentReference.getId());
+                        //editor.apply();
                     })
                     .addOnFailureListener(e -> {
                         // Handle the failure if needed
                     });
         } else {
             // Update the existing document with the new "Time studied" value
-            database.collection("Study stats").document(userid)
+            database.collection("Study stats").document(userId)
                     .update("Time studied", timeStudied)
                     .addOnSuccessListener(aVoid -> {
                         // Update successful
