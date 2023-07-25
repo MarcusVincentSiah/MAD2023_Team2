@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 public class NotificationActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private CollectionReference userCollection;
     private CollectionReference notificationCollection;
     private NotificationAdapter adapter;
 

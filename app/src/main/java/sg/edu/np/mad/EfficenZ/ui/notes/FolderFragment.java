@@ -2,6 +2,7 @@ package sg.edu.np.mad.EfficenZ.ui.notes;
 
 // NOTE TAKING
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,10 +27,13 @@ import sg.edu.np.mad.EfficenZ.R;
 
 public class FolderFragment extends Fragment {
 
+    private SharedPreferences prefs; // = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+    //private String userId = prefs.getString("userId", null);
     private RecyclerView recyclerView;
     private FolderAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference foldersCollection = db.collection("folders");
+    private CollectionReference userCollection = db.collection("users");
+    private CollectionReference foldersCollection; //= userCollection.document(userId).collection("folders");
 
     private OnFolderDataPassListener dataPassListener;
     private OnFragmentChangeListener fragmentChangeListener;
@@ -46,14 +50,18 @@ public class FolderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setUpRecyclerView(view);
+        prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        String userId = prefs.getString("userId", null);
+        foldersCollection = userCollection.document(userId).collection("folders");
+
+        setUpRecyclerView(view, foldersCollection);
 
         // show create folder button
         ImageButton createFolder = getActivity().findViewById(R.id.createFolder);
         createFolder.setVisibility(View.VISIBLE);
     }
 
-    private void setUpRecyclerView(View view) {
+    private void setUpRecyclerView(View view, CollectionReference foldersCollection) {
         // FETCH DATA
         Query query = foldersCollection.orderBy("name", Query.Direction.ASCENDING);
 

@@ -3,6 +3,7 @@ package sg.edu.np.mad.EfficenZ.ui.notes;
 // NOTE TAKING
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,10 +31,14 @@ import sg.edu.np.mad.EfficenZ.R;
 
 public class NotesFragment extends Fragment {
 
+    private SharedPreferences prefs; //= getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+    //private String userId = prefs.getString("userId", null);
     private RecyclerView recyclerView;
     private NotesAdapter adapter;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference userCollection = db.collection("users");
+    private CollectionReference folderCollection; //= userCollection.document(userId).collection("folders");
     private CollectionReference notesCollection;
     private OnFragmentChangeListener fragmentChangeListener;
 
@@ -49,21 +54,26 @@ public class NotesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        String userId = prefs.getString("userId", null);
+        folderCollection = userCollection.document(userId).collection("folders");
+
+
         // receive folderid and folderName from FolderFragment
         Bundle bundle = this.getArguments();
         String folderid = bundle.getString("FOLDERID");
         String folderName = bundle.getString("FOLDERNAME");
 
-        setUpRecyclerView(view, folderid, folderName);
+        setUpRecyclerView(view, folderid, folderName, folderCollection);
 
         // hide create folder button
         ImageButton createFolder = getActivity().findViewById(R.id.createFolder);
         createFolder.setVisibility(View.GONE);
     }
 
-    private void setUpRecyclerView(View view, String folderid, String folderName) {
+    private void setUpRecyclerView(View view, String folderid, String folderName, CollectionReference folderCollection) {
         // fetch data
-        notesCollection = db.collection("folders").document(folderid).collection("notes");
+        notesCollection = folderCollection.document(folderid).collection("notes");
 
         Query query = notesCollection.orderBy("title", Query.Direction.ASCENDING);
 

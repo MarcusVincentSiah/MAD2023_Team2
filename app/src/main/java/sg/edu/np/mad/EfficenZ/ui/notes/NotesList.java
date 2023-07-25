@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -31,14 +32,18 @@ import sg.edu.np.mad.EfficenZ.R;
 
 public class NotesList extends AppCompatActivity implements SearchView.OnQueryTextListener, FolderFragment.OnFolderDataPassListener, OnFragmentChangeListener {
 
+    private SharedPreferences prefs; //= getSharedPreferences("prefs", MODE_PRIVATE);
+    //private String userId = prefs.getString("userId", null);
     private RecyclerView recyclerView;
     private SearchView searchView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference foldersCollection = db.collection("folders");
+    private CollectionReference userCollection = db.collection("users");
+    private CollectionReference foldersCollection;
     private CollectionReference notesCollection;
 
-    private Folder folder = new Folder();
 
+
+    private Folder folder = new Folder();
     private String currentFragment;
 
     @Override
@@ -46,6 +51,9 @@ public class NotesList extends AppCompatActivity implements SearchView.OnQueryTe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes_list);
 
+        prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        String userId = prefs.getString("userId", null);
+        foldersCollection = userCollection.document(userId).collection("folders");
 
         // set fragment to FolderFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
