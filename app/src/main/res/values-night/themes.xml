@@ -19,18 +19,21 @@
         <item name="fontFamily">@font/poppinsbold</item>
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">@android:color/primary_text_dark</item>
+        <item name="android:paddingTop">5dp</item>
     </style>
 
     <style name="header2_text">
         <item name="fontFamily">@font/poppinsmedium</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/secondary_text_dark</item>
+        <item name="android:paddingTop">5dp</item>
     </style>
 
     <style name="normal_text">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/secondary_text_dark</item>
+        <item name="android:paddingTop">5dp</item>
     </style>
 
     <style name="green_blob_1">
@@ -88,7 +91,10 @@
         <item name="cardElevation">0dp</item>
         <item name="android:backgroundTint">@color/dark_grey</item>
         <item name="cardCornerRadius">10dp</item>
-        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
     </style>
 
     <style name="cardView_button_style">

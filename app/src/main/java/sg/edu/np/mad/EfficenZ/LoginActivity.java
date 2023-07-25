@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase.keepSynced(true);
 
 
         input_email = findViewById(R.id.login_email);
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        updateUI(user);
+        //updateUI(user);
     }
 
     private void loginUser(String email, String password) {
@@ -115,9 +116,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                 SharedPreferences.Editor editor =prefs.edit();
                                 userId = user.getUid(); // Retrieve the user ID here
-                                Log.v("userId", userId);
-                                editor.putString("userId", userId);
-                                editor.apply();
+                                //Log.v("userId", userId);
+                                //editor.putString("userId", userId);
+                                //editor.apply();
+                                getUserInfo(userId);
                                 updateUI(user);
                             }
 
