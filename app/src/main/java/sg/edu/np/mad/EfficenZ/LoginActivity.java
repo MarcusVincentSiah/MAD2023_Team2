@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     Button login_btn;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+
+    private DatabaseReference mDatabase;
     String userId;
 
 
@@ -42,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase.keepSynced(true);
 
 
         input_email = findViewById(R.id.login_email);
@@ -84,15 +93,15 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        updateUI(user);
+        //updateUI(user);
     }
 
     private void loginUser(String email, String password) {
-        if(email == ""){
+        if(email.equals("")){
             Toast.makeText(LoginActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
         }
 
-        else if(password == ""){
+        else if(password.equals("")){
             Toast.makeText(LoginActivity.this, "Password is required", Toast.LENGTH_SHORT).show();
         }
 
@@ -108,9 +117,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                 SharedPreferences.Editor editor =prefs.edit();
                                 userId = user.getUid(); // Retrieve the user ID here
-                                Log.v("userId", userId);
-                                editor.putString("userId", userId);
-                                editor.apply();
+                                //Log.v("userId", userId);
+                                //editor.putString("userId", userId);
+                                //editor.apply();
+                                getUserInfo(userId);
                                 updateUI(user);
                             }
 
@@ -129,5 +139,35 @@ public class LoginActivity extends AppCompatActivity {
             Intent Success = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(Success);
         }
+    }
+
+    private void getUserInfo(String userId){
+        mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String email = snapshot.child("email").getValue(String.class);
+                    String first_name = snapshot.child("first_name").getValue(String.class);
+                    String last_name = snapshot.child("last_name").getValue(String.class);
+
+                    SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor =prefs.edit();
+                    Log.v("userId", userId);
+                    Log.v("userId", first_name);
+                    editor.putString("userId", userId);
+                    editor.putString("email", email);
+                    editor.putString("first_name", first_name);
+                    editor.putString("last_name", last_name);
+                    editor.apply();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
