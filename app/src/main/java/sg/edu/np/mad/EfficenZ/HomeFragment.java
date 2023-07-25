@@ -90,6 +90,7 @@ public class HomeFragment extends Fragment {
     ProgressBar taskProgress;
     private FirebaseAuth mAuth;
     private String userId;
+    SharedPreferences prefs;
     
 
     @Override
@@ -132,11 +133,18 @@ public class HomeFragment extends Fragment {
         blob2.startAnimation(animation);
 
         // TODO: add personalised welcome message
+        prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+
+        String first_name = prefs.getString("first_name", "there");
+        home_greeting = getView().findViewById(R.id.home_greeting);
+        home_greeting.setText("Hello, " + first_name + "!");
+        home_msg = getView().findViewById(R.id.home_msg);
+        home_msg.setText("Welcome!");
 
         notificationBtn = getView().findViewById(R.id.notificationBtn);
         notificationBtn.setOnClickListener(v -> {
-            // TODO: START NOTIFICATION ACTIVITY
-            Log.v("BUTTON TEST", "CLICKED");
+            Intent intent = new Intent(getContext(), NotificationActivity.class);
+            startActivity(intent);
         });
 
         accountBtn = getView().findViewById(R.id.accountBtn);

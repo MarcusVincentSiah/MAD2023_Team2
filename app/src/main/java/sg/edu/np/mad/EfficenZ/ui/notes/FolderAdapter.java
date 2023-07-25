@@ -25,6 +25,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -121,8 +122,11 @@ public class FolderAdapter extends FirestoreRecyclerAdapter<Folder, FolderAdapte
         folderOptions.show();
     }
 
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String userId = mAuth.getCurrentUser().getUid();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference foldersCollection = db.collection("folders");
+    private CollectionReference userCollection = db.collection("users");
+    private CollectionReference foldersCollection = userCollection.document(userId).collection("folders");
 
     // EDIT FOLDER NAME
     private void editFolder(String folderid) {

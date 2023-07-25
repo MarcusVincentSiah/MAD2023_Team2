@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -33,14 +34,21 @@ import sg.edu.np.mad.EfficenZ.R;
 
 public class NotesEdit extends AppCompatActivity {
 
-    private FirebaseFirestore db;
+    private SharedPreferences prefs;// = getSharedPreferences("prefs", MODE_PRIVATE);
+    //private String userId = prefs.getString("userId", null);
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference userCollection = db.collection("users");
     private CollectionReference notesCollection;
-    private CollectionReference foldersCollection;
+    private CollectionReference foldersCollection; //= userCollection.document(userId).collection("folders");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes_edit);
+
+        prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        String userId = prefs.getString("userId", null);
+        foldersCollection = userCollection.document(userId).collection("folders");
 
         TextView pageTitle = findViewById(R.id.pageTitle);
         EditText titleText = findViewById(R.id.titleText);
@@ -48,8 +56,8 @@ public class NotesEdit extends AppCompatActivity {
         ImageButton saveBtn = findViewById(R.id.saveBtn);
         ImageButton deleteBtn = findViewById(R.id.deleteBtn);
 
-        db = FirebaseFirestore.getInstance();
-        foldersCollection = db.collection("folders");
+        //db = FirebaseFirestore.getInstance();
+        //foldersCollection = db.collection("folders");
 
         // receive data from NotesList/NotesAdapter
         Intent intent = getIntent();
@@ -86,7 +94,7 @@ public class NotesEdit extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Failed to save: Please enter some text.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    saveNote(titleText, contentText, noteid, folderid, folderName);
+                    saveNote(titleText, contentText, noteid, folderid, folderName, foldersCollection);
                 }
             }
         });
@@ -95,13 +103,13 @@ public class NotesEdit extends AppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteNote(folderid, noteid);
+                deleteNote(folderid, noteid, foldersCollection);
             }
         });
     }
 
     // SAVE NOTE
-    void saveNote(EditText titleText, EditText contentText, String id, String folderid, String folderName)
+    void saveNote(EditText titleText, EditText contentText, String id, String folderid, String folderName, CollectionReference foldersCollection)
     {
         // convert to string
         String title = titleText.getText().toString();
@@ -163,7 +171,7 @@ public class NotesEdit extends AppCompatActivity {
     }
 
     // DELETE NOTE
-    private void deleteNote(String folderid, String noteid) {
+    private void deleteNote(String folderid, String noteid, CollectionReference foldersCollection) {
 
         // folders > folderid > notes > noteid
         foldersCollection.document(folderid).collection("notes").document(noteid)
