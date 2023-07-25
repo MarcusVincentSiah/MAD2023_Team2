@@ -45,7 +45,7 @@
         <item name="itemIconTint">@drawable/bottom_nav_bar_color</item>
         <item name="itemTextColor">@drawable/bottom_nav_bar_color</item>
         <item name="itemIconSize">30dp</item>
-        <item name="android:padding">5dp</item>
+        <item name="itemPaddingTop">0dp</item>
     </style>
 
     <!-- Bottom Nav Bar Indicator -->

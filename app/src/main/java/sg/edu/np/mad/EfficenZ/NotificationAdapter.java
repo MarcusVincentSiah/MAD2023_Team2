@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
@@ -47,6 +49,29 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<NotificationMo
             title = itemView.findViewById(R.id.titleText_item);
             content = itemView.findViewById(R.id.contentText_item);
         }
+    }
+
+    // swipe to delete
+    private void deleteNotification(int position){
+        DocumentSnapshot snapshot = getSnapshots().getSnapshot(position);
+        snapshot.getReference().delete();
+    }
+
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,
+            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAbsoluteAdapterPosition();
+            deleteNotification(position);
+        }
+    };
+    public ItemTouchHelper.SimpleCallback getItemTouchHelperCallback() {
+        return itemTouchHelperCallback;
     }
 
 

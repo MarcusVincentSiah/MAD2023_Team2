@@ -1,7 +1,9 @@
 package sg.edu.np.mad.EfficenZ;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,9 +45,12 @@ public class NotificationActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         notificationCollection = db.collection("notification");
+        RecyclerView rv = findViewById(R.id.notificationRV);
 
         setUpRecyclerView();
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(adapter.getItemTouchHelperCallback());
+        itemTouchHelper.attachToRecyclerView(rv);
     }
 
     private void setUpRecyclerView() {
