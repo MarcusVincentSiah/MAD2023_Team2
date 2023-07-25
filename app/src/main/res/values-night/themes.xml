@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.EfficenZ" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.EfficenZ" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -10,11 +10,11 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/primary_color_light</item>
         <!-- Customize your theme here. -->
     </style>
 
-
+<!--
     <style name="header1_text">
         <item name="fontFamily">@font/poppinsbold</item>
         <item name="android:textSize">30sp</item>
@@ -56,7 +56,7 @@
         <item name="tint">#4D5446</item>
     </style>
 
-    <!-- Bottom Nav Bar Indicator -->
+
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">#3D4339</item>
     </style>
@@ -75,16 +75,19 @@
     <style name="button_yellow">
         <item name="android:backgroundTint">@color/secondary_color_dark</item>
         <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">50dp</item>
     </style>
 
     <style name="button_green">
         <item name="android:backgroundTint">#526046</item>
         <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">50dp</item>
     </style>
 
     <style name="button_grey">
         <item name="android:backgroundTint">@color/dark_grey</item>
         <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">50dp</item>
     </style>
 
     <style name="cardView_style">
@@ -109,6 +112,6 @@
 
     <style name="icons">
         <item name="tint">@color/primary_color_dark</item>
-    </style>
+    </style> -->
 
 </resources>

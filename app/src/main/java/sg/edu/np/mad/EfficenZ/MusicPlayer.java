@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
     };
     int currentSongIndex = 0;
 
+    TextView songTitleTextView;
     String currentSongName;
 
     @Override
@@ -35,6 +37,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        songTitleTextView = findViewById(R.id.textView_songTitle);
 
         setUpSongsList();
 
@@ -54,6 +57,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
 
         if (mediaPlayer.isPlaying()){
             ppbtn.setBackgroundResource(R.drawable.pause_button);
+            songTitleTextView.setText(currentSongName);
         } else {
             ppbtn.setBackgroundResource(R.drawable.play_button);
         }
@@ -102,6 +106,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             mediaPlayer = MediaPlayer.create(getApplicationContext(), songMp3Array[currentSongIndex]);
             mediaPlayer.start();
             ppbtn.setBackgroundResource(R.drawable.pause_button);
+            currentSongName = songs.get(currentSongIndex).getSongName();
         }
     }
 
@@ -113,6 +118,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             mediaPlayer = MediaPlayer.create(getApplicationContext(), songMp3Array[currentSongIndex]);
             mediaPlayer.start();
             ppbtn.setBackgroundResource(R.drawable.pause_button);
+            currentSongName = songs.get(currentSongIndex).getSongName();
         }
     }
 
@@ -139,6 +145,7 @@ public class MusicPlayer extends AppCompatActivity implements RecyclerViewInterf
             mediaPlayer = MediaPlayer.create(getApplicationContext(), temp.songMp3);
             mediaPlayer.start();
             ppbtn.setBackgroundResource(R.drawable.pause_button);
+            currentSongName = temp.getSongName();
         }
     }
 

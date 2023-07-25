@@ -23,8 +23,9 @@ public class NotificationActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private CollectionReference userCollection;
-    private CollectionReference notificationCollection;
+    private String userId = mAuth.getCurrentUser().getUid();
+    private CollectionReference userCollection = db.collection("users");
+    private CollectionReference notificationCollection = userCollection.document(userId).collection("notifications");
     private NotificationAdapter adapter;
 
 

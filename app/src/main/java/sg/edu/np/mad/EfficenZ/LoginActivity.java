@@ -8,8 +8,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // wave animation
+        Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wave);
+        ImageView wave1 = findViewById(R.id.wave);
+        wave1.startAnimation(animation1);
+        Animation animation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wave2);
+        ImageView wave2 = findViewById(R.id.wave1);
+        wave2.startAnimation(animation2);
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
