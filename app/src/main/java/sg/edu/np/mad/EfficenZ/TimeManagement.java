@@ -231,7 +231,7 @@ public class TimeManagement extends AppCompatActivity {
         updateInterface();
     }
 
-    private  void pauseTimer() {
+    private void pauseTimer() {
 
         countDownTimer.cancel();
         timeRunning = false;
@@ -502,7 +502,7 @@ public class TimeManagement extends AppCompatActivity {
                             Toast.makeText(TimeManagement.this, "Value updated", Toast.LENGTH_SHORT).show();
                             Log.d(data.getTitle()+"Started", data.getTime_left());
                             task_title.setText("Task: " + data.getTitle());
-                            task_title.setTextSize(20);
+                            task_title.setTextSize(30);
                         }
                     }
 
@@ -513,6 +513,9 @@ public class TimeManagement extends AppCompatActivity {
                     }
                 });
             }
+        }
+        if(data == null && dataReceived == null) {
+            set_time.setVisibility(View.INVISIBLE);
         }
     }
 
