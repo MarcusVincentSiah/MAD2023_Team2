@@ -57,6 +57,7 @@ public class ToolsFragment extends Fragment {
             startActivity(intent);
         });
 
+        // TODO: DARK MODE TIMER
         timer = getView().findViewById(R.id.timerBtn);
         timer.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), TimeManagement.class);
@@ -69,6 +70,7 @@ public class ToolsFragment extends Fragment {
             startActivity(intent);
         });
 
+        // TODO: MARCUS WHY DOES YOUR CALENDAR NOT DARK MODE
         calendar = getView().findViewById(R.id.calendarBtn);
         calendar.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), CalendarTask.class);

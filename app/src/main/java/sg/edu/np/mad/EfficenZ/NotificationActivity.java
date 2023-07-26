@@ -2,20 +2,26 @@ package sg.edu.np.mad.EfficenZ;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -31,6 +37,7 @@ public class NotificationActivity extends AppCompatActivity {
     private NotificationAdapter adapter;
     private TextView emptyNotifications;
     private Button testNotification;
+    private ImageView clearAllBtn;
 
 
     @Override
@@ -38,27 +45,20 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
+        // TODO: REMOVE THIS
         testNotification = findViewById(R.id.testNotification);
         testNotification.setOnClickListener(v -> {
             NotificationHelper notificationHelper = new NotificationHelper();
             notificationHelper.sendNotification(this, "TEST", "HELLOOOOOOOOOOOOO");
         });
 
-        /*
-        ArrayList<NotificationModel> notificationList = new ArrayList<>();
-
-        Intent intent = getIntent();
-        Bundle args = intent.getBundleExtra("BUNDLE");
-        notificationList = (ArrayList<NotificationModel>) args.getSerializable("NOTIFICATION_LIST");
-
-
-        RecyclerView rv = findViewById(R.id.notificationRV);
-        NotificationAdapter adapter = new NotificationAdapter(this, notificationList);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setAdapter(adapter); */
+        // DELETE ALL NOTIFICATION
+        clearAllBtn = findViewById(R.id.notification_deleteAll);
+        clearAllBtn.setOnClickListener(v -> {
+            showClearAllDialog();
+        });
 
         String userId = mAuth.getCurrentUser().getUid();
-
         db = FirebaseFirestore.getInstance();
         userCollection = db.collection("users");
         notificationCollection = userCollection.document(userId).collection("notification");
@@ -66,12 +66,15 @@ public class NotificationActivity extends AppCompatActivity {
 
         setUpRecyclerView();
 
+        // SWIPE TO DELETE
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(adapter.getItemTouchHelperCallback());
         itemTouchHelper.attachToRecyclerView(rv);
+
+
     }
 
     private void setUpRecyclerView() {
-        Query query = notificationCollection.orderBy("title", Query.Direction.ASCENDING);
+        Query query = notificationCollection.orderBy("timestamp", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<NotificationModel> options = new FirestoreRecyclerOptions.Builder<NotificationModel>()
                 .setQuery(query, NotificationModel.class)
                 .build();
@@ -104,11 +107,44 @@ public class NotificationActivity extends AppCompatActivity {
             emptyNotifications.setVisibility(View.VISIBLE);
             RecyclerView rv = findViewById(R.id.notificationRV);
             rv.setVisibility(View.GONE);
+            clearAllBtn.setVisibility(View.GONE);
         } else {
             emptyNotifications.setVisibility(View.GONE);
             RecyclerView rv = findViewById(R.id.notificationRV);
             rv.setVisibility(View.VISIBLE);
+            clearAllBtn.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void showClearAllDialog(){
+        AlertDialog.Builder alertdialog = new AlertDialog.Builder(NotificationActivity.this);
+        alertdialog.setTitle("Caution OwO")
+                .setMessage("This will clear all of your notifications. Continue?")
+                .setPositiveButton("Yes!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteAllNotifications();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertdialog.show();
+    }
+    private void deleteAllNotifications() {
+        // Delete all notifications from the Firestore database
+        notificationCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                documentSnapshot.getReference().delete();
+            }
+
+            Toast.makeText(this, "Notifications cleared! :D", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Unable to delete all notifications :(", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override

@@ -1,13 +1,17 @@
 package sg.edu.np.mad.EfficenZ;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -16,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     CardView account, notification, theme;
     int option;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,16 +29,22 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences theme_prefs = getSharedPreferences("THEME_MODE", MODE_PRIVATE);
         SharedPreferences.Editor editor = theme_prefs.edit();
 
+        // ACCOUNT SETTINGS
         account = findViewById(R.id.settings_accountBtn);
         account.setOnClickListener(v -> {
             // TODO: ACCOUNT SETTINGS ACTIVITY
         });
 
+        // NOTIFICATION SETTINGS
         notification = findViewById(R.id.settings_notificationBtn);
         notification.setOnClickListener(v -> {
-            // TODO: NOTIFICATION SETTINGS ACTIVITY
+            Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, getApplicationContext().getPackageName())
+                    .putExtra(Settings.EXTRA_CHANNEL_ID, "NOTIFICATION");
+            startActivity(intent);
         });
 
+        // THEME SETTINGS
         theme = findViewById(R.id.settings_themeBtn);
         theme.setOnClickListener(v -> {
             setTheme(theme_prefs, editor);
