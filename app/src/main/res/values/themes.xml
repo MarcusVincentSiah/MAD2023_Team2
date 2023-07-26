@@ -12,17 +12,41 @@
         <!-- Tertiary color -->
         <item name="colorTertiary">@color/tertiary_color</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/bg_color</item>
     </style>
 
+
     <!-- LIGHT MODE -->
 
+    <!-- GREEN SHAPES STYLES -->
+    <style name="green_blob_1">
+
+    </style>
+
+    <style name="green_blob_2">
+
+    </style>
+
+    <style name="green_blob_3">
+
+    </style>
+
+    <style name="wave">
+
+    </style>
+
+    <style name="wave2">
+
+    </style>
+
+    <!-- TEXT STYLES -->
     <style name="header1_text">
         <item name="fontFamily">@font/poppinsbold</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="android:textColor">@android:color/secondary_text_light</item>
         <item name="android:paddingTop">5dp</item>
     </style>
 
@@ -40,6 +64,7 @@
         <item name="android:paddingTop">5dp</item>
     </style>
 
+    <!-- BOTTOM NAV BAR STYLES -->
     <style name="BottomNavBar">
         <item name="android:background">@color/white</item>
         <item name="itemIconTint">@drawable/bottom_nav_bar_color</item>
@@ -48,35 +73,41 @@
         <item name="itemPaddingTop">0dp</item>
     </style>
 
-    <!-- Bottom Nav Bar Indicator -->
+
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/tertiary_color_light</item>
     </style>
 
     <!-- input text box -->
-    <style name="roundedCorner">
+    <style name="roundedCorner_inputText">
         <item name="android:background">@drawable/rounded_corner_input_text</item>
     </style>
 
+    <!-- BUTTON STYLES -->
     <style name="button_yellow">
         <item name="android:backgroundTint">@color/secondary_color_light</item>
         <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">50dp</item>
+
     </style>
 
     <style name="button_green">
         <item name="android:backgroundTint">@color/primary_color_light</item>
         <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">50dp</item>
     </style>
 
     <style name="button_grey">
         <item name="android:backgroundTint">@color/light_grey</item>
         <item name="android:textColor">@color/black</item>
+        <item name="cornerRadius">50dp</item>
     </style>
 
+    <!-- CARD STYLES -->
     <style name="cardView_style">
-        <item name="cardElevation">4dp</item>
+        <item name="cardElevation">0dp</item>
         <item name="android:backgroundTint">@color/light_grey</item>
-        <item name="cardCornerRadius">10dp</item>
+        <item name="cardCornerRadius">16dp</item>
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
@@ -84,17 +115,60 @@
     </style>
 
     <style name="cardView_button_style">
-        <item name="cardElevation">4dp</item>
+        <item name="cardElevation">0dp</item>
         <item name="android:backgroundTint">@color/light_grey</item>
-        <item name="cardCornerRadius">10dp</item>
+        <item name="cardCornerRadius">16dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:layout_marginBottom">8dp</item>
     </style>
 
-    <style name="icons">
+    <style name="icons_green">
         <item name="tint">@color/primary_color_light</item>
+    </style>
+
+    <style name="icons_grey">
+        <item name="tint">@android:color/secondary_text_light</item>
+    </style>
+
+    <!-- NOTES STYLES -->
+    <style name="notes_seachbox">
+        <item name="cornerRadius">10dp</item>
+        <item name="android:background">@color/light_grey</item>
+    </style>
+
+    <style name="floating_action_btn">
+        <item name="android:backgroundTint">@color/secondary_color_light</item>
+        <item name="borderWidth">0dp</item>
+    </style>
+
+
+
+    <!-- MUSIC STYLES -->
+    <style name="music_card">
+        <item name="cardElevation">0dp</item>
+        <item name="android:backgroundTint">@color/primary_color_light</item>
+        <item name="cardCornerRadius">20dp</item>
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
+    <!-- TASK MANAGEMENT STYLES -->
+    <style name="task_header1_text">
+        <item name="fontFamily">@font/poppinsbold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
+    <style name="task_popup_bg_color">
+        <item name="backgroundColor">@color/bg_color</item>
+    </style>
+
+    <!-- CALENDAR STYLES -->
+    <style name="calendar_cell">
+        <item name="android:background">@drawable/rounded_corner</item>
     </style>
 
 </resources>

@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,15 +25,24 @@ public class NotificationActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private CollectionReference userCollection;
-    private CollectionReference notificationCollection;
+    private String userId = mAuth.getCurrentUser().getUid();
+    private CollectionReference userCollection; // = db.collection("users");
+    private CollectionReference notificationCollection; // = userCollection.document(userId).collection("notifications");
     private NotificationAdapter adapter;
+    private TextView emptyNotifications;
+    private Button testNotification;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+
+        testNotification = findViewById(R.id.testNotification);
+        testNotification.setOnClickListener(v -> {
+            NotificationHelper notificationHelper = new NotificationHelper();
+            notificationHelper.sendNotification(this, "TEST", "HELLOOOOOOOOOOOOO");
+        });
 
         /*
         ArrayList<NotificationModel> notificationList = new ArrayList<>();
@@ -46,8 +57,11 @@ public class NotificationActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter); */
 
+        String userId = mAuth.getCurrentUser().getUid();
+
         db = FirebaseFirestore.getInstance();
-        notificationCollection = db.collection("notification");
+        userCollection = db.collection("users");
+        notificationCollection = userCollection.document(userId).collection("notification");
         RecyclerView rv = findViewById(R.id.notificationRV);
 
         setUpRecyclerView();
@@ -65,6 +79,36 @@ public class NotificationActivity extends AppCompatActivity {
         RecyclerView rv = findViewById(R.id.notificationRV);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
+
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                updateEmptyView();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                updateEmptyView();
+            }
+        });
+
+        updateEmptyView();
+
+    }
+
+    private void updateEmptyView() {
+        emptyNotifications = findViewById(R.id.emptyNotification);
+        if (adapter.getItemCount() == 0) {
+            emptyNotifications.setVisibility(View.VISIBLE);
+            RecyclerView rv = findViewById(R.id.notificationRV);
+            rv.setVisibility(View.GONE);
+        } else {
+            emptyNotifications.setVisibility(View.GONE);
+            RecyclerView rv = findViewById(R.id.notificationRV);
+            rv.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

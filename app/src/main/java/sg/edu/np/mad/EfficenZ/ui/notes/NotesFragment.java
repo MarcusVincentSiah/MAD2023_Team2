@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,7 +68,7 @@ public class NotesFragment extends Fragment {
         setUpRecyclerView(view, folderid, folderName, folderCollection);
 
         // hide create folder button
-        ImageButton createFolder = getActivity().findViewById(R.id.createFolder);
+        ImageView createFolder = getActivity().findViewById(R.id.createFolder);
         createFolder.setVisibility(View.GONE);
     }
 

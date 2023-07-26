@@ -108,8 +108,8 @@ public class TaskManagement extends AppCompatActivity {
         setContentView(R.layout.activity_task_management);
         myContext = this;
         //Creating the heading "task management"
-        toolbar = findViewById(R.id.toolbar_home);
-        toolbar.setTitle("Task Management");
+        //toolbar = findViewById(R.id.toolbar_home);
+        //toolbar.setTitle("Task Management");
 
         //Getting firebase Authentication
         mAuth = FirebaseAuth.getInstance();

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -63,7 +64,7 @@ public class NotesList extends AppCompatActivity implements SearchView.OnQueryTe
         searchView.setOnQueryTextListener(this);
 
         // CREATE FOLDER BUTTON
-        ImageButton createFolder = findViewById(R.id.createFolder);
+        ImageView createFolder = findViewById(R.id.createFolder);
         createFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,7 +169,7 @@ public class NotesList extends AppCompatActivity implements SearchView.OnQueryTe
                     String folderName = documentSnapshot.getString("name");
 
                     // remove create folder button
-                    ImageButton createFolder = findViewById(R.id.createFolder);
+                    ImageView createFolder = findViewById(R.id.createFolder);
                     createFolder.setVisibility(View.GONE);
 
                     // pass foldername and folderid to NotesFragment (needed for NotesEdit)
