@@ -186,11 +186,35 @@
             app:layout_constraintTop_toBottomOf="@+id/textView"
             style="@style/cardView_style">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/home_recyclerview"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="10dp" />
+                android:layout_height="220dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/home_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/home_emptyTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="All tasks completed! 😎"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         </androidx.cardview.widget.CardView>
 
@@ -225,7 +249,7 @@
                         android:layout_marginTop="20dp"
                         android:paddingTop="5dp"
                         android:text="Studied"
-                        app:layout_constraintBottom_toTopOf="@+id/textView8"
+                        app:layout_constraintBottom_toTopOf="@+id/home_studyHoursCounter"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -233,7 +257,7 @@
                         style="@style/header2_text"/>
 
                     <TextView
-                        android:id="@+id/textView8"
+                        android:id="@+id/home_studyHoursCounter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppinsbold"
@@ -257,7 +281,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView8"
+                        app:layout_constraintTop_toBottomOf="@+id/home_studyHoursCounter"
                         style="@style/header2_text"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -286,7 +310,7 @@
                         android:layout_marginTop="20dp"
                         android:paddingTop="5dp"
                         android:text="Study Streak"
-                        app:layout_constraintBottom_toTopOf="@+id/textView11"
+                        app:layout_constraintBottom_toTopOf="@+id/home_studyStreakCounter"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.494"
                         app:layout_constraintStart_toStartOf="parent"
@@ -294,7 +318,7 @@
                         style="@style/header2_text"/>
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/home_studyStreakCounter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="5dp"
@@ -319,7 +343,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView11"
+                        app:layout_constraintTop_toBottomOf="@+id/home_studyStreakCounter"
                         style="@style/header2_text"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

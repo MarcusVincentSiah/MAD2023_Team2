@@ -40,7 +40,7 @@ import sg.edu.np.mad.EfficenZ.model.Data;
 
 public class HomeFragment extends Fragment {
 
-    TextView home_greeting, home_msg;
+    TextView home_greeting, home_msg, studyStreakCounter, studyHourCounter, emptyTaskMessage;
     TextView progressText;
     ImageView notificationBtn, accountBtn;
     CardView achievementCard;
@@ -84,6 +84,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // SETTING STATUS BAR COLOR
         int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         switch (nightModeFlags){
             case Configuration.UI_MODE_NIGHT_YES:
@@ -98,6 +99,7 @@ public class HomeFragment extends Fragment {
                 break;
         }
 
+        // ANIMATION
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
         ImageView blob = getView().findViewById(R.id.imageView8);
         ImageView blob1 = getView().findViewById(R.id.imageView7);
@@ -106,7 +108,7 @@ public class HomeFragment extends Fragment {
         blob1.startAnimation(animation);
         blob2.startAnimation(animation);
 
-        // TODO: add personalised welcome message
+        // GREETING & WELCOME MESSAGE
         prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
         String first_name = prefs.getString("first_name", "there");
@@ -115,12 +117,14 @@ public class HomeFragment extends Fragment {
         home_msg = getView().findViewById(R.id.home_msg);
         home_msg.setText("Welcome!");
 
+        // NOTIFICATION BUTTON
         notificationBtn = getView().findViewById(R.id.notificationBtn);
         notificationBtn.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), NotificationActivity.class);
             startActivity(intent);
         });
 
+        // ACCOUNT SETTING BUTTON
         accountBtn = getView().findViewById(R.id.accountBtn);
         accountBtn.setOnClickListener(v -> {
             // TODO: START ACCOUNT ACTIVITY
@@ -129,10 +133,11 @@ public class HomeFragment extends Fragment {
 
         });
 
+        // PROGRESS BAR
         progressText = getView().findViewById(R.id.progressText);
         taskProgress = getView().findViewById(R.id.progressBar);
 
-        // OnClickListener for Tasks
+        // TASK LIST
         taskListCard = getView().findViewById(R.id.homepageTaskList_card);
         taskListCard.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), TaskManagement.class);
@@ -140,10 +145,12 @@ public class HomeFragment extends Fragment {
         });
 
         // TODO: Study Streak counter
+        studyStreakCounter = getView().findViewById(R.id.home_studyStreakCounter);
 
         // TODO: Study hours counter
+        studyHourCounter = getView().findViewById(R.id.home_studyHoursCounter);
 
-        // My Progress and Achievements button
+        // MY PROGRESS AND ACHIEVEMENT BUTTON
         achievementCard = getView().findViewById(R.id.homepageAchievement_card);
         achievementCard.setOnClickListener(v -> {
             // TODO: ACHIEVEMENT PAGE
@@ -165,6 +172,8 @@ public class HomeFragment extends Fragment {
         startActivity(Success);
 
     }
+
+
 
     @Override
     public void onStart() {
@@ -194,6 +203,23 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+
+        /*
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                updateEmptyView(adapter);
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                updateEmptyView(adapter);
+            }
+        });
+
+        updateEmptyView(adapter); */
 
         // placeholder code for progress bar
         taskReference.addValueEventListener(new ValueEventListener() {
@@ -241,6 +267,19 @@ public class HomeFragment extends Fragment {
         public void setDueDate(String dueDate) {
             TextView mDate = taskView.findViewById(R.id.dueDate);
             mDate.setText(dueDate);
+        }
+    }
+
+    private void updateEmptyView(FirebaseRecyclerAdapter<Data, TaskViewHolder> adapter) {
+        emptyTaskMessage = getView().findViewById(R.id.home_emptyTask);
+        if (adapter.getItemCount() == 0) {
+            emptyTaskMessage.setVisibility(View.VISIBLE);
+            RecyclerView rv = getView().findViewById(R.id.home_recyclerview);
+            rv.setVisibility(View.GONE);
+        } else {
+            emptyTaskMessage.setVisibility(View.GONE);
+            RecyclerView rv = getView().findViewById(R.id.home_recyclerview);
+            rv.setVisibility(View.VISIBLE);
         }
     }
 }
