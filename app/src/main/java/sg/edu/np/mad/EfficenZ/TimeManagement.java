@@ -3,6 +3,7 @@ package sg.edu.np.mad.EfficenZ;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -266,7 +267,7 @@ public class TimeManagement extends AppCompatActivity {
         CollectionReference studyStatsCollection = db.collection("users").document(userId).collection("StudyStats");
         DocumentReference studyStatsDocument = studyStatsCollection.document("study_stats_data");
 
-        String currentDate = LocalDate.now().toString();
+        @SuppressLint({"NewApi", "LocalSuppress"}) String currentDate = LocalDate.now().toString();
 
         studyStatsDocument.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -323,6 +324,30 @@ public class TimeManagement extends AppCompatActivity {
                                             }
                                         });
                             }
+                        } else {
+                            // Handle the case when time_studied field doesn't exist or is null
+                            HashMap<String, Object> studyStats = new HashMap<>();
+                            studyStats.put("Time_studied", timeStudied);
+                            studyStats.put("Time_studied_today", timeStudied);
+                            studyStats.put("Target_time", 69);
+                            studyStats.put("days", 99);
+                            studyStats.put("Last_updated_date", currentDate);
+                            studyStats.put("days_target_met", 99);
+                            studyStatsDocument.set(studyStats)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Handle success after creating the new document
+                                            Log.d("Firestore", "New document created successfully");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Handle any errors that occurred during document creation
+                                            Log.e("Firestore", "Error creating new document: " + e.getMessage());
+                                        }
+                                    });
                         }
                     }
                 })
