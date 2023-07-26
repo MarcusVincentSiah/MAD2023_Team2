@@ -19,7 +19,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import io.reactivex.rxjava3.annotations.NonNull;
 import sg.edu.np.mad.EfficenZ.model.Data;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +31,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -38,7 +46,7 @@ public class TimeManagement extends AppCompatActivity {
     private TextView time;
     private Button set_time;
     private Button start_pause;
-    private Button reset;
+    //private Button reset;
     private Button finish;
     private CountDownTimer countDownTimer;
     private boolean timeRunning;
@@ -49,8 +57,18 @@ public class TimeManagement extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private Data data;
     private MediaPlayer mediaPlayer;
-    private String userId;
     private FirebaseAuth mAuth;
+    private String userId;
+
+    private long timeStarted;
+
+    private long timeStopped;
+
+    private long timeStudied;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +119,7 @@ public class TimeManagement extends AppCompatActivity {
         set_time = findViewById(R.id.btn_set);
         time = findViewById(R.id.timer);
         start_pause = findViewById(R.id.btn_start_pause);
-        reset = findViewById(R.id.btn_reset);
+        //reset = findViewById(R.id.btn_reset);
         finish = findViewById(R.id.btn_finish);
 
         //When user clicks on the set button
@@ -168,12 +186,12 @@ public class TimeManagement extends AppCompatActivity {
         });
 
         //When reset is clicked
-        reset.setOnClickListener(new View.OnClickListener() {
+        /*reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resetTimer();
             }
-        });
+        });*/
     }
 
     private void setTime(long time) {
@@ -183,7 +201,8 @@ public class TimeManagement extends AppCompatActivity {
         }
         else {
             startTime = time;
-            resetTimer();
+            timeLeft = time;
+            //resetTimer();
             closeKeyboard();
 
             //Update the database with the new time_set values
@@ -228,6 +247,7 @@ public class TimeManagement extends AppCompatActivity {
         }.start();
 
         timeRunning = true;
+        timeStarted = System.currentTimeMillis();
         updateInterface();
     }
 
@@ -235,7 +255,75 @@ public class TimeManagement extends AppCompatActivity {
 
         countDownTimer.cancel();
         timeRunning = false;
+        timeStopped = System.currentTimeMillis();
         updateInterface();
+
+        userId = mAuth.getCurrentUser().getUid();
+        timeStudied = timeStopped - timeStarted;
+
+        CollectionReference studyStatsCollection = db.collection("users").document(userId).collection("StudyStats");
+        DocumentReference studyStatsDocument = studyStatsCollection.document("study_stats_data");
+
+        studyStatsDocument.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Retrieve the value of time_studied field
+                            Long currentTimeStudied = documentSnapshot.getLong("Time_studied");
+                            if (currentTimeStudied != null) {
+                                // Update the value of timeStudied by adding the new timeStudied
+                                long updatedTimeStudied = currentTimeStudied + timeStudied;
+                                HashMap<String, Object> studyStats = new HashMap<>();
+                                studyStats.put("Time_studied", updatedTimeStudied);
+                                studyStatsDocument.set(studyStats, SetOptions.merge())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // Handle success after updating the document
+                                                Log.d("Firestore", "Time Studied updated successfully");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Handle any errors that occurred during the update
+                                                Log.e("Firestore", "Error updating document: " + e.getMessage());
+                                            }
+                                        });
+                            } else {
+                                // Handle the case when time_studied field doesn't exist or is null
+                                HashMap<String, Object> studyStats = new HashMap<>();
+                                studyStats.put("Time_studied", timeStudied);
+                                studyStats.put("Time_studied_today", timeStudied);
+                                studyStats.put("Target", 69);
+                                studyStats.put("days", 99);
+                                studyStatsDocument.set(studyStats)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // Handle success after creating the new document
+                                                Log.d("Firestore", "New document created successfully");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Handle any errors that occurred during document creation
+                                                Log.e("Firestore", "Error creating new document: " + e.getMessage());
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle any errors that occurred during the retrieval
+                        Log.e("Firestore", "Error retrieving document: " + e.getMessage());
+                    }
+                });
 
         if (data!= null) {
 
@@ -255,7 +343,7 @@ public class TimeManagement extends AppCompatActivity {
         else Toast.makeText(TimeManagement.this, "There is no task", Toast.LENGTH_SHORT).show();
     }
 
-    private void resetTimer() {
+    /*private void resetTimer() {
 
         timeLeft = startTime;
         updateCountDownText();
@@ -272,45 +360,35 @@ public class TimeManagement extends AppCompatActivity {
             Toast.makeText(TimeManagement.this, "Timer has been resetted", Toast.LENGTH_SHORT).show();
         }
         else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
     private void finishTask() {
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        Intent intent = new Intent(TimeManagement.this, MainActivity.class);
+
+        //Update the database with the new time_set values
+        String dataKey = data.getId();
+        String time_left = String.valueOf(timeLeft);
+        Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
+                data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, data.getTask_status());
+
+        mDatabase.child(dataKey).setValue(newData);//update
+
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        String userId = prefs.getString("userId", null);
-        long timeStudied = startTime - timeLeft;
+        SharedPreferences.Editor editor =prefs.edit();
 
-        if (userId == null) {
-            HashMap<String, Object> studyStats = new HashMap<>();
-            studyStats.put("Time studied", timeStudied);
-            studyStats.put("Target", 69);
-            studyStats.put("days", 99);
-            studyStats.put("userid", userId);
-
-            // Add the new document to the "Study stats" collection
-            database.collection("Study stats")
-                    .add(studyStats)
-                    .addOnSuccessListener(documentReference -> {
-                        // Save the document ID (userid) to SharedPreferences
-                        //SharedPreferences.Editor editor = prefs.edit();
-                        //editor.putString("userid", documentReference.getId());
-                        //editor.apply();
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle the failure if needed
-                    });
-        } else {
-            // Update the existing document with the new "Time studied" value
-            database.collection("Study stats").document(userId)
-                    .update("Time studied", timeStudied)
-                    .addOnSuccessListener(aVoid -> {
-                        // Update successful
-                        // Handle success if needed
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle the failure if needed
-                    });
-        }
+        //Store the start time, the amt of time left, whether timer is running or not, end time and the key of the data
+        editor.remove("startTime");
+        editor.remove("timeLeft");
+        editor.remove("timerRunning");
+        editor.remove("endTime");
+        editor.remove("timeStarted");
+        editor.remove("TaskID");
+        data = null;
+        startTime = 0;
+        timeLeft = 0;
+        endTime = 0;
+        editor.apply();
+        startActivity(intent);
     }
 
     private void updateCountDownText() {
@@ -338,7 +416,7 @@ public class TimeManagement extends AppCompatActivity {
             time_input_hours.setVisibility(View.INVISIBLE);
             time_input_min.setVisibility(View.INVISIBLE);
             set_time.setVisibility(View.INVISIBLE);
-            reset.setVisibility(View.INVISIBLE);
+            //reset.setVisibility(View.INVISIBLE);
             finish.setVisibility(View.INVISIBLE);
 
             start_pause.setText("Pause");
@@ -363,12 +441,12 @@ public class TimeManagement extends AppCompatActivity {
 
             //if time left and time start are equal, hide reset btn
             if (timeLeft < startTime) {
-                reset.setVisibility(View.VISIBLE);
+                //reset.setVisibility(View.VISIBLE);
                 finish.setVisibility(View.VISIBLE);
 
             }
             else {
-                reset.setVisibility(View.INVISIBLE);
+                //reset.setVisibility(View.INVISIBLE);
                 finish.setVisibility(View.INVISIBLE);
             }
         }
@@ -401,6 +479,7 @@ public class TimeManagement extends AppCompatActivity {
         editor.putLong("timeLeft", timeLeft);
         editor.putBoolean("timerRunning", timeRunning);
         editor.putLong("endTime", endTime);
+        editor.putLong("timeStarted", timeStarted);
 
         if (data!= null) {
             String dataKey = data.getId();
@@ -464,6 +543,7 @@ public class TimeManagement extends AppCompatActivity {
             startTime = prefs.getLong("startTime", 60000);
             timeLeft = prefs.getLong("timeLeft", startTime);
             timeRunning = prefs.getBoolean("timerRunning", false);
+            timeStarted = prefs.getLong("timeStarted", 0);
             String dataKey = prefs.getString("TaskID", null);
 
             updateCountDownText();

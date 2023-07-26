@@ -27,5 +27,6 @@
 
     <string name="back"><![CDATA[<-]]></string>
     <string name="forward"><![CDATA[->]]></string>
+    <string name="finish">Finish</string>
 
 </resources>
