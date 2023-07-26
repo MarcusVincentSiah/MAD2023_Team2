@@ -4,6 +4,7 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
     style="@style/cardView_style">
 
     <!-- Define the layout for the note preview, such as TextViews or other views -->

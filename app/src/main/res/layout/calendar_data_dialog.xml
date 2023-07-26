@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/task_popup_bg_color">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,14 +19,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:background="@color/secondary_color"
+                android:layout_margin="16dp"
                 android:gravity="center"
-                android:padding="10dp"
                 android:text="Your Task"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/white"
-                app:cornerRadius="10dp" />
+                style="@style/task_header1_text" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/calendar_recycler"

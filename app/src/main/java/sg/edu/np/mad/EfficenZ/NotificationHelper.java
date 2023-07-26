@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -22,6 +23,7 @@ public class NotificationHelper {
     private static final String CHANNEL_DESCRIPTION = "Receive app notifications";
 
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
     private CollectionReference notificationCollection;
 
     public void sendNotification(Context context, String title, String content) {
@@ -47,7 +49,8 @@ public class NotificationHelper {
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        notificationManager.notify(0, builder.build());
+        int notificationId = (int) System.currentTimeMillis();
+        notificationManager.notify(notificationId, builder.build());
     }
 
     private void createNotificationChannel(Context context) {
@@ -66,7 +69,9 @@ public class NotificationHelper {
 
     private void saveNotification(NotificationModel n){
         db = FirebaseFirestore.getInstance();
-        notificationCollection = db.collection("notification");
+        mAuth = FirebaseAuth.getInstance();
+        String userId = mAuth.getCurrentUser().getUid();
+        notificationCollection = db.collection("users").document(userId).collection("notification");
         notificationCollection.document().set(n);
     }
 }

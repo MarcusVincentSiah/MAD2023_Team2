@@ -10,6 +10,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="bg_color">#FFFFFF</color> <!-- app bg -->
+    <color name="bg_color_dark">#121212</color>
     <color name="primary_color">#4f6b4e</color> <!-- Header -->
     <color name="secondary_color">#988057</color> <!-- Buttons -->
     <color name="tertiary_color">#EFEFE2</color> <!-- items?-->
@@ -22,7 +23,9 @@
     <color name="tertiary_color_light">#EFEFE2</color>
 
     <color name="dark_grey">#434343</color>
-    <color name="primary_color_dark">#BCCDAC</color>
+    <color name="primary_color_dark">#5F704F</color>
     <color name="secondary_color_dark">#7C653D</color>
     <color name="tertiary_color_dark">#3D4339</color>
+
+    <color name="homepage_statusbar_color">#A5B893</color>
 </resources>

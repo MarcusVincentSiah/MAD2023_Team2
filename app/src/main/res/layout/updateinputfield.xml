@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/task_popup_bg_color">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,14 +18,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@color/secondary_color"
-                android:gravity="center"
-                android:padding="10dp"
+                android:layout_margin="16dp"
                 android:text="Add Your Task"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/white"
-                app:cornerRadius="10dp" />
+                style="@style/task_header1_text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,9 +35,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Title"
-                        android:textAppearance="?android:textAppearanceMedium"
-                        android:layout_margin="10dp"/>
+                        style="@style/header2_text" />
 
                 </RelativeLayout>
 
@@ -58,7 +57,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:textColor="@color/black" />
+                        />
 
                 </RelativeLayout>
 
@@ -77,9 +76,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Note"
-                        android:textAppearance="?android:textAppearanceMedium"
-                        android:layout_margin="10dp" />
+                        style="@style/header2_text" />
 
                 </RelativeLayout>
 
@@ -96,7 +98,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:textColor="@color/black" />
+                        />
 
                 </RelativeLayout>
 
@@ -120,7 +122,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:text="Set Date"
-                        android:textAppearance="?android:textAppearanceMedium" />
+                        style="@style/header2_text" />
 
                 </RelativeLayout>
 
@@ -138,7 +140,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:text="Click here"
-                        android:textColor="@color/white" />
+                        style="@style/button_grey" />
 
                 </RelativeLayout>
 
@@ -162,7 +164,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:text="Set Time"
-                        android:textAppearance="?android:textAppearanceMedium" />
+                        style="@style/header2_text" />
 
                 </RelativeLayout>
 
@@ -180,7 +182,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:text="Click here"
-                        android:textColor="@color/white" />
+                        style="@style/button_grey" />
 
                 </RelativeLayout>
 
@@ -204,9 +206,8 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:backgroundTint="@color/secondary_color"
                         android:text="DELETE"
-                        app:cornerRadius="20dp" />
+                        style="@style/button_grey" />
 
                 </RelativeLayout>
 
@@ -223,9 +224,8 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:backgroundTint="@color/secondary_color"
                         android:text="UPDATE"
-                        app:cornerRadius="20dp" />
+                        style="@style/button_green" />
 
                 </RelativeLayout>
 

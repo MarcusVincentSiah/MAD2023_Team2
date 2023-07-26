@@ -2,9 +2,12 @@ package sg.edu.np.mad.EfficenZ;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.checkerframework.checker.units.qual.A;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,6 +55,38 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // setting theme
+        SharedPreferences theme_prefs = getSharedPreferences("THEME_MODE", MODE_PRIVATE);
+        String themeMode = theme_prefs.getString("MODE", "system");
+        switch (themeMode){
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case "system":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+        }
+
+        // change status bar color
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags){
+            case Configuration.UI_MODE_NIGHT_YES:
+                getWindow().setStatusBarColor(Color.parseColor("#526046"));
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+                getWindow().setStatusBarColor(getColor(R.color.primary_color_light));
+                break;
+
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                break;
+        }
+
+
 
         // wave animation
         Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wave);

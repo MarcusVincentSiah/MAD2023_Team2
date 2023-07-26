@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
@@ -57,7 +58,7 @@ public class FolderFragment extends Fragment {
         setUpRecyclerView(view, foldersCollection);
 
         // show create folder button
-        ImageButton createFolder = getActivity().findViewById(R.id.createFolder);
+        ImageView createFolder = getActivity().findViewById(R.id.createFolder);
         createFolder.setVisibility(View.VISIBLE);
     }
 

@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp"
-    app:cardElevation="6dp"
-    android:elevation="6dp">
+    android:layout_marginTop="0dp"
+    style="@style/cardView_style">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFF1E2"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -23,18 +21,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Date"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/black" />
+                android:text="Date" />
 
             <TextView
                 android:id="@+id/duedate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                android:text="duedate"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/black" />
+                android:text="duedate" />
 
             <TextView
                 android:id="@+id/duetime"
@@ -42,8 +36,7 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:text="duetime"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/black" />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -60,8 +53,7 @@
                 android:maxLines="1"
                 android:padding="8dp"
                 android:text="Title"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/black" />
+                android:textStyle="bold" />
 
             <!--            android:maxLines="3"-->
             <TextView
@@ -70,8 +62,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Note"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/black" />
+                />
         </LinearLayout>
 
         <LinearLayout

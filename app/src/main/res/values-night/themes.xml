@@ -1,24 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.EfficenZ" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.EfficenZ" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/primary_color_dark</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/secondary_color_dark</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/primary_color_light</item>
+        <item name="android:statusBarColor">@color/bg_color_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/bg_color_dark</item>
     </style>
 
-<!--
+
+
     <style name="header1_text">
         <item name="fontFamily">@font/poppinsbold</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@android:color/primary_text_dark</item>
+        <item name="android:textColor">@android:color/secondary_text_dark</item>
         <item name="android:paddingTop">5dp</item>
     </style>
 
@@ -66,6 +69,7 @@
         <item name="rippleColor">#3D4339</item>
         <item name="itemIconTint">@drawable/bottom_nav_bar_color_dark</item>
         <item name="itemTextColor">@drawable/bottom_nav_bar_color_dark</item>
+        <item name="itemPaddingTop">0dp</item>
     </style>
 
     <style name="roundedCorner_inputText">
@@ -93,7 +97,7 @@
     <style name="cardView_style">
         <item name="cardElevation">0dp</item>
         <item name="android:backgroundTint">@color/dark_grey</item>
-        <item name="cardCornerRadius">10dp</item>
+        <item name="cardCornerRadius">16dp</item>
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
@@ -103,15 +107,58 @@
     <style name="cardView_button_style">
         <item name="cardElevation">0dp</item>
         <item name="android:backgroundTint">@color/dark_grey</item>
-        <item name="cardCornerRadius">10dp</item>
+        <item name="cardCornerRadius">16dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:layout_marginBottom">8dp</item>
     </style>
 
-    <style name="icons">
+    <style name="icons_green">
         <item name="tint">@color/primary_color_dark</item>
-    </style> -->
+    </style>
+
+    <style name="icons_grey">
+        <item name="tint">@android:color/secondary_text_dark</item>
+    </style>
+
+    <!-- NOTES STYLES -->
+    <style name="notes_seachbox">
+        <item name="cornerRadius">10dp</item>
+        <item name="android:background">@color/dark_grey</item>
+    </style>
+
+    <style name="floating_action_btn">
+        <item name="android:backgroundTint">@color/secondary_color_dark</item>
+        <item name="borderWidth">0dp</item>
+    </style>
+
+
+
+    <!-- MUSIC STYLES -->
+    <style name="music_card">
+        <item name="cardElevation">0dp</item>
+        <item name="android:backgroundTint">@color/primary_color_dark</item>
+        <item name="cardCornerRadius">20dp</item>
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
+    <!-- TASK MANAGEMENT STYLES -->
+    <style name="task_header1_text">
+        <item name="fontFamily">@font/poppinsbold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
+    <style name="task_popup_bg_color">
+        <item name="backgroundColor">@color/bg_color_dark</item>
+    </style>
+
+    <!-- CALENDAR STYLES -->
+    <style name="calendar_cell">
+        <item name="android:background">@drawable/rounded_corner_dark</item>
+    </style>
 
 </resources>

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,8 +54,8 @@ public class NotesEdit extends AppCompatActivity {
         TextView pageTitle = findViewById(R.id.pageTitle);
         EditText titleText = findViewById(R.id.titleText);
         EditText contentText = findViewById(R.id.contentText);
-        ImageButton saveBtn = findViewById(R.id.saveBtn);
-        ImageButton deleteBtn = findViewById(R.id.deleteBtn);
+        ImageView saveBtn = findViewById(R.id.saveBtn);
+        ImageView deleteBtn = findViewById(R.id.deleteBtn);
 
         //db = FirebaseFirestore.getInstance();
         //foldersCollection = db.collection("folders");

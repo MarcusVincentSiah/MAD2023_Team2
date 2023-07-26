@@ -103,7 +103,8 @@
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_notifications_24" />
+                app:srcCompat="@drawable/baseline_notifications_24"
+                style="@style/icons_grey"/>
 
             <ImageView
                 android:id="@+id/accountBtn"
@@ -116,7 +117,8 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_account_circle_24" />
+                app:srcCompat="@drawable/baseline_account_circle_24"
+                style="@style/icons_grey"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
@@ -266,7 +268,6 @@
                 android:id="@+id/cardView2"
                 android:layout_width="175dp"
                 android:layout_height="160dp"
-                app:cardCornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cardView3"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -333,7 +334,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
