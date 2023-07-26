@@ -127,7 +127,6 @@ public class SignUpActivity extends AppCompatActivity {
         editor.putString("last_name", user.getLast_name());
         editor.putString("email", user.getEmail());
         editor.apply();
-        userId = mDatabase.push().getKey();
         mDatabase.child("users").child(userId).setValue(user);
     }
 }
