@@ -37,6 +37,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -211,6 +212,7 @@ public class TimeManagement extends AppCompatActivity {
             Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, time_needed, time_needed, data.getTask_status());
             mDatabase.child(dataKey).setValue(newData);//update
             Toast.makeText(TimeManagement.this, "Time has been set", Toast.LENGTH_SHORT).show();
+            updateCountDownText();
         }
     }
 
@@ -264,6 +266,8 @@ public class TimeManagement extends AppCompatActivity {
         CollectionReference studyStatsCollection = db.collection("users").document(userId).collection("StudyStats");
         DocumentReference studyStatsDocument = studyStatsCollection.document("study_stats_data");
 
+        String currentDate = LocalDate.now().toString();
+
         studyStatsDocument.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -271,11 +275,14 @@ public class TimeManagement extends AppCompatActivity {
                         if (documentSnapshot.exists()) {
                             // Retrieve the value of time_studied field
                             Long currentTimeStudied = documentSnapshot.getLong("Time_studied");
-                            if (currentTimeStudied != null) {
+                            Long currentTimeStudiedToday = documentSnapshot.getLong("Time_studied_today");
+                            if (currentTimeStudied != null && currentTimeStudiedToday != null) {
                                 // Update the value of timeStudied by adding the new timeStudied
                                 long updatedTimeStudied = currentTimeStudied + timeStudied;
+                                long updatedTimeStudiedToday = currentTimeStudiedToday + timeStudied;
                                 HashMap<String, Object> studyStats = new HashMap<>();
                                 studyStats.put("Time_studied", updatedTimeStudied);
+                                studyStats.put("Time_studied_today", updatedTimeStudiedToday);
                                 studyStatsDocument.set(studyStats, SetOptions.merge())
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -296,8 +303,10 @@ public class TimeManagement extends AppCompatActivity {
                                 HashMap<String, Object> studyStats = new HashMap<>();
                                 studyStats.put("Time_studied", timeStudied);
                                 studyStats.put("Time_studied_today", timeStudied);
-                                studyStats.put("Target", 69);
+                                studyStats.put("Target_time", 69);
                                 studyStats.put("days", 99);
+                                studyStats.put("Last_updated_date", currentDate);
+                                studyStats.put("days_target_met", 99);
                                 studyStatsDocument.set(studyStats)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
