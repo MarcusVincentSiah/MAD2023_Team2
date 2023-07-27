@@ -42,6 +42,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 
 import sg.edu.np.mad.EfficenZ.model.Data;
@@ -227,9 +229,23 @@ public class HomeFragment extends Fragment {
                                 HashMap<String, Object> studyStats = new HashMap<>();
                                 studyStats.put("Time_studied_today", 0);
                                 studyStats.put("Last_updated_date", currentDate);
+
+                                // Calculate the difference in days between the current date and the last updated date
+                                @SuppressLint({"NewApi", "LocalSuppress"}) DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                @SuppressLint({"NewApi", "LocalSuppress"}) LocalDate lastUpdatedLocalDate = LocalDate.parse(lastUpdatedDate, formatter);
+                                @SuppressLint({"NewApi", "LocalSuppress"}) LocalDate currentLocalDate = LocalDate.parse(currentDate, formatter);
+                                @SuppressLint({"NewApi", "LocalSuppress"}) long daysDifference = ChronoUnit.DAYS.between(lastUpdatedLocalDate, currentLocalDate);
+
+                                if (daysDifference > 2) {
+                                    // If the difference is more than 2 days, reset days_target_met to 0
+                                    studyStats.put("days_target_met", 0);
+                                } else {
+                                    // If the difference is not more than 2 days, increment days_target_met by 1
+                                    studyStats.put("days_target_met", daysTargetMet + 1);
+                                }
+
+                                // Increment the total days by 1
                                 studyStats.put("days", days + 1);
-                                studyStats.put("days_target_met", daysTargetMet + 1);
-                                Log.d("HEHEH", "IHOAHIOAIHWORIHOWRH");
 
                                 // Update the document with the new values
                                 database.collection("users").document(userId).collection("StudyStats").document("study_stats_data")
