@@ -218,6 +218,8 @@ public class HomeFragment extends Fragment {
                             String lastUpdatedDate = documentSnapshot.getString("Last_updated_date");
                             Long timeStudiedToday = documentSnapshot.getLong("Time_studied_today");
                             Long daysTargetMet = documentSnapshot.getLong("days_target_met");
+                            Long days = documentSnapshot.getLong("days");
+
                             int minutes = (int) ((timeStudiedToday / 1000) % 3600) / 60;
 
                             // Set the text for studyStreakCounter and studyHourCounter
@@ -230,6 +232,8 @@ public class HomeFragment extends Fragment {
                                 HashMap<String, Object> studyStats = new HashMap<>();
                                 studyStats.put("Time_studied_today", 0);
                                 studyStats.put("Last_updated_date", currentDate);
+                                studyStats.put("days", days + 1);
+                                studyStats.put("days_target_met", daysTargetMet + 1);
                                 Log.d("HEHEH", "IHOAHIOAIHWORIHOWRH");
 
                                 // Update the document with the new values

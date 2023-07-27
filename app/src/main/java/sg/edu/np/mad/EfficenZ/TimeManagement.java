@@ -305,9 +305,9 @@ public class TimeManagement extends AppCompatActivity {
                                 studyStats.put("Time_studied", timeStudied);
                                 studyStats.put("Time_studied_today", timeStudied);
                                 studyStats.put("Target_time", 69);
-                                studyStats.put("days", 99);
+                                studyStats.put("days", 0);
                                 studyStats.put("Last_updated_date", currentDate);
-                                studyStats.put("days_target_met", 99);
+                                studyStats.put("days_target_met", 0);
                                 studyStatsDocument.set(studyStats)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -330,9 +330,9 @@ public class TimeManagement extends AppCompatActivity {
                             studyStats.put("Time_studied", timeStudied);
                             studyStats.put("Time_studied_today", timeStudied);
                             studyStats.put("Target_time", 69);
-                            studyStats.put("days", 99);
+                            studyStats.put("days", 0);
                             studyStats.put("Last_updated_date", currentDate);
-                            studyStats.put("days_target_met", 99);
+                            studyStats.put("days_target_met", 0);
                             studyStatsDocument.set(studyStats)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
