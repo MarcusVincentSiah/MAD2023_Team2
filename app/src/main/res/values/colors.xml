@@ -16,6 +16,7 @@
     <color name="tertiary_color">#EFEFE2</color> <!-- items?-->
     <color name="tick_green">#44FF99</color>
     <color name="cross_red">#FFB769</color>
+    <color name="green">29c453</color>
 
     <color name="light_grey">#F0F0F0</color>
     <color name="primary_color_light">#83996F</color>
