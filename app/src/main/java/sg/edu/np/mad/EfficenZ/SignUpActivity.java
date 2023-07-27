@@ -32,7 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     String firstName;
     String lastName;
 
-    Button signup_btn;
+    Button signUp;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
@@ -48,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
-        signup_btn = findViewById(R.id.signup_btn);
+        signUp = findViewById(R.id.signup_btn);
 
 
 
@@ -56,7 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        signup_btn.setOnClickListener(new View.OnClickListener() {
+        signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 email = user_email.getText().toString();
@@ -127,7 +127,6 @@ public class SignUpActivity extends AppCompatActivity {
         editor.putString("last_name", user.getLast_name());
         editor.putString("email", user.getEmail());
         editor.apply();
-        userId = mDatabase.push().getKey();
         mDatabase.child("users").child(userId).setValue(user);
     }
 }

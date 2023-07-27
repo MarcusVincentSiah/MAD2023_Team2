@@ -143,8 +143,8 @@ public class HomeFragment extends Fragment {
         // ACCOUNT SETTING BUTTON
         accountBtn = getView().findViewById(R.id.accountBtn);
         accountBtn.setOnClickListener(v -> {
-            // TODO: START ACCOUNT ACTIVITY
-            singOut();
+            Intent accSetting = new Intent(getContext(), AccountSettingsActivity.class);
+            startActivity(accSetting);
             Log.v("BUTTON TEST", "CLICKED");
 
         });
@@ -179,7 +179,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void singOut() {
+    private void signOut() {
         SharedPreferences prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =prefs.edit();
         Log.v("userId", userId);
@@ -310,7 +310,7 @@ public class HomeFragment extends Fragment {
 
         updateEmptyView(adapter); */
 
-        // placeholder code for progress bar
+        // code for progress bar
         taskReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
