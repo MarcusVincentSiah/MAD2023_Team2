@@ -1,5 +1,8 @@
 package sg.edu.np.mad.EfficenZ;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class EditProfile extends AppCompatActivity{
-
+public class EditProfile extends AppCompatActivity {
     private EditText editFirstName;
     private EditText editLastName;
     private EditText editEmail;
@@ -72,12 +72,25 @@ public class EditProfile extends AppCompatActivity{
         }
         else {
             if (userId != null) {
-                mDatabase.child(userId).child("email").setValue(e);
+                //mDatabase.child(userId).child("email").setValue(e);
                 mDatabase.child(userId).child("first_name").setValue(fn);
                 mDatabase.child(userId).child("last_name").setValue(ln);
+
+                SharedPreferences pref = getSharedPreferences("prefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("userId", userId);
+                editor.putString("first_name", fn);
+                editor.putString("last_name", ln);
+                //editor.putString("email", user.getEmail());
+                editor.apply();
+
+                Intent activity = new Intent(EditProfile.this, MainActivity.class);
+                startActivity(activity);
+                finishAffinity();
+
             }
             else {
-                Log.d("EditProfile", "Error: null userId");
+                Log.d("EditProfiles", "Error: null userId");
             }
         }
     }

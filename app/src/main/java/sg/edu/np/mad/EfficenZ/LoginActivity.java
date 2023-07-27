@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                 email = input_email.getText().toString();
                 password = input_password.getText().toString();
                 loginUser(email, password);
+
             }
         });
 
@@ -187,6 +188,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             Intent Success = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(Success);
+            finishAffinity();
         }
     }
 

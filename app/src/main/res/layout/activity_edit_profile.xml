@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountSettingsActivity">
+    tools:context=".EditProfile">
 
     <TextView
         android:id="@+id/editProfileTitle"
@@ -23,12 +23,12 @@
         style="@style/cardView_style"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:layout_constraintEnd_toEndOf=""
-        app:layout_constraintStart_toStartOf=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editProfileTitle">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="376dp"
             android:layout_height="match_parent">
 
             <TextView
@@ -64,8 +64,8 @@
         style="@style/cardView_style"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:layout_constraintEnd_toEndOf=""
-        app:layout_constraintStart_toStartOf=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editProfile_editFirstName">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -105,8 +105,8 @@
         style="@style/cardView_style"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:layout_constraintEnd_toEndOf=""
-        app:layout_constraintStart_toStartOf=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editProfile_editLastName">
 
         <androidx.constraintlayout.widget.ConstraintLayout

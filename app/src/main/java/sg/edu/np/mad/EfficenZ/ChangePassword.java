@@ -2,34 +2,27 @@ package sg.edu.np.mad.EfficenZ;
 
 import static androidx.fragment.app.FragmentManager.TAG;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import android.app.Dialog;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ChangePassword extends AppCompatActivity {
-
     private EditText email;
     private EditText oldPassword;
     private EditText newPassword;
@@ -85,15 +78,15 @@ public class ChangePassword extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    Log.d(TAG, "Password updated");
+                                                    //Log.d(TAG, "Password updated");
                                                     signOut();
                                                 } else {
-                                                    Log.d(TAG, "Error password not updated");
+                                                    //Log.d(TAG, "Error password not updated");
                                                 }
                                             }
                                         });
                                     } else {
-                                        Log.d(TAG, "Error auth failed");
+                                        //Log.d(TAG, "Error auth failed");
                                     }
                                 }
                             });
