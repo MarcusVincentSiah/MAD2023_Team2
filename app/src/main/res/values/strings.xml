@@ -25,6 +25,23 @@
         <item>Rain in rainforest</item>
     </string-array>
 
+    <string-array name="achievement_names">
+        <item>Study for 1 hour</item>
+        <item>Study for 10 hours</item>
+        <item>Study for 50 hours</item>
+        <item>Study for 100 hours</item>
+        <item>Study for 200 hours</item>
+        <item>Study for 500 hours</item>
+        <item>1 day streak</item>
+        <item>3 day streak</item>
+        <item>7 day streak</item>
+        <item>14 day streak</item>
+        <item>30 day streak</item>
+        <item>50 day streak</item>
+        <item>100 day streak</item>
+
+    </string-array>
+
     <string name="back"><![CDATA[<-]]></string>
     <string name="forward"><![CDATA[->]]></string>
     <string name="finish">Finish</string>

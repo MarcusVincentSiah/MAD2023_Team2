@@ -39,7 +39,7 @@ public class achievement_activity2 extends AppCompatActivity {
 
 
         if (studydata/completionTarget >= 1) {
-            int completedColor = ContextCompat.getColor(this, R.color.green);
+            int completedColor = ContextCompat.getColor(this, R.color.completedAchievementColor);
             mConstraintLayout.setBackgroundColor(completedColor);
 
             String text = "Achievement unlocked.";
