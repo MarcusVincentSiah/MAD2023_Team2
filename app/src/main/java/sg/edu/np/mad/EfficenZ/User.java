@@ -1,6 +1,8 @@
 package sg.edu.np.mad.EfficenZ;
 
 
+import android.net.Uri;
+
 public class User  {
 
     String first_name;
@@ -11,6 +13,8 @@ public class User  {
 
     String userId;
 
+    //Uri imageUri;
+
 
 
     public User() { }
@@ -20,6 +24,7 @@ public class User  {
         this.last_name = last_name;
         this.email = email;
         this.userId = userId;
+        // this.imageUri = imageUri;
     }
 
     public String getFirst_name() {
@@ -53,4 +58,8 @@ public class User  {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+/*    public Uri getImageUri() { return imageUri; }
+
+    public void setImageUri(Uri imageUri) { this.imageUri = imageUri; }*/
 }

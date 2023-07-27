@@ -39,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText input_password;
     String email;
     String password;
-    Button signUp_btn_on_login;
-    TextView forgot_password_on_login;
+    Button signup_btn_login;
+    TextView forgot_password;
     Button login_btn;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -107,8 +107,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
         login_btn = findViewById(R.id.login_btn);
-        signUp_btn_on_login = findViewById(R.id.login_signup_btn);
-        forgot_password_on_login = findViewById(R.id.login_forgetPassword_btn);
+        signup_btn_login = findViewById(R.id.login_signup_btn);
+        forgot_password = findViewById(R.id.login_forgetPassword_btn);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        signUp_btn_on_login.setOnClickListener(new View.OnClickListener() {
+        signup_btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent Signup = new Intent(LoginActivity.this, SignUpActivity.class);
