@@ -4,10 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -58,20 +64,35 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
     }
 
 
+    private void loadAchievementsFromFirebase() {
+        // Replace "YOUR_FIREBASE_PATH" with the actual path to your achievements data in Firebase
+        FirebaseDatabase.getInstance().getReference("YOUR_FIREBASE_PATH").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+                // Loop through the data retrieved from Firebase and populate the achievements list
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String name = dataSnapshot.getKey();
+                    noOfHoursStudied = dataSnapshot.child("studyHours").getValue(Integer.class);
 
 
 
-    //private void updateAchievementsStatus() {
-     //   for (Achievement achievement : achievements) {
-       //     // Check if the achievement is completed based on its progress
-         //   if (achievement.getStudyHours() >= achievement.getCompletionTarget() || achievement.getConsecutiveDays() >= achievement.getCompletionTarget()) {
-             //   achievement.setCompleted(true);
-           // } else {
-               // achievement.setCompleted(false);
-     //       }
-       // }
-   // }
+                }
 
+                // Update the achievements list with completion status
+
+                // Notify the adapter that the data has changed
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle any errors that occur during data retrieval from Firebase
+                // For example, you can display an error message or retry the operation
+                Toast.makeText(achievement_activity.this, "Failed to load achievements data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     private void setUpAchievements() {
