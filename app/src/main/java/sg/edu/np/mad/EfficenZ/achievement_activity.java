@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,10 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import sg.edu.np.mad.EfficenZ.Achievement;
-import sg.edu.np.mad.EfficenZ.Achievement_RecyclerViewInterface;
-import sg.edu.np.mad.EfficenZ.R;
-import sg.edu.np.mad.EfficenZ.achievements_recyclerview_adapter;
 
 
 public class achievement_activity extends AppCompatActivity implements Achievement_RecyclerViewInterface {
@@ -67,16 +65,18 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
             checkAchievementCompletion(achievements, position);
         }
         //method to pull no of hours studied from firebase
-        pullDataFromFirebase();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        String userId = firebaseUser.getUid();
+
+        pullDataFromFirebase(userId);
 
 
 
     }
 
-    public void pullDataFromFirebase() {
-        // Replace "userId" with the actual user ID of the user whose study stats you want to retrieve
-        String userId = "userId";
-
+    public void pullDataFromFirebase(String userId) {
         // Reference to the Firestore database
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -102,12 +102,8 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
                             // Process the study stats data as needed
                             // ...
 
-                        }
-
-                        else {
+                        } else {
                             Toast.makeText(achievement_activity.this, "Failed to load achievements data.", Toast.LENGTH_SHORT).show();
-
-
                         }
                     }
                 })
@@ -116,9 +112,7 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
                     public void onFailure(@NonNull Exception e) {
                         // Handle any errors that occurred during the retrieval
                         Toast.makeText(achievement_activity.this, "Failed to load achievements data.", Toast.LENGTH_SHORT).show();
-
                         // ...
-
                     }
                 });
     }
@@ -126,27 +120,14 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
 
 
 
-
-    //private void updateAchievementsStatus() {
-    //   for (Achievement achievement : achievements) {
-    //     // Check if the achievement is completed based on its progress
-    //   if (achievement.getStudyHours() >= achievement.getCompletionTarget() || achievement.getConsecutiveDays() >= achievement.getCompletionTarget()) {
-    //   achievement.setCompleted(true);
-    // } else {
-    // achievement.setCompleted(false);
-    //       }
-    // }
-    // }
-
-
-
     private void setUpAchievements() {
         String [] achievementsNames = getResources().getStringArray(R.array.achievement_names);
         int [] completionTargets =  getResources().getIntArray(R.array.completionTargets);
+        String [] descriptions = getResources().getStringArray(R.array.descriptions);
 
         for (int i = 0; i<achievementsNames.length; i++) {
 
-            achievements.add(new Achievement(achievementsNames[i], 0, false, completionTargets[i]));
+            achievements.add(new Achievement(achievementsNames[i], 0, false, completionTargets[i], descriptions[i]));
         }
 
 
@@ -185,6 +166,7 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
             intent.putExtra("COMPLETION TARGET", achievements.get(position).completionTarget);
             intent.putExtra("COMPLETION STATE", achievements.get(position).isCompleted);
             intent.putExtra("STUDY DATA", noOfHoursStudied);
+            intent.putExtra("DESCRIPTION", achievements.get(position).description);
 
             startActivity(intent);
         }
@@ -196,6 +178,8 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
             intent.putExtra("COMPLETION TARGET", achievements.get(position).completionTarget);
             intent.putExtra("COMPLETION STATE", achievements.get(position).isCompleted);
             intent.putExtra("STUDY DATA", noOfConsecutiveDaysStudied);
+            intent.putExtra("DESCRIPTION", achievements.get(position).description);
+
 
             startActivity(intent);
         }

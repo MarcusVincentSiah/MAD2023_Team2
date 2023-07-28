@@ -15,8 +15,8 @@ import java.util.ArrayList;
 public class achievements_recyclerview_adapter extends RecyclerView.Adapter<achievements_recyclerview_adapter.ViewHolder> {
     private final Achievement_RecyclerViewInterface achievementRecyclerViewInterface;
 
-     ArrayList<Achievement> achievements;
-     Context context;
+    ArrayList<Achievement> achievements;
+    Context context;
 
 
 
@@ -29,7 +29,7 @@ public class achievements_recyclerview_adapter extends RecyclerView.Adapter<achi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView achievementName;
 
-            public ViewHolder(View itemView, Achievement_RecyclerViewInterface achievementRecyclerViewInterface) {
+        public ViewHolder(View itemView, Achievement_RecyclerViewInterface achievementRecyclerViewInterface) {
             super(itemView);
             achievementName = itemView.findViewById(R.id.achievementName);
 
@@ -65,11 +65,7 @@ public class achievements_recyclerview_adapter extends RecyclerView.Adapter<achi
         holder.achievementName.setText(currentAchievement.getName());
 
 
-        if (currentAchievement.isCompleted()) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.completedAchievementColor));
-        } else {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.defaultAchievementColor));
-        }
+
     }
 
     @Override

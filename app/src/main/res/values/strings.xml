@@ -42,6 +42,22 @@
 
     </string-array>
 
+    <string-array name="descriptions">
+        <item>Complete 1 hour of studying to unlock this achievement!</item>
+        <item>Complete 10 hours of studying to unlock this achievement!</item>
+        <item>Complete 50 hours of studying to unlock this achievement!</item>
+        <item>Complete 100 hours of studying to unlock this achievement!</item>
+        <item>Complete 200 hours of studying to unlock this achievement!</item>
+        <item>Complete 500 hours of studying to unlock this achievement!</item>
+        <item>Meet your study goals for 1 day to unlock this achievement!</item>
+        <item>Meet your study goals for 3 days consecutively to unlock this achievement!</item>
+        <item>Meet your study goals for 7 days consecutively to unlock this achievement!</item>
+        <item>Meet your study goals for 14 days consecutively to unlock this achievement!</item>
+        <item>Meet your study goals for 30 days consecutively to unlock this achievement!</item>
+        <item>Meet your study goals for 50 days consecutively to unlock this achievement!</item>
+        <item>Meet your study goals for 100 days consecutively to unlock this achievement!</item>
+    </string-array>
+
     <string name="back"><![CDATA[<-]]></string>
     <string name="forward"><![CDATA[->]]></string>
     <string name="finish">Finish</string>
