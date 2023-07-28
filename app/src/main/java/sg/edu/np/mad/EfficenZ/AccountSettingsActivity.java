@@ -4,11 +4,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,8 +28,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import com.squareup.picasso.Picasso;
 
 public class AccountSettingsActivity extends AppCompatActivity {
     private ImageView profile_Pic;
@@ -55,13 +62,18 @@ public class AccountSettingsActivity extends AppCompatActivity {
         signOut = findViewById(R.id.signOutbtn);
 
         prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        String fullName = prefs.getString("first_name"+"last_name", "Name");
-        name.setText(fullName);
+        String firstName = prefs.getString("first_name", "Name");
+        String lastName = prefs.getString("last_name", "Name");
+        name.setText(firstName + " " + lastName);
         String email_pref = prefs.getString("email", "Email");
         email.setText(email_pref);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+
+        if (user.getPhotoUrl() != null) {
+            Picasso.get().load(image_Uri).into(profile_Pic);
+        }
 
         profile_Pic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,11 +135,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                 else if (options[item].equals("Choose from Gallery")){
 
-                    // launch photo picker and let user choose only images
-                   /* ActivityResultContracts.PickVisualMedia.VisualMediaType mediaType = (ActivityResultContracts.PickVisualMedia.VisualMediaType) ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE;
-                    pickMedia.launch(new PickVisualMediaRequest.Builder()
-                            .setMediaType(mediaType)
-                            .build());*/
+                    Intent intent = new   Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+
+                    startActivityForResult(intent, 2);
 
                 }
 
@@ -168,18 +178,25 @@ public class AccountSettingsActivity extends AppCompatActivity {
         }
     }
 
-    // registers photo picker activity launcher in single-select mode
-    ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                // callback invoked after user selects media item or closes photo picker
-                if (uri != null) {
-                    Log.d("PhotoPicker", "Selected uri: " + uri);
-                    profile_Pic.setImageURI(uri);
-                }
-                else {
-                    Log.d("PhotoPicker", "No media selected");
-                }
-            });
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // Result code is RESULT_OK only if the user selects an Image
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case 1:
+                    profile_Pic.setImageURI(image_Uri);
+                    updateProfile();
+                    break;
+                case 2:
+                    //data.getData returns the content URI for the selected Image
+                    image_Uri = data.getData();
+                    profile_Pic.setImageURI(image_Uri);
+                    updateProfile();
+                    break;
+            }
+        }
+    }
 
     private void signOut() {
         SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
@@ -190,5 +207,20 @@ public class AccountSettingsActivity extends AppCompatActivity {
         Intent Success = new Intent(AccountSettingsActivity.this, LoginActivity.class);
         finishAffinity();
         startActivity(Success);
+    }
+
+    private void updateProfile() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                    .setPhotoUri(image_Uri).build();
+            user.updateProfile(profileUpdate).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Log.v("Profile Pic", "Successfully updated");
+                    Log.v("Profile Pic", image_Uri.toString());
+                }
+            });
+        }
     }
 }

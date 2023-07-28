@@ -32,7 +32,8 @@ public class SettingsActivity extends AppCompatActivity {
         // ACCOUNT SETTINGS
         account = findViewById(R.id.settings_accountBtn);
         account.setOnClickListener(v -> {
-            // TODO: ACCOUNT SETTINGS ACTIVITY
+            Intent accSetting = new Intent(SettingsActivity.this, AccountSettingsActivity.class);
+            startActivity(accSetting);
         });
 
         // NOTIFICATION SETTINGS
