@@ -48,7 +48,8 @@
                 android:id="@+id/taskListBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -85,7 +86,8 @@
                 android:id="@+id/notesBtn"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,6 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="0.5"
+                android:layout_marginEnd="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -172,6 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="0.5"
+                android:layout_marginStart="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -221,6 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="0.5"
+                android:layout_marginEnd="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -258,6 +263,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="0.5"
+                android:layout_marginStart="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -307,6 +313,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="0.5"
+                android:layout_marginEnd="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -345,6 +352,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_weight="0.5"
+                android:layout_marginStart="8dp"
                 style="@style/cardView_button_style">
 
                 <androidx.constraintlayout.widget.ConstraintLayout

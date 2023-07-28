@@ -2,14 +2,10 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/cardView_style"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
-    app:cardBackgroundColor="@color/tertiary_color"
-    android:elevation="0.5dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginTop="0dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -17,10 +13,13 @@
         android:padding="8dp">
 
         <TextView
+            style="@style/header2_text"
             android:id="@+id/task_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             tools:text="A Task" />
     </RelativeLayout>
 

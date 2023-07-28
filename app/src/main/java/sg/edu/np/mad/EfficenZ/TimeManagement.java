@@ -55,7 +55,7 @@ public class TimeManagement extends AppCompatActivity {
     private long startTime;
     private long timeLeft;
     private long endTime;
-    private TextView task_title;
+    private Button task_title;
     private DatabaseReference mDatabase;
     private Data data;
     private MediaPlayer mediaPlayer;

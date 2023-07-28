@@ -306,22 +306,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-        /*
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                updateEmptyView(adapter);
-            }
 
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                super.onItemRangeRemoved(positionStart, itemCount);
-                updateEmptyView(adapter);
-            }
-        });
-
-        updateEmptyView(adapter); */
 
         // code for progress bar
         taskReference.addValueEventListener(new ValueEventListener() {

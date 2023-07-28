@@ -57,8 +57,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textColor="@color/black" />
+                        android:layout_marginBottom="10dp" />
 
                 </RelativeLayout>
 
@@ -98,8 +97,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textColor="@color/black" />
+                        android:layout_marginBottom="10dp" />
 
                 </RelativeLayout>
 
