@@ -84,7 +84,8 @@ public class ToolsFragment extends Fragment {
 
         achievement = getView().findViewById(R.id.achievementBtn);
         achievement.setOnClickListener(v -> {
-            // TODO: ACHIEVEMENT ACTIVITY
+            Intent intent = new Intent(getContext(), achievement_activity.class);
+            startActivity(intent);
         });
 
         settings = getView().findViewById(R.id.settingsBtn);
