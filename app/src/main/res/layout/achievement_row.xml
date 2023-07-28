@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="@color/completedAchievementColor"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,29 +21,21 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/one_achievement"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="81dp"
-                android:layout_height="88dp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/trophy" />
+            android:layout_height="109dp"
+            android:background="#BBCCAB">
 
             <TextView
                 android:id="@+id/achievementName"
-                android:layout_width="265dp"
-                android:layout_height="43dp"
+                android:layout_width="366dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/poppinsmedium"
                 android:text="100 hours of studying"
-                android:textSize="24sp"
+                android:textSize="34sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/imageView"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.644" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -34,7 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 public class AccountSettingsActivity extends AppCompatActivity {
     private ImageView profile_Pic;
@@ -70,9 +70,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-
         if (user.getPhotoUrl() != null) {
-            Picasso.get().load(image_Uri).into(profile_Pic);
+            image_Uri = user.getPhotoUrl();
+            Glide.with(this).load(image_Uri).centerCrop().into(profile_Pic);
         }
 
         profile_Pic.setOnClickListener(new View.OnClickListener() {

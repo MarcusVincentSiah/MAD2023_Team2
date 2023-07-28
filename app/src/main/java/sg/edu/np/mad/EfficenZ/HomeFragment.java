@@ -166,9 +166,11 @@ public class HomeFragment extends Fragment {
         studyHourCounter = getView().findViewById(R.id.home_studyHoursCounter);
 
         // MY PROGRESS AND ACHIEVEMENT BUTTON
-        achievementCard = getView().findViewById(R.id.homepageAchievement_card);
-        achievementCard.setOnClickListener(v -> {
-            // TODO: ACHIEVEMENT PAGE
+
+        CardView achievement = getView().findViewById(R.id.homepageAchievement_card);
+        achievement.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), achievement_activity.class);
+            startActivity(intent);
         });
 
 
@@ -384,4 +386,6 @@ public class HomeFragment extends Fragment {
             rv.setVisibility(View.VISIBLE);
         }
     }
+
+
 }
