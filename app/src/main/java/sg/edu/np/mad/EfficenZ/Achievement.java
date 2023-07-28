@@ -9,11 +9,11 @@ public class Achievement {
 
 
     String description;
-    int progress;
+    double progress;
     int completionTarget;
     boolean isCompleted;
 
-    public Achievement(String name, int progress, boolean isCompleted, int completionTarget, String description) {
+    public Achievement(String name, double progress, boolean isCompleted, int completionTarget, String description) {
         this.name = name;
         this.progress = progress;
         this.isCompleted = isCompleted;
@@ -27,7 +27,7 @@ public class Achievement {
 
     public String getDescription() {return description;}
 
-    public int getProgress() {
+    public double getProgress() {
         return progress;
     }
 

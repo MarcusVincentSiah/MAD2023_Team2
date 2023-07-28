@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,10 +43,19 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.achievement_activity_main);
 
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        String userId = firebaseUser.getUid();
+        pullDataFromFirebase(userId);
+
+
+
 
         RecyclerView recyclerView = findViewById(R.id.mRecyclerView);
 
         setUpAchievements();
+
+
 
         // Initialize the adapter
         adapter = new achievements_recyclerview_adapter(this, achievements, this);
@@ -54,27 +64,55 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
 
         // Load achievements data from Firebase
 
+
+        // Update the adapter to reflect the new data
+        adapter.notifyDataSetChanged();
+
+        // Calculate the progress and update the completion status
+        for (int position = 0; position < achievements.size(); position++) {
+            checkAchievementCompletion(achievements, position);
+        }
+
     }
 
     @Override
-    public void onResume() {
-
-        super.onResume();
+    public void onStart() {
+        super.onStart();
 
         for (int position = 0; position < achievements.size(); position++) {
             checkAchievementCompletion(achievements, position);
         }
-        //method to pull no of hours studied from firebase
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         String userId = firebaseUser.getUid();
 
         pullDataFromFirebase(userId);
+        adapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Fetch the data from Firestore and update the adapter
+        for (int position = 0; position < achievements.size(); position++) {
+            checkAchievementCompletion(achievements, position);
+        }
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        String userId = firebaseUser.getUid();
+
+        pullDataFromFirebase(userId);
+        adapter.notifyDataSetChanged();
 
 
     }
+
 
     public void pullDataFromFirebase(String userId) {
         // Reference to the Firestore database
@@ -98,6 +136,8 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
 
                             noOfHoursStudied = documentSnapshot.getDouble("Time_studied");
                             noOfConsecutiveDaysStudied = documentSnapshot.getLong("days_target_met");
+                            Log.d("Adapter", "Hours studied from Firestore: " + noOfHoursStudied);
+                            Log.d("Adapter", "Consecutive days studied from Firestore: " + noOfConsecutiveDaysStudied);
 
                             // Process the study stats data as needed
                             // ...
@@ -121,39 +161,38 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
 
 
     private void setUpAchievements() {
-        String [] achievementsNames = getResources().getStringArray(R.array.achievement_names);
-        int [] completionTargets =  getResources().getIntArray(R.array.completionTargets);
-        String [] descriptions = getResources().getStringArray(R.array.descriptions);
+        String[] achievementsNames = getResources().getStringArray(R.array.achievement_names);
+        int[] completionTargets =  getResources().getIntArray(R.array.completionTargets);
+        String[] descriptions = getResources().getStringArray(R.array.descriptions);
 
-        for (int i = 0; i<achievementsNames.length; i++) {
+        // Initialize the progress based on the completion targets and the actual study data
+        double progressHours = noOfHoursStudied;
+        double progressDays = noOfConsecutiveDaysStudied;
 
-            achievements.add(new Achievement(achievementsNames[i], 0, false, completionTargets[i], descriptions[i]));
+        for (int i = 0; i < achievementsNames.length; i++) {
+            double progress = i <= 6 ? progressHours / completionTargets[i] : progressDays / completionTargets[i];
+            achievements.add(new Achievement(achievementsNames[i], progress, progress >= 1, completionTargets[i], descriptions[i]));
         }
-
-
-
     }
+
 
 
     public void checkAchievementCompletion(ArrayList<Achievement> achievements, int position) {
         if (position <= 6) {
-
             double progress = noOfHoursStudied / achievements.get(position).completionTarget;
-
+            Log.d("Adapter", "Hours studied: " + noOfHoursStudied + ", Completion target: " + achievements.get(position).completionTarget + ", Progress: " + progress);
             if (progress >= 1) {
                 achievements.get(position).isCompleted = true;
             }
-
-        }
-
-        else {
+        } else {
             double progress = noOfConsecutiveDaysStudied / achievements.get(position).completionTarget;
-
+            Log.d("Adapter", "Consecutive days studied: " + noOfConsecutiveDaysStudied + ", Completion target: " + achievements.get(position).completionTarget + ", Progress: " + progress);
             if (progress >= 1) {
                 achievements.get(position).isCompleted = true;
             }
         }
     }
+
 
 
     @Override

@@ -7,10 +7,13 @@
 
 
     <androidx.cardview.widget.CardView
-        style="@style/cardView_style"
-        android:layout_width="match_parent"
+        android:id="@+id/achievementCardView"
+        android:layout_width="409dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/one_achievement"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/achievementName"
@@ -27,8 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:textSize="26sp"
                 android:text="100 hours of studying"
+                android:textSize="26sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

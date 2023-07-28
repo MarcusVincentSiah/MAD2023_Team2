@@ -1,12 +1,14 @@
 package sg.edu.np.mad.EfficenZ;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,10 +30,13 @@ public class achievements_recyclerview_adapter extends RecyclerView.Adapter<achi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView achievementName;
+        CardView cardView;
+
 
         public ViewHolder(View itemView, Achievement_RecyclerViewInterface achievementRecyclerViewInterface) {
             super(itemView);
             achievementName = itemView.findViewById(R.id.achievementName);
+            cardView = itemView.findViewById(R.id.achievementCardView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -60,13 +65,21 @@ public class achievements_recyclerview_adapter extends RecyclerView.Adapter<achi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         Achievement currentAchievement = achievements.get(position);
         holder.achievementName.setText(currentAchievement.getName());
+        Log.d("Adapter", "Achievement at position " + position + " isCompleted: " + currentAchievement.isCompleted);
 
-
-
+        // Update the card view's background color based on the completion status
+        if (currentAchievement.isCompleted) {
+            // Set completed background color
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color_light));
+        } else {
+            // Set incomplete background color
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.defaultAchievementColor));
+        }
     }
+
+
 
     @Override
     public int getItemCount() {
