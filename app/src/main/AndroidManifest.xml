@@ -49,6 +49,13 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".achievement_activity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity android:name=".achievement_activity2"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.notes.NotesEdit"
             android:exported="false"
             android:screenOrientation="portrait" />
