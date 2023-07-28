@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     CardView account, notification, theme;
     int option;
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
         // NOTIFICATION SETTINGS
         notification = findViewById(R.id.settings_notificationBtn);
         notification.setOnClickListener(v -> {
-            Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-                    .putExtra(Settings.EXTRA_APP_PACKAGE, getApplicationContext().getPackageName())
-                    .putExtra(Settings.EXTRA_CHANNEL_ID, "NOTIFICATION");
+            Intent intent = new Intent(SettingsActivity.this, NotificationSettings.class);
             startActivity(intent);
         });
 

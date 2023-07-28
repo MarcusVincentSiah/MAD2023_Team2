@@ -339,6 +339,8 @@ public class HomeFragment extends Fragment {
                     total += 1;
                 }
 
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("no_of_tasks_pending", (int)(total - counter)).apply();
                 int progress = Math.round((counter / total) * 100);
                 taskProgress.setProgress(progress);
                 progressText.setText("Your Progress: " + progress + "%");
