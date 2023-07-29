@@ -80,6 +80,8 @@ public class ToolsFragment extends Fragment {
         chat = getView().findViewById(R.id.chatBtn);
         chat.setOnClickListener(v -> {
             // TODO: CHAT ACTIVITY
+            Intent intent = new Intent(getContext(),ChatActivity.class);
+            startActivity(intent);
         });
 
         achievement = getView().findViewById(R.id.achievementBtn);

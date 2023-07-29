@@ -3,6 +3,7 @@ package sg.edu.np.mad.EfficenZ;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -139,5 +140,11 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
     private String getReadableDateTIme(Date date) {
         return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ChatMessagesActivity.this, ChatActivity.class);
+        startActivity(intent);
     }
 }

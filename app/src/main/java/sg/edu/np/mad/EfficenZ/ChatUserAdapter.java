@@ -45,6 +45,11 @@ public class ChatUserAdapter extends FirebaseRecyclerAdapter<User, ChatUserAdapt
         return new ChatUserAdapter.ChatUserHolder(v);
     }
 
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
+    }
+
     class ChatUserHolder extends RecyclerView.ViewHolder {
 
         TextView name;
