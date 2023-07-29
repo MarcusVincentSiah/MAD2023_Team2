@@ -37,6 +37,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -169,7 +171,50 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
+        CollectionReference studyStatsCollection = database.collection("users").document(userId).collection("StudyStats");
+        DocumentReference studyStatsDocument = studyStatsCollection.document("study_stats_data");
 
+        @SuppressLint({"NewApi", "LocalSuppress"}) String currentDate = LocalDate.now().toString(); // Step 1: Get the current date as a string
+
+       studyStatsDocument
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            // Handle the case when time_studied field doesn't exist or is null
+                            HashMap<String, Object> studyStats = new HashMap<>();
+                            studyStats.put("Time_studied", 0);
+                            studyStats.put("Time_studied_today", 0);
+                            studyStats.put("Target_time", 0);
+                            studyStats.put("days", 0);
+                            studyStats.put("Last_updated_date", currentDate);
+                            studyStats.put("days_target_met", 0);
+                            studyStatsDocument.set(studyStats)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Handle success after creating the new document
+                                            Log.d("Firestore", "New document created successfully");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@io.reactivex.rxjava3.annotations.NonNull Exception e) {
+                                            // Handle any errors that occurred during document creation
+                                            Log.e("Firestore", "Error creating new document: " + e.getMessage());
+                                        }
+                                    });
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle any errors that occurred during the retrieval
+                        Log.e("Firestore", "Error retrieving document: " + e.getMessage());
+                    }
+                });
 
 
     }
