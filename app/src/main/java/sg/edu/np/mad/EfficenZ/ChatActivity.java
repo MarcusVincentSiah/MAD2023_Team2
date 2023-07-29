@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -33,14 +34,14 @@ public class ChatActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private RecyclerView recyclerView;
-
-
+    private ImageView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        backBtn = findViewById(R.id.imageBack);
 
         //Getting firebase Authentication
         mAuth = FirebaseAuth.getInstance();
@@ -58,6 +59,10 @@ public class ChatActivity extends AppCompatActivity {
         //mDatabase = FirebaseDatabase.getInstance().getReference().child("TaskNote");
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         setUpRecyclerView();
+
+        backBtn.setOnClickListener(v -> {
+            onBackPressed();
+        });
     }
 
     private void setUpRecyclerView() {

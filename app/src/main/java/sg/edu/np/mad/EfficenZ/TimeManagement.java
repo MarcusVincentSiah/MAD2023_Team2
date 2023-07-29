@@ -237,8 +237,9 @@ public class TimeManagement extends AppCompatActivity {
                 timeRunning = false;
                 updateInterface();
 
+                //SEND NOTIFICATION
                 NotificationHelper notificationHelper = new NotificationHelper();
-                notificationHelper.sendNotification(getApplicationContext(), "Timer Finished!", "TIMES UP");
+                notificationHelper.sendNotification(getApplicationContext(), data.getTitle(), "Timer has finished");
 
                 // Play sound for 3 seconds
                 mediaPlayer.start();
@@ -280,7 +281,7 @@ public class TimeManagement extends AppCompatActivity {
                             // Retrieve the value of time_studied field
                             Long currentTimeStudied = documentSnapshot.getLong("Time_studied");
                             Long currentTimeStudiedToday = documentSnapshot.getLong("Time_studied_today");
-                            if (currentTimeStudied != null && currentTimeStudiedToday != null) {
+
                                 // Update the value of timeStudied by adding the new timeStudied
                                 long updatedTimeStudied = currentTimeStudied + timeStudied;
                                 long updatedTimeStudiedToday = currentTimeStudiedToday + timeStudied;
@@ -302,55 +303,7 @@ public class TimeManagement extends AppCompatActivity {
                                                 Log.e("Firestore", "Error updating document: " + e.getMessage());
                                             }
                                         });
-                            } else {
-                                // Handle the case when time_studied field doesn't exist or is null
-                                HashMap<String, Object> studyStats = new HashMap<>();
-                                studyStats.put("Time_studied", timeStudied);
-                                studyStats.put("Time_studied_today", timeStudied);
-                                studyStats.put("Target_time", 69);
-                                studyStats.put("days", 1);
-                                studyStats.put("Last_updated_date", currentDate);
-                                studyStats.put("days_target_met", 0);
-                                studyStatsDocument.set(studyStats)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                // Handle success after creating the new document
-                                                Log.d("Firestore", "New document created successfully");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Handle any errors that occurred during document creation
-                                                Log.e("Firestore", "Error creating new document: " + e.getMessage());
-                                            }
-                                        });
-                            }
-                        } else {
-                            // Handle the case when time_studied field doesn't exist or is null
-                            HashMap<String, Object> studyStats = new HashMap<>();
-                            studyStats.put("Time_studied", timeStudied);
-                            studyStats.put("Time_studied_today", timeStudied);
-                            studyStats.put("Target_time", 69);
-                            studyStats.put("days", 0);
-                            studyStats.put("Last_updated_date", currentDate);
-                            studyStats.put("days_target_met", 0);
-                            studyStatsDocument.set(studyStats)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            // Handle success after creating the new document
-                                            Log.d("Firestore", "New document created successfully");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Handle any errors that occurred during document creation
-                                            Log.e("Firestore", "Error creating new document: " + e.getMessage());
-                                        }
-                                    });
+
                         }
                     }
                 })
@@ -601,7 +554,13 @@ public class TimeManagement extends AppCompatActivity {
                             Log.d(data.getTitle()+"Started", data.getTime_left());
                             task_title.setText("Task: " + data.getTitle());
                             task_title.setTextSize(30);
-                            set_time.setVisibility(View.VISIBLE);
+
+                            if (timeRunning) {
+                                set_time.setVisibility(View.INVISIBLE);
+                            } else {
+                                set_time.setVisibility(View.VISIBLE);
+                            }
+
                         }
                     }
 
