@@ -69,6 +69,8 @@ public class TimeManagement extends AppCompatActivity {
     private long timeStudied;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    boolean hasTimerStarted = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -378,25 +380,6 @@ public class TimeManagement extends AppCompatActivity {
         else Toast.makeText(TimeManagement.this, "There is no task", Toast.LENGTH_SHORT).show();
     }
 
-    /*private void resetTimer() {
-
-        timeLeft = startTime;
-        updateCountDownText();
-        updateInterface();
-
-        if (data!= null) {
-            //Update the database with the new time_set values
-            String dataKey = data.getId();
-            String time_left = String.valueOf(timeLeft);
-            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, data.getTask_status());
-
-            mDatabase.child(dataKey).setValue(newData);//update
-            Toast.makeText(TimeManagement.this, "Timer has been resetted", Toast.LENGTH_SHORT).show();
-        }
-        else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
-    }*/
-
     private void finishTask() {
         Intent intent = new Intent(TimeManagement.this, MainActivity.class);
 
@@ -618,6 +601,7 @@ public class TimeManagement extends AppCompatActivity {
                             Log.d(data.getTitle()+"Started", data.getTime_left());
                             task_title.setText("Task: " + data.getTitle());
                             task_title.setTextSize(30);
+                            set_time.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -629,7 +613,7 @@ public class TimeManagement extends AppCompatActivity {
                 });
             }
         }
-        if(data == null && dataReceived == null) {
+        if(data == null) {
             set_time.setVisibility(View.INVISIBLE);
         }
     }
