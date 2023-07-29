@@ -146,5 +146,6 @@ public class ChatMessagesActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(ChatMessagesActivity.this, ChatActivity.class);
         startActivity(intent);
+        finish();
     }
 }

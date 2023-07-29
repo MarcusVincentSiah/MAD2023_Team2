@@ -59,19 +59,22 @@ public class ChatUserAdapter extends FirebaseRecyclerAdapter<User, ChatUserAdapt
             name = itemView.findViewById(R.id.textName);
             email = itemView.findViewById(R.id.textEmail);
 
-            itemView.setOnClickListener(v -> {
-                //When user clicks on a task
-                int position = getLayoutPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    DataSnapshot dataSnapshot = getSnapshots().getSnapshot(position);
-                    User user = dataSnapshot.getValue(User.class);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        User user = getItem(position);
 
-                    Intent intent = new Intent(context, ChatMessagesActivity.class);
-                    // Pass data to the profile activity using intent extras
-                    intent.putExtra("User", user);
-                    context.startActivity(intent);
+                        Intent intent = new Intent(context, ChatMessagesActivity.class);
+                        // Pass data to the ChatMessagesActivity using intent extras
+                        intent.putExtra("User", user);
+
+                        context.startActivity(intent);
+                    }
                 }
             });
         }
     }
+
 }

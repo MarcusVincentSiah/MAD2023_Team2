@@ -97,4 +97,11 @@ public class ChatActivity extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
