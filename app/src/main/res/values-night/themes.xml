@@ -99,8 +99,8 @@
         <item name="android:backgroundTint">@color/dark_grey</item>
         <item name="cardCornerRadius">16dp</item>
         <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
         <item name="android:layout_marginBottom">16dp</item>
     </style>
 
@@ -109,8 +109,8 @@
         <item name="android:backgroundTint">@color/dark_grey</item>
         <item name="cardCornerRadius">16dp</item>
         <item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
         <item name="android:layout_marginBottom">8dp</item>
     </style>
 
@@ -157,8 +157,33 @@
     </style>
 
     <!-- CALENDAR STYLES -->
-    <style name="calendar_cell">
+    <style name="calendar_cell_normal">
         <item name="android:background">@drawable/rounded_corner_dark</item>
+    </style>
+
+    <style name="calendar_cell_orange">
+        <item name="android:background">@drawable/rounded_corner_task_dark</item>
+    </style>
+
+    <style name="calendar_cell_red">
+        <item name="android:background">@drawable/rounded_corner_more_task_dark</item>
+    </style>
+
+    <!-- TIMER STYLES -->
+    <style name="timer_circle">
+        <item name="tint">@color/dark_grey</item>
+    </style>
+
+    <style name="timer_task_title">
+        <item name="android:textColor">@android:color/secondary_text_dark</item>
+        <item name="fontFamily">@font/poppinsmedium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:backgroundTint">@color/tertiary_color_dark</item>
+        <item name="android:ems">8</item>
+        <item name="cornerRadius">20dp</item>
     </style>
 
 </resources>

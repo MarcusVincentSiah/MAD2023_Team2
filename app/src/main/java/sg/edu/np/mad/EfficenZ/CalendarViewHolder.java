@@ -59,13 +59,16 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder implements View.
         if(numberOfTask == 0){
             // No task on this day, white bg color
             dayOfMonth.setBackground(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.rounded_corner));
+            //dayOfMonth.setTextAppearance(R.style.calendar_cell_normal);
         }
         else if(numberOfTask <= 2) {
             dayOfMonth.setBackground(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.rounded_corner_task));
+            //dayOfMonth.setTextAppearance(R.style.calendar_cell_orange);
         }
         else if(numberOfTask >= 3){
             // There is  task on this day, orange bg color
             dayOfMonth.setBackground(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.rounded_corner_more_task));
+            //dayOfMonth.setTextAppearance(R.style.calendar_cell_red);
         }
     }
 }

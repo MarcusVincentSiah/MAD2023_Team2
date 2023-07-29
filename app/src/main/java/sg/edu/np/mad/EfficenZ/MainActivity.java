@@ -268,4 +268,11 @@ public class MainActivity extends AppCompatActivity {
 
         return mWeeklyDate;
     }
+
+    @Override
+    public void onBackPressed() {
+        // Prevent going back to the login page
+        // Finish all activities in the stack and exit the app
+        finishAffinity();
+    }
 }

@@ -115,6 +115,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void updateUI() {
         Toast.makeText(this, "Successful sign-up", Toast.LENGTH_LONG).show();
         Intent Login = new Intent(SignUpActivity.this, LoginActivity.class);
+        finishAffinity();
         startActivity(Login);
     }
 

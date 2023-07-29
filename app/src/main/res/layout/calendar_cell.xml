@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/cellDayText"
-        style="@style/calendar_cell"
+        style="@style/calendar_cell_normal"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:gravity="center"

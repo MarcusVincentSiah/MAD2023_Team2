@@ -166,9 +166,11 @@ public class HomeFragment extends Fragment {
         studyHourCounter = getView().findViewById(R.id.home_studyHoursCounter);
 
         // MY PROGRESS AND ACHIEVEMENT BUTTON
-        achievementCard = getView().findViewById(R.id.homepageAchievement_card);
-        achievementCard.setOnClickListener(v -> {
-            // TODO: ACHIEVEMENT PAGE
+
+        CardView achievement = getView().findViewById(R.id.homepageAchievement_card);
+        achievement.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), achievement_activity.class);
+            startActivity(intent);
         });
 
 
@@ -304,22 +306,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-        /*
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                updateEmptyView(adapter);
-            }
 
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                super.onItemRangeRemoved(positionStart, itemCount);
-                updateEmptyView(adapter);
-            }
-        });
-
-        updateEmptyView(adapter); */
 
         // code for progress bar
         taskReference.addValueEventListener(new ValueEventListener() {
@@ -339,6 +326,8 @@ public class HomeFragment extends Fragment {
                     total += 1;
                 }
 
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("no_of_tasks_pending", (int)(total - counter)).apply();
                 int progress = Math.round((counter / total) * 100);
                 taskProgress.setProgress(progress);
                 progressText.setText("Your Progress: " + progress + "%");
@@ -382,4 +371,6 @@ public class HomeFragment extends Fragment {
             rv.setVisibility(View.VISIBLE);
         }
     }
+
+
 }

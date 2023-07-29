@@ -36,7 +36,6 @@ public class NotificationActivity extends AppCompatActivity {
     private CollectionReference notificationCollection; // = userCollection.document(userId).collection("notifications");
     private NotificationAdapter adapter;
     private TextView emptyNotifications;
-    private Button testNotification;
     private ImageView clearAllBtn;
 
 
@@ -44,13 +43,6 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-
-        // TODO: REMOVE THIS
-        testNotification = findViewById(R.id.testNotification);
-        testNotification.setOnClickListener(v -> {
-            NotificationHelper notificationHelper = new NotificationHelper();
-            notificationHelper.sendNotification(this, "TEST", "HELLOOOOOOOOOOOOO");
-        });
 
         // DELETE ALL NOTIFICATION
         clearAllBtn = findViewById(R.id.notification_deleteAll);
