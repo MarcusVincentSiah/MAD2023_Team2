@@ -3,7 +3,9 @@ package sg.edu.np.mad.EfficenZ;
 
 import android.net.Uri;
 
-public class User  {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     String first_name;
 

@@ -28,5 +28,6 @@
     <string name="back"><![CDATA[<-]]></string>
     <string name="forward"><![CDATA[->]]></string>
     <string name="finish">Finish</string>
+    <string name="type_a_message">Type a Message</string>
 
 </resources>
