@@ -124,6 +124,8 @@ public class TimeManagement extends AppCompatActivity {
         //reset = findViewById(R.id.btn_reset);
         finish = findViewById(R.id.btn_finish);
 
+
+
         //When user clicks on the set button
         set_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +163,12 @@ public class TimeManagement extends AppCompatActivity {
                     return;
                 }
 
-                setTime(timeInput);
+                if(hasTimerStarted) {
+                    addTime(timeInput);
+                } else {
+                    setTime(timeInput);
+                }
+
                 time_input_hours.setText("");
                 time_input_min.setText("");
             }
@@ -217,7 +224,23 @@ public class TimeManagement extends AppCompatActivity {
         }
     }
 
+    private void addTime(long time) {
+        startTime += time;
+        timeLeft += time;
+        closeKeyboard();
+
+        //Update the database with the new time_set values
+        String dataKey = data.getId();
+        String time_needed = String.valueOf(time);
+        Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_needed, data.getTask_status());
+        mDatabase.child(dataKey).setValue(newData);//update
+        Toast.makeText(TimeManagement.this, "Time has been set", Toast.LENGTH_SHORT).show();
+        updateCountDownText();
+    }
+
     private void startTimer() {
+
+        hasTimerStarted = true;
 
         if(timeLeft <= 0) {
             Toast.makeText(TimeManagement.this, "Reset the timer of enter a new time first", Toast.LENGTH_SHORT).show();
@@ -382,6 +405,12 @@ public class TimeManagement extends AppCompatActivity {
 
     private void updateInterface() {
 
+        if(hasTimerStarted) {
+            set_time.setText("ADD");
+        } else {
+            set_time.setText("SET");
+        }
+
         //If timer is running, change start button to pause & hide the time-input, set btn, reset btn and finish btn
         if(timeRunning) {
             time_input_hours.setVisibility(View.INVISIBLE);
@@ -476,6 +505,8 @@ public class TimeManagement extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+
 
         Intent receivingEnd = getIntent();
 
