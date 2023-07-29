@@ -134,7 +134,7 @@ public class achievement_activity extends AppCompatActivity implements Achieveme
                         if (documentSnapshot.exists()) {
                             // Document exists, retrieve the study stats data
 
-                            noOfHoursStudied = documentSnapshot.getDouble("Time_studied");
+                            noOfHoursStudied = documentSnapshot.getDouble("Time_studied") / 3600000 ;
                             noOfConsecutiveDaysStudied = documentSnapshot.getLong("days_target_met");
                             Log.d("Adapter", "Hours studied from Firestore: " + noOfHoursStudied);
                             Log.d("Adapter", "Consecutive days studied from Firestore: " + noOfConsecutiveDaysStudied);
