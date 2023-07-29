@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -31,6 +32,8 @@ public class SignUpActivity extends AppCompatActivity {
     String password;
     String firstName;
     String lastName;
+    CheckBox agreementCheckBox;
+    Boolean isAgreed;
 
     Button signUp;
     private FirebaseAuth mAuth;
@@ -45,8 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         user_password = findViewById(R.id.editTextTextPassword);
         first_name = findViewById(R.id.firstName);
         last_name = findViewById(R.id.lastName);
-
-
+        agreementCheckBox = findViewById(R.id.agreeCheckBox);
 
         signUp = findViewById(R.id.signup_btn);
 
@@ -63,14 +65,13 @@ public class SignUpActivity extends AppCompatActivity {
                 password = user_password.getText().toString();
                 firstName = first_name.getText().toString();
                 lastName = last_name.getText().toString();
-                Log.v("AAAAAAAAAA", email);
-                Log.v("AAAAAAAAAA", password);
-                signUpUser(email, password, firstName, lastName);
+                isAgreed = agreementCheckBox.isChecked();
+                signUpUser(email, password, firstName, lastName, isAgreed);
             }
         });
     }
 
-    public void signUpUser(String e, String p, String fn, String ln) {
+    public void signUpUser(String e, String p, String fn, String ln, boolean isAgreed) {
         if (e == "")  {
             Toast.makeText(SignUpActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
         }
@@ -85,6 +86,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         else if (ln == "") {
             Toast.makeText(SignUpActivity.this, "Last name is required", Toast.LENGTH_SHORT).show();
+        }
+
+        else if (!isAgreed){
+            Toast.makeText(SignUpActivity.this, "Please agree to the T&C", Toast.LENGTH_SHORT).show();
         }
 
         else {

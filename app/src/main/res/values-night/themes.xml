@@ -125,7 +125,8 @@
     <!-- NOTES STYLES -->
     <style name="notes_seachbox">
         <item name="cornerRadius">10dp</item>
-        <item name="android:background">@color/dark_grey</item>
+        <item name="android:background">@drawable/rounded_corner_input_text_dark</item>
+        <item name="queryBackground">@color/dark_grey</item>
     </style>
 
     <style name="floating_action_btn">

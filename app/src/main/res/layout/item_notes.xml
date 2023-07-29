@@ -26,6 +26,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:maxLines="3"
             android:id="@+id/contentText_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

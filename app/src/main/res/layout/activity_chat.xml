@@ -13,10 +13,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:gravity="center"
         android:maxLines="1"
-        android:text="Hello"
-        android:layout_marginTop="5dp"
+        android:text="Chats"
+        android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
