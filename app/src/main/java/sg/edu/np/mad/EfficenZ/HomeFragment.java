@@ -157,12 +157,8 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        // TODO: Study Streak counter
         studyStreakCounter = getView().findViewById(R.id.home_studyStreakCounter);
 
-
-
-        // TODO: Study hours counter
         studyHourCounter = getView().findViewById(R.id.home_studyHoursCounter);
 
         // MY PROGRESS AND ACHIEVEMENT BUTTON
@@ -370,6 +366,10 @@ public class HomeFragment extends Fragment {
             RecyclerView rv = getView().findViewById(R.id.home_recyclerview);
             rv.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void retrieveStudyStats(){
+
     }
 
 
