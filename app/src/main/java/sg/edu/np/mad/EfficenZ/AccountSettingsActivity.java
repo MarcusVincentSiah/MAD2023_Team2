@@ -114,26 +114,23 @@ public class AccountSettingsActivity extends AppCompatActivity {
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo")) {
-                    if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M) {
-                        if(checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
-                                checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-                        {
-                            String [] permission = {android.Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                            requestPermissions(permission,1000);
-                        }
-
-                        else {
-                            openCamera();
-                        }
-                    }
-
-                    else {
-                        openCamera();
+                if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M) {
+                    if(checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+                    {
+                        String [] permission = {android.Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
+                        requestPermissions(permission,1000);
                     }
                 }
 
-                else if (options[item].equals("Choose from Gallery")){
+                if (options[item].equals("Take Photo")) {
+
+                        openCamera();
+                }
+
+
+                else if (options[item].equals("Choose from Gallery")) {
 
                     Intent intent = new   Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
 
