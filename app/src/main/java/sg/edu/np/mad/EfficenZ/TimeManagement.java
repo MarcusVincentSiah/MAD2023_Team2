@@ -305,7 +305,7 @@ public class TimeManagement extends AppCompatActivity {
                                 studyStats.put("Time_studied", timeStudied);
                                 studyStats.put("Time_studied_today", timeStudied);
                                 studyStats.put("Target_time", 69);
-                                studyStats.put("days", 0);
+                                studyStats.put("days", 1);
                                 studyStats.put("Last_updated_date", currentDate);
                                 studyStats.put("days_target_met", 0);
                                 studyStatsDocument.set(studyStats)
