@@ -70,8 +70,6 @@ public class TimeManagement extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,6 +234,9 @@ public class TimeManagement extends AppCompatActivity {
             public void onFinish() {
                 timeRunning = false;
                 updateInterface();
+
+                NotificationHelper notificationHelper = new NotificationHelper();
+                notificationHelper.sendNotification(getApplicationContext(), "Timer Finished!", "TIMES UP");
 
                 // Play sound for 3 seconds
                 mediaPlayer.start();
@@ -403,7 +404,7 @@ public class TimeManagement extends AppCompatActivity {
         String dataKey = data.getId();
         String time_left = String.valueOf(timeLeft);
         Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, data.getTask_status());
+                data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, true);
 
         mDatabase.child(dataKey).setValue(newData);//update
 

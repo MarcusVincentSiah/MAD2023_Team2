@@ -171,6 +171,7 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
+        //SET UP STUDY_STATS IN FIRESTORE
         CollectionReference studyStatsCollection = database.collection("users").document(userId).collection("StudyStats");
         DocumentReference studyStatsDocument = studyStatsCollection.document("study_stats_data");
 
@@ -186,10 +187,10 @@ public class HomeFragment extends Fragment {
                             HashMap<String, Object> studyStats = new HashMap<>();
                             studyStats.put("Time_studied", 0);
                             studyStats.put("Time_studied_today", 0);
-                            studyStats.put("Target_time", 0);
-                            studyStats.put("days", 0);
+                            studyStats.put("Target_time", 1);
+                            studyStats.put("days", 1);
                             studyStats.put("Last_updated_date", currentDate);
-                            studyStats.put("days_target_met", 0);
+                            studyStats.put("days_target_met", 1);
                             studyStatsDocument.set(studyStats)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -238,10 +239,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        /*Calendar calendar = Calendar.getInstance(); // Step 1: Get the current date using Calendar
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String currentDate = dateFormat.format(calendar.getTime()); // Format the date as a string*/
-
+        //UPDATE STUDY_STATS DB WHEN DATE CHANGES
         @SuppressLint({"NewApi", "LocalSuppress"}) String currentDate = LocalDate.now().toString(); // Step 1: Get the current date as a string
 
         Log.d("currentDate", currentDate);
@@ -266,7 +264,7 @@ public class HomeFragment extends Fragment {
                             studyHourCounter.setText(String.valueOf(minutes));
                             studyStreakCounter.setText(String.valueOf(daysTargetMet));
 
-                            // Step 3: Check if the Time_studied_today field exists and compare its date with the current date
+                            //Check if the Time_studied_today field exists and compare its date with the current date
                             if (currentTimeStudiedToday == null || !lastUpdatedDate.equals(currentDate)) {
                                 // Step 4: If the field doesn't exist or the date is different from the current date, reset the field and update the date
                                 HashMap<String, Object> studyStats = new HashMap<>();
@@ -281,7 +279,7 @@ public class HomeFragment extends Fragment {
 
                                 if (daysDifference > 2) {
                                     // If the difference is more than 2 days, reset days_target_met to 0
-                                    studyStats.put("days_target_met", 0);
+                                    studyStats.put("days_target_met", 1);
                                 } else {
                                     // If the difference is not more than 2 days, increment days_target_met by 1
                                     studyStats.put("days_target_met", daysTargetMet + 1);
