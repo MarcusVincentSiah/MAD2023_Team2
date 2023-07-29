@@ -53,12 +53,13 @@ public class ChatUsersActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        Query q = mDatabase.orderByChild("first_name");
+        Query q = mDatabase.orderByChild("first_name")
+                .equalTo(userId, "userId");
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(q, User.class)
                 .build();
 
-        adapter = new ChatUserAdapter(options, ChatUsersActivity.this);
+        adapter = new ChatUserAdapter(options, ChatUsersActivity.this, userId);
 
         recyclerView = findViewById(R.id.usersRecyclerView);
         recyclerView.setHasFixedSize(true);

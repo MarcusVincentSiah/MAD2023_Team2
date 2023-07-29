@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
                 .setQuery(q, User.class)
                 .build();
 
-        adapter = new ChatUserAdapter(options, ChatActivity.this);
+        adapter = new ChatUserAdapter(options, ChatActivity.this, userId);
 
         recyclerView = findViewById(R.id.usersRecyclerView);
         recyclerView.setHasFixedSize(true);
