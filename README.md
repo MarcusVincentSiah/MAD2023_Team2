@@ -40,3 +40,27 @@ Stage 2:
 
 ### Homepage
 ![img.png](img.png)
+On the homepage dashboard you can view:
+•	Your progress percentage
+•	Your pending tasks
+•	Your study streaks
+•	Your number of hours studied
+On the homepage, there are also some buttons that lead you to various pages:
+•	Account Settings: View and manage your account information, logout, change profile picture
+•	Notifications Page: View all your notifications from EfficienZ
+•	Achievements Page: View all your achievements
+•	Tools Page: Access all the tools
+![img_1.png](img_1.png)
+On the Tools page, you can access the following functions as displayed:
+•	Task Lists: View and manage your tasks
+•	Notes: Create, store, and organise text-based notes.
+•	Timer: Time tracking
+•	Music: Listen to music
+•	Calendar: View your tasks in a calendar
+•	Chat: Text messaging function
+•	Achievements: View all your achievements
+•	Settings: Manage app settings
+•	Homepage: Return to dashboard view
+
+
+
