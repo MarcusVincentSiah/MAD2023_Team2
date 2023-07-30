@@ -62,9 +62,8 @@ public class NotificationSettings extends AppCompatActivity {
         // MORE NOTIFICATION SETTINGS
         notificationSettings = findViewById(R.id.notification_moreSettings);
         notificationSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-                    .putExtra(Settings.EXTRA_APP_PACKAGE, getApplicationContext().getPackageName())
-                    .putExtra(Settings.EXTRA_CHANNEL_ID, "NOTIFICATION");
+            Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, getApplicationContext().getPackageName());
             startActivity(intent);
         });
 
