@@ -67,6 +67,10 @@ On the Tools page, you can access the following functions as displayed:
 
 
 
+Here are some features of Task Management:
 
-
-
+* Task: View your task details such as due date, time due, title, note, and status.
+* 
+* Task Status: Tap on the icon to mark task as done or undone.
+* 
+* Create Task: Create a new task. 
