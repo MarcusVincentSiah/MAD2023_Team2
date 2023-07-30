@@ -27,9 +27,10 @@ Stage 1 Features
 
 Stage 2:
 1.	Login & personalization (rachelle) – Allow users to login with an existing account or sign up with a new account. Users can change their color scheme (light/dark mode) and change settings like name, password, email address, as well as profile picture.
-2.	Habit streaks (Thu Ta)– track and view streaks for maintaining daily habits. It allows users to set up habits they want to develop or break. It will track their consistency over time. Celebrate milestones streaks by giving motivational prompts/quotes. 
-3.	Notification (GUANXI) - Users will be notified when duedate is closing, when timer ends and maybe when achivements have been accomplished. 
-4.	Integration with Calendar (Marcus) – A Calendar showing tasks and events stated by the user. This allows users to have a more overall view of their tasks.
+2.	Habit streaks (Thu Ta)– Track and view streaks for the amount of time studied daily and the number of days studies in a row. it will track thier consistency over time and allow them to be more aware of thier progress and study habits. With this feature, they will be able to set goals for themselves easily and be motivated, overall improving thier productivity. They can view these statistics from the home page.
+3.	Chat Feature(Thu Ta)- Usera will be able to chat with other users on the app. This allows users to collaborate with thier peers, learn together and discuss topics they need help on. They can clarify thier doubts with other users and motivate each other to study and finish thier tasks.
+4.	Notification (GUANXI) - Users will be notified when duedate is closing, when timer ends and maybe when achivements have been accomplished. 
+5.	Integration with Calendar (Marcus) – A Calendar showing tasks and events stated by the user. This allows users to have a more overall view of their tasks.
     Improvements to Task Management (Marcus) - Add input validation to create and update input dialogs, completed tasks should go to the bottem of recycle view, add            confetti shown on screen when task is completed together with media audio of clapping noise, add duetime display to each recycle view item
 6.	Gamification (Javier) – Include achievements, badges, and rewards to encourage users to complete tasks and maintain productivity streaks.
 

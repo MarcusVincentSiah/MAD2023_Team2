@@ -107,14 +107,7 @@ public class NotificationSettings extends AppCompatActivity {
         LinearLayout setTimeBtn = findViewById(R.id.notification_setTime);
         setTimeBtn.setVisibility(View.GONE);
 
-        // Cancel the pending notification alarm
-        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(NotificationSettings.this, DailyNotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(NotificationSettings.this, 0, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
-        if (pendingIntent != null) {
-            alarmManager.cancel(pendingIntent);
-            pendingIntent.cancel();
-        }
+        cancelDailyNotification();
     }
 
     private void showTimePicker(int hours, int mins){
@@ -143,6 +136,10 @@ public class NotificationSettings extends AppCompatActivity {
 
 
     private void scheduleDailyNotification(int hour, int min) {
+
+        // cancel existing notification reminder (if any)
+        cancelDailyNotification();
+
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(getApplicationContext().ALARM_SERVICE);
         Intent intent = new Intent(NotificationSettings.this, DailyNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(NotificationSettings.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -156,5 +153,16 @@ public class NotificationSettings extends AppCompatActivity {
 
         // Schedule the daily notification at the specified time
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    private void cancelDailyNotification(){
+        // Cancel the pending notification alarm
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(NotificationSettings.this, DailyNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(NotificationSettings.this, 0, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
+        if (pendingIntent != null) {
+            alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
     }
 }
