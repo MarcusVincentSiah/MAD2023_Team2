@@ -38,12 +38,13 @@ public class ChatUserAdapter extends FirebaseRecyclerAdapter<User, ChatUserAdapt
         this.currentUserId = currentUserId;
     }
 
+    // Bind the data from the model to the view holder for each item in the RecyclerView
     @Override
     protected void onBindViewHolder(@NonNull ChatUserHolder holder, int position, @NonNull User model) {
         String name = model.first_name + " " + model.last_name;
         holder.name.setText(name);
 
-        // Get the FirebaseUser representing the current logged-in user
+        // Get the FirebaseUser for the current logged-in user
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -70,6 +71,7 @@ public class ChatUserAdapter extends FirebaseRecyclerAdapter<User, ChatUserAdapt
         return super.getItemCount();
     }
 
+    // View holder for each item in the RecyclerView
     class ChatUserHolder extends RecyclerView.ViewHolder {
         TextView name;
 
@@ -87,7 +89,7 @@ public class ChatUserAdapter extends FirebaseRecyclerAdapter<User, ChatUserAdapt
                         // Check if the user's ID matches the current logged-in user's ID
                         if (!user.userId.equals(currentUserId)) {
                             Intent intent = new Intent(context, ChatMessagesActivity.class);
-                            // Pass data to the ChatMessagesActivity using intent extras
+                            // Pass data to the ChatMessagesActivity
                             intent.putExtra("User", user);
                             context.startActivity(intent);
                         }

@@ -53,8 +53,11 @@ public class ChatUsersActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
+        // Retrieve users and order by first names
         Query q = mDatabase.orderByChild("first_name")
                 .equalTo(userId, "userId");
+
+        // Create the ChatUserAdapter
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(q, User.class)
                 .build();

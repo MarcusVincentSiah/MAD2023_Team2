@@ -92,6 +92,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     private void sendMessage() {
 
         if (inputMessage.getText().toString() != null) {
+            // Add the message to the "Chat" collection in the Firestore database
             HashMap<String, Object> message = new HashMap<>();
             message.put("senderId", mAuth.getCurrentUser().getUid());
             message.put("receiverId", receivedUser.userId);
@@ -109,6 +110,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
     }
 
     private void listenMessages() {
+        // Add a snapshot listener to "Chat" collection to listen for new messages sent or received by the current user
         database.collection("Chat")
                 .whereEqualTo("senderId", mAuth.getCurrentUser().getUid())
                 .whereEqualTo("receiverId", receivedUser.userId)
@@ -125,9 +127,10 @@ public class ChatMessagesActivity extends AppCompatActivity {
         }
         if(value != null) {
             int count = chatMessages.size();
-
+            // Loop through the document changes to get added messages
             for (DocumentChange documentChange : value.getDocumentChanges()) {
                 if(documentChange.getType() == DocumentChange.Type.ADDED) {
+                    // Create a new ChatMessage object and store its data
                     ChatMessage chatMessage = new ChatMessage();
                     chatMessage.senderId= documentChange.getDocument().getString("senderId");
                     chatMessage.receiverId = documentChange.getDocument().getString("receiverId");
@@ -137,8 +140,11 @@ public class ChatMessagesActivity extends AppCompatActivity {
                     chatMessages.add(chatMessage);
                 }
             }
+            // Sort the chat messages based on timestamp
             Collections.sort(chatMessages, (obj1, obj2) -> obj1.dateObject.compareTo(obj2.dateObject));
+
             if(count == 0) {
+                // Notify the adapter about the changes in the chat messages
                 chatAdapter.notifyDataSetChanged();
             } else {
                 chatAdapter.notifyItemRangeInserted(chatMessages.size(), chatMessages.size());
@@ -150,12 +156,14 @@ public class ChatMessagesActivity extends AppCompatActivity {
     };
 
     private void loadReceiverDetails() {
+        // Get the selected User object from prev activity
         receivedUser = (User) getIntent().getSerializableExtra("User");
         String fullName = receivedUser.first_name + " " + receivedUser.last_name;
         name.setText(fullName);
     }
 
     private String getReadableDateTIme(Date date) {
+        // Format date
         return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
     }
 
