@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -150,9 +151,18 @@ public class NotificationSettings extends AppCompatActivity {
         calendar.set(Calendar.HOUR_OF_DAY, hour); // Set the hour of the daily notification (in 24-hour format)
         calendar.set(Calendar.MINUTE, min);      // Set the minute of the daily notification
         calendar.set(Calendar.SECOND, 0);      // Set the second of the daily notification
+        Log.v("TIMEPICKER", String.valueOf(hour) + "  " + String.valueOf(min));
 
         // Schedule the daily notification at the specified time
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        // If the scheduled time has already passed for today, schedule it for the next day
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        // Schedule the daily notification at the specified time using setExact()
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     private void cancelDailyNotification(){
