@@ -232,9 +232,6 @@ public class HomeFragment extends Fragment {
 
     }
 
-
-
-
     @Override
     public void onStart() {
         super.onStart();

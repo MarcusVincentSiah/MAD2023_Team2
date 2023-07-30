@@ -42,7 +42,6 @@ public class ChatUserAdapter extends FirebaseRecyclerAdapter<User, ChatUserAdapt
     protected void onBindViewHolder(@NonNull ChatUserHolder holder, int position, @NonNull User model) {
         String name = model.first_name + " " + model.last_name;
         holder.name.setText(name);
-        holder.email.setText(model.email);
 
         // Get the FirebaseUser representing the current logged-in user
         mAuth = FirebaseAuth.getInstance();
@@ -72,14 +71,11 @@ public class ChatUserAdapter extends FirebaseRecyclerAdapter<User, ChatUserAdapt
     }
 
     class ChatUserHolder extends RecyclerView.ViewHolder {
-
         TextView name;
-        TextView email;
 
         public ChatUserHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.textName);
-            email = itemView.findViewById(R.id.textEmail);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

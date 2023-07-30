@@ -48,6 +48,8 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
+    private ImageView backBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +61,18 @@ public class ChatMessagesActivity extends AppCompatActivity {
         inputMessage = findViewById(R.id.inputMessage);
         send = findViewById(R.id.layoutSend);
         progressBar = findViewById(R.id.progressBar);
+        backBtn = findViewById(R.id.imageBack);
+
         loadReceiverDetails();
         init();
         listenMessages();
 
         send.setOnClickListener(v -> {
             sendMessage();
+        });
+
+        backBtn.setOnClickListener(v -> {
+            onBackPressed();
         });
 
     }

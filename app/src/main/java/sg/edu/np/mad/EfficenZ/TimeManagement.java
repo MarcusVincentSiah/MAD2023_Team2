@@ -69,6 +69,8 @@ public class TimeManagement extends AppCompatActivity {
     private long timeStudied;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    boolean hasTimerStarted = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +124,8 @@ public class TimeManagement extends AppCompatActivity {
         //reset = findViewById(R.id.btn_reset);
         finish = findViewById(R.id.btn_finish);
 
+
+
         //When user clicks on the set button
         set_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +163,12 @@ public class TimeManagement extends AppCompatActivity {
                     return;
                 }
 
-                setTime(timeInput);
+                if(hasTimerStarted) {
+                    addTime(timeInput);
+                } else {
+                    setTime(timeInput);
+                }
+
                 time_input_hours.setText("");
                 time_input_min.setText("");
             }
@@ -215,7 +224,23 @@ public class TimeManagement extends AppCompatActivity {
         }
     }
 
+    private void addTime(long time) {
+        startTime += time;
+        timeLeft += time;
+        closeKeyboard();
+
+        //Update the database with the new time_set values
+        String dataKey = data.getId();
+        String time_needed = String.valueOf(time);
+        Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(), data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_needed, data.getTask_status());
+        mDatabase.child(dataKey).setValue(newData);//update
+        Toast.makeText(TimeManagement.this, "Time has been set", Toast.LENGTH_SHORT).show();
+        updateCountDownText();
+    }
+
     private void startTimer() {
+
+        hasTimerStarted = true;
 
         if(timeLeft <= 0) {
             Toast.makeText(TimeManagement.this, "Reset the timer of enter a new time first", Toast.LENGTH_SHORT).show();
@@ -235,8 +260,9 @@ public class TimeManagement extends AppCompatActivity {
                 timeRunning = false;
                 updateInterface();
 
+                //SEND NOTIFICATION
                 NotificationHelper notificationHelper = new NotificationHelper();
-                notificationHelper.sendNotification(getApplicationContext(), "Timer Finished!", "TIMES UP");
+                notificationHelper.sendNotification(getApplicationContext(), data.getTitle(), "Timer has finished");
 
                 // Play sound for 3 seconds
                 mediaPlayer.start();
@@ -278,7 +304,7 @@ public class TimeManagement extends AppCompatActivity {
                             // Retrieve the value of time_studied field
                             Long currentTimeStudied = documentSnapshot.getLong("Time_studied");
                             Long currentTimeStudiedToday = documentSnapshot.getLong("Time_studied_today");
-                            if (currentTimeStudied != null && currentTimeStudiedToday != null) {
+
                                 // Update the value of timeStudied by adding the new timeStudied
                                 long updatedTimeStudied = currentTimeStudied + timeStudied;
                                 long updatedTimeStudiedToday = currentTimeStudiedToday + timeStudied;
@@ -300,55 +326,7 @@ public class TimeManagement extends AppCompatActivity {
                                                 Log.e("Firestore", "Error updating document: " + e.getMessage());
                                             }
                                         });
-                            } else {
-                                // Handle the case when time_studied field doesn't exist or is null
-                                HashMap<String, Object> studyStats = new HashMap<>();
-                                studyStats.put("Time_studied", timeStudied);
-                                studyStats.put("Time_studied_today", timeStudied);
-                                studyStats.put("Target_time", 69);
-                                studyStats.put("days", 1);
-                                studyStats.put("Last_updated_date", currentDate);
-                                studyStats.put("days_target_met", 0);
-                                studyStatsDocument.set(studyStats)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                // Handle success after creating the new document
-                                                Log.d("Firestore", "New document created successfully");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Handle any errors that occurred during document creation
-                                                Log.e("Firestore", "Error creating new document: " + e.getMessage());
-                                            }
-                                        });
-                            }
-                        } else {
-                            // Handle the case when time_studied field doesn't exist or is null
-                            HashMap<String, Object> studyStats = new HashMap<>();
-                            studyStats.put("Time_studied", timeStudied);
-                            studyStats.put("Time_studied_today", timeStudied);
-                            studyStats.put("Target_time", 69);
-                            studyStats.put("days", 0);
-                            studyStats.put("Last_updated_date", currentDate);
-                            studyStats.put("days_target_met", 0);
-                            studyStatsDocument.set(studyStats)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            // Handle success after creating the new document
-                                            Log.d("Firestore", "New document created successfully");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Handle any errors that occurred during document creation
-                                            Log.e("Firestore", "Error creating new document: " + e.getMessage());
-                                        }
-                                    });
+
                         }
                     }
                 })
@@ -377,25 +355,6 @@ public class TimeManagement extends AppCompatActivity {
 
         else Toast.makeText(TimeManagement.this, "There is no task", Toast.LENGTH_SHORT).show();
     }
-
-    /*private void resetTimer() {
-
-        timeLeft = startTime;
-        updateCountDownText();
-        updateInterface();
-
-        if (data!= null) {
-            //Update the database with the new time_set values
-            String dataKey = data.getId();
-            String time_left = String.valueOf(timeLeft);
-            Data newData =new Data(data.getTitle(), data.getNote(), data.getDate(), data.getTimestamp(),
-                    data.getDueDate(), data.getDueTime(), dataKey, String.valueOf(startTime), time_left, data.getTask_status());
-
-            mDatabase.child(dataKey).setValue(newData);//update
-            Toast.makeText(TimeManagement.this, "Timer has been resetted", Toast.LENGTH_SHORT).show();
-        }
-        else Toast.makeText(TimeManagement.this, "There is no data", Toast.LENGTH_SHORT).show();
-    }*/
 
     private void finishTask() {
         Intent intent = new Intent(TimeManagement.this, MainActivity.class);
@@ -445,6 +404,12 @@ public class TimeManagement extends AppCompatActivity {
     }
 
     private void updateInterface() {
+
+        if(hasTimerStarted) {
+            set_time.setText("ADD");
+        } else {
+            set_time.setText("SET");
+        }
 
         //If timer is running, change start button to pause & hide the time-input, set btn, reset btn and finish btn
         if(timeRunning) {
@@ -541,6 +506,8 @@ public class TimeManagement extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
+
         Intent receivingEnd = getIntent();
 
         Data dataReceived = (Data) receivingEnd.getSerializableExtra("TASK_OBJECT"); //Get data object from recycler view
@@ -618,6 +585,13 @@ public class TimeManagement extends AppCompatActivity {
                             Log.d(data.getTitle()+"Started", data.getTime_left());
                             task_title.setText("Task: " + data.getTitle());
                             task_title.setTextSize(30);
+
+                            if (timeRunning) {
+                                set_time.setVisibility(View.INVISIBLE);
+                            } else {
+                                set_time.setVisibility(View.VISIBLE);
+                            }
+
                         }
                     }
 
@@ -629,7 +603,7 @@ public class TimeManagement extends AppCompatActivity {
                 });
             }
         }
-        if(data == null && dataReceived == null) {
+        if(data == null) {
             set_time.setVisibility(View.INVISIBLE);
         }
     }
