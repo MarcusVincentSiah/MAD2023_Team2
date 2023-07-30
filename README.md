@@ -39,3 +39,4 @@ Stage 2:
 # User Guide
 
 ### Homepage
+![img.png](img.png)
