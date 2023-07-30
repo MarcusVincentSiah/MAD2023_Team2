@@ -51,6 +51,7 @@ On the homepage, there are also some buttons that lead you to various pages:
 •	Achievements Page: View all your achievements
 •	Tools Page: Access all the tools
 ![img_1.png](img_1.png)
+
 On the Tools page, you can access the following functions as displayed:
 •	Task Lists: View and manage your tasks
 •	Notes: Create, store, and organise text-based notes.
@@ -61,6 +62,11 @@ On the Tools page, you can access the following functions as displayed:
 •	Achievements: View all your achievements
 •	Settings: Manage app settings
 •	Homepage: Return to dashboard view
+
+### Task Management
+
+
+
 
 
 
