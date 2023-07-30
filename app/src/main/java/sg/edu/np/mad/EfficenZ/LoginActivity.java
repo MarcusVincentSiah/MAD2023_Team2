@@ -136,6 +136,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent forgetPassword = new Intent(LoginActivity.this, ChangePassword.class);
+                startActivity(forgetPassword);
+            }
+        });
+
     }
 
     @Override
