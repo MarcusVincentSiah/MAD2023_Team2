@@ -40,6 +40,7 @@ Stage 2:
 
 ### Homepage
 ![img.png](img.png)
+
 On the homepage dashboard you can view:
 * Your progress percentage
 * Your pending tasks
@@ -50,6 +51,7 @@ On the homepage dashboard you can view:
 * Notifications Page: View all your notifications from EfficienZ
 * Achievements Page: View all your achievements
 * Tools Page: Access all the tools
+
 ![img_1.png](img_1.png)
 
 On the Tools page, you can access the following functions as displayed:
@@ -65,7 +67,7 @@ On the Tools page, you can access the following functions as displayed:
 
 ### Task Management
 
-image
+![img_2.png](img_2.png)
 
 Here are some features of Task Management:
 
@@ -73,7 +75,7 @@ Here are some features of Task Management:
 * Task Status: Tap on the icon to mark task as done or undone.
 * Create Task: Create a new task. 
 
-image
+![img_3.png](img_3.png)
 
 Upon creating/tapping on one of the task, here are the following functions:
 
@@ -86,7 +88,7 @@ Upon creating/tapping on one of the task, here are the following functions:
 
 ### Note Taking
 
-image
+![img_4.png](img_4.png)
 
 In Note-Taking, here are the following features:
 
@@ -96,55 +98,55 @@ In Note-Taking, here are the following features:
 * Folder Menu: Edit your folder name or delete your folder.
 * Create Notes: Create a new note 
 
-image
+![img_5.png](img_5.png)
 
 Upon clicking into one of the folders, you can create and view all your notes stored in that folder. 
 
-image
+![img_6.png](img_6.png)
 
 Upon clicking into one of the notes, you can edit the title and content. You can delete the note as well. Click the Save button to save your notes. 
 
 ### Time Management
 
-image
+![img_7.png](img_7.png)
 
 You can choose an uncompleted task to start working on after “clicking on choose a task” and then clicking on the task and then “Start task”. 
 
-image
+![img_8.png](img_8.png)
 
 After selecting their tasks, you can type in their time under at the input fields and click on SET. The timer text will update, and you can click on start for the timer to start counting down. 
 
-image
+![img_9.png](img_9.png)
 
 After pausing the timer, you have the choice to continue by clicking START, adding time to the current timer by clicking ADD, or if you are done with the task, click on FINISH to set the task as complete. 
 
 ### Music
 
-image
+![img_10.png](img_10.png)
 
 You can click on a music you would like to play, and it will automatically play. When the music finishes, it will automatically play the next music in queue. To stop, click on the pause button. To skip or rewind, click on the skip button on the right and the rewind button on the left respectively.  
 
 ### Calendar
 
-image
+![img_11.png](img_11.png)
 
 You can see which days your tasks are due on the calendar. If the there is 1 or 2 tasks due that day, it will be highlighted orange. If it is more than 3, it will be highlighted red. To view the tasks due the day, click on the day. To toggle between months, click on the arrows on top. 
 
 ### Chat
 
-image
+![img_12.png](img_12.png)
 
 You can click on a user you would like to chat with which leads the chat history on the right. To send a message to the other user, simply type your message in the message input field and click send. 
 
 ### Achievement
 
-image
+![img_13.png](img_13.png)
 
 You can see the achievements you have accomplished by seeing which ones are green in colour. Clicking on an achievements you haven’t get will lead to a page letting you know of your progress(2nd pic). Clicking on a completed achievements will lead to the page on the right, celebrating your milestone  
 
 ### Settings
 
-image
+![img_14.png](img_14.png)
 
 The Settings page has the following features:
 
@@ -155,7 +157,7 @@ The Settings page has the following features:
 
 ### Account Settings
 
-image
+![img_15.png](img_15.png)
 
 In Account Settings, here are the following features:
 
@@ -165,7 +167,7 @@ In Account Settings, here are the following features:
 
 ### Notification Settings
 
-image
+![img_16.png](img_16.png)
 
 In Notification Settings, here are the following functions:
 
@@ -176,7 +178,7 @@ In Notification Settings, here are the following functions:
 
 ### Notification Page
 
-image
+![img_17.png](img_17.png)
 
 In the Notifications Page, here are the following features:
 
@@ -186,7 +188,7 @@ In the Notifications Page, here are the following features:
 
 ### Theme Settings
 
-image
+![img_18.png](img_18.png)
 
 In Themes, you can pick the following themes:
 
