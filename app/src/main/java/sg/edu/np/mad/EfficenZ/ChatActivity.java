@@ -65,7 +65,9 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    // Set up the RecyclerView with the list of users
     private void setUpRecyclerView() {
+        //Orders users by first name
         Query q = mDatabase.orderByChild("first_name");
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(q, User.class)
@@ -80,6 +82,7 @@ public class ChatActivity extends AppCompatActivity {
         loading(false);
     }
 
+    //Show or Hide loading page
     private void loading(Boolean isLoading) {
         progressBar = findViewById(R.id.progressBar);
 

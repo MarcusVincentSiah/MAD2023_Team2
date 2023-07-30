@@ -14,21 +14,23 @@ import sg.edu.np.mad.EfficenZ.model.ChatMessage;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private final List<ChatMessage> chatMessages;
+    private final List<ChatMessage> chatMessages; // List to hold chat messages
 
-    private final String senderId;
+    private final String senderId; // Id of the current user
 
     public ChatAdapter(List<ChatMessage> chatMessages, String senderId) {
         this.chatMessages = chatMessages;
         this.senderId = senderId;
     }
 
+    //Define the view types for sent and received messages
     public static final int VIEW_TYPE_SENT = 1;
     public static final int VIEW_TYPE_RECEIVED = 2;
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //Inflate layout for sent and received messages
         if(viewType == VIEW_TYPE_SENT) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container_sent_message,
                     parent,false);
@@ -43,6 +45,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        // Bind data to the appropriate view holder based on view type
         if(getItemViewType(position) == VIEW_TYPE_SENT){
             ((SentMessageViewHolder) holder).setData(chatMessages.get(position));
         } else {
@@ -53,10 +56,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public int getItemCount() {
         return chatMessages.size();
+        // Return the number of chat messages
     }
 
     @Override
     public int getItemViewType(int position) {
+        // Determine the view type (sent or received) for each chat message based on the senderId
         if(chatMessages.get(position).senderId.equals(senderId)) {
             return VIEW_TYPE_SENT;
         } else {
