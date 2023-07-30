@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -89,12 +90,20 @@ public class ChatMessagesActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        HashMap<String, Object> message = new HashMap<>();
-        message.put("senderId", mAuth.getCurrentUser().getUid());
-        message.put("receiverId", receivedUser.userId);
-        message.put("message", inputMessage.getText().toString());
-        message.put("timeStamp", new Date());
-        database.collection("Chat").add(message);
+
+        if (inputMessage.getText().toString() != null) {
+            HashMap<String, Object> message = new HashMap<>();
+            message.put("senderId", mAuth.getCurrentUser().getUid());
+            message.put("receiverId", receivedUser.userId);
+            message.put("message", inputMessage.getText().toString());
+            message.put("timeStamp", new Date());
+            database.collection("Chat").add(message);
+        }
+
+        else {
+            Toast.makeText(ChatMessagesActivity.this, "Please enter a message", Toast.LENGTH_SHORT).show();
+        }
+
 
         inputMessage.setText(null);
     }
