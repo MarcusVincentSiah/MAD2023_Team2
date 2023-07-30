@@ -135,7 +135,6 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:fontFamily="@font/poppins"
-        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/layoutSend"
